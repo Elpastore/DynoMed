@@ -60,14 +60,12 @@ class ResetPasswordRequestForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Request Password Reset')
     
-    def validate_email(self, cls, email):
-        """
-        function that check if the user already exist in the database.
-        """
-        if cls is None and cls in classes:
-            user = cls.query.filter_by(email=email.data).first()
-            if user is None:
-                raise ValidationError("There is no account with that email. You must register first.")
+    def validate_email(self, email):
+        """function that check if the user already exist in the database."""
+
+        user = database.users.find_one({"email": email.data})
+        if user:
+            raise ValidationError("That email is taken. Please choose a different one.")
         
 class ResetPasswordForm(FlaskForm):
     """
@@ -89,22 +87,18 @@ class UpdateAccountForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[EqualTo('password')])
     submit = SubmitField('Update')
     
-    def validate_username(self, cls, username):
+    def validate_username(self, username):
         """
         function that check if the user already exist in the database.
         """
-        if username.data != current_user.username:
-            user = cls.query.filter_by(username=username.data).first()
-            if user:
-                raise ValidationError("That username is taken. Please choose a different one.")
+        user = database.users.find_one({"username": username.data})
+        if user:
+            raise ValidationError("That username is taken. Please choose a different one.")
 
-    def validate_email(self, cls,email):
-        """
-        function that check if the user already exist in the database.
-        """
-        if cls is None and cls in classes:
-            if email.data != current_user.email:
-                user = cls.query.filter_by(email=email.data).first()
-                if user:
-                    raise ValidationError(
-                        "That email is taken. Please choose a different one.")
+    def validate_email(self, email):
+        """function that check if the user already exist in the database."""
+
+        user = database.users.find_one({"email": email.data})
+        if user:
+            raise ValidationError("That email is taken. Please choose a different one.")
+        
