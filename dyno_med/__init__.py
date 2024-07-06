@@ -13,5 +13,6 @@ database = client.dynoMed
 # Initialize CSRF protection
 csrf = CSRFProtect(app)
 csrf.exempt('dyno_med.routes.register')
+csrf.exempt('dyno_med.routes.login')
 
 from dyno_med import routes
