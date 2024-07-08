@@ -6,11 +6,14 @@ from wtforms.validators import DataRequired, Length, Email, ValidationError
 from dyno_med import database
 
 
-class Doctor():
-    first_name = StringField('First Name', validators=[DataRequired(), Length(min=3, max=30)])
-    middle_name = StringField('Middle Name', validators=Length(min=3, max=30))
-    last_name = StringField('Last Name', validators=[DataRequired(), Length(min=3, max=30)])
-    passWord = S
-    comfirm_pass_word = S
+class AddressForm(FlaskForm):
+    country = StringField('Country', validators=[DataRequired(), Length(min=2, max=50)])
+    state = StringField('State', validators=[DataRequired(), Length(min=2, max=30)])
+    city = StringField('City', validators=[DataRequired(), Length(min=2,max=30)])
+    town = StringField('Town', validators=[DtatRequired(), Length(max=50)])
+    street = StringField('Street', validators=[DataRequired(), Length(max=100)])
+    House_num = StringField('House Number', validators=[Length(max=15)]),
+    email = StringField('Email', validators=[Email(), Length(max=100)])
+    telephone_num = StringField('Telephone Number', )
     
 
