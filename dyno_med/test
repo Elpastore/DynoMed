@@ -1,0 +1,41 @@
+curl -X POST http://127.0.0.1:5000/patient/profile -H "Content-Type: application/json" -d '{
+    "full_name": "Abdoulaye Sadio",
+    "birthday": "1985-05-15",
+    "gender": "Male",
+    "contact_information": "123-456-7890",
+    "emergency_contact": "Mohamed Sadio, 123-456-7890",
+    "medical_history": {
+        "chief_complaint": "Headache",
+        "symptoms": ["Headache", "Nausea"],
+        "diagnoses": ["Migraine"],
+        "vital_signs": {
+            "blood_pressure": "120/80",
+            "heart_rate": 72,
+            "temperature": 98.6,
+            "respiration_rate": 18
+        },
+        "medications": [
+            {
+                "name": "Ibuprofen",
+                "dosage": "200mg",
+                "start_date": "2024-07-01",
+                "end_date": "2024-07-10"
+            }
+        ],
+        "surgeries": [
+            {
+                "procedure": "Appendectomy",
+                "date": "2010-04-20",
+                "outcome": "Successful"
+            }
+        ],
+        "allergies": [
+            {
+                "name": "Penicillin",
+                "reaction": "Rash"
+            }
+        ]
+    },
+    "immunization_records": ["MMR", "Tetanus"],
+    "insurance_information": "Insurance Company XYZ"
+}' -b cookies.txt
