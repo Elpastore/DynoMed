@@ -8,7 +8,14 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dyno_med'
 client = MongoClient('mongodb://127.0.0.1:27017')
 school_collection = client.my_db.school
+
+# Added by wizy
+medical_practitioners = client.dynoMed.medical_practitioners
+
 database = client.dynoMed
+
+# Added by wizy
+
 
 # Initialize CSRF protection
 csrf = CSRFProtect(app)
