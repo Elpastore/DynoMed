@@ -1,0 +1,36 @@
+african_countries_states = {
+    'Nigeria': {
+        'Abia': [
+            'Aba North', 'Aba South', 'Arochukwu', 'Bende', 'Ikwuano', 'Isiala Ngwa North', 'Isiala Ngwa South', 
+            'Isuikwuato', 'Obi Ngwa', 'Ohafia', 'Osisioma', 'Ugwunagbo', 'Ukwa East', 'Ukwa West', 'Umuahia North', 
+            'Umuahia South', 'Umu Nneochi'
+        ],
+        'Adamawa': [
+            'Demsa', 'Fufore', 'Ganye', 'Gayuk', 'Gombi', 'Grie', 'Hong', 'Jada', 'Lamurde', 'Madagali', 'Maiha', 
+            'Mayo Belwa', 'Michika', 'Mubi North', 'Mubi South', 'Numan', 'Shelleng', 'Song', 'Toungo', 'Yola North', 
+            'Yola South'
+        ],
+        # Add other states and their LGAs...
+    },
+    'South Africa': {
+        'Eastern Cape': [
+            'Amathole District Municipality', 'Buffalo City Metropolitan Municipality', 'Chris Hani District Municipality', 
+            'Joe Gqabi District Municipality', 'Nelson Mandela Bay Metropolitan Municipality', 'OR Tambo District Municipality', 
+            'Sarah Baartman District Municipality'
+        ],
+        'Free State': [
+            'Fezile Dabi District Municipality', 'Lejweleputswa District Municipality', 'Mangaung Metropolitan Municipality', 
+            'Thabo Mofutsanyana District Municipality', 'Xhariep District Municipality'
+        ],
+        # Add other provinces and their municipalities...
+    },
+    'Kenya': {
+        'Baringo': [
+            'Baringo Central', 'Baringo North', 'Baringo South', 'Eldama Ravine', 'Mogotio', 'Tiaty'
+        ],
+        'Bomet': [
+            'Bomet Central', 'Bomet East', 'Chepalungu', 'Konoin', 'Sotik'
+        ],
+        # Add other counties and their constituencies...
+    }
+}

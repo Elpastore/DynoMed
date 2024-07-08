@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """Doctors module"""
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField, DateField, FieldList, FormField
+from wtforms import ( StringField, PasswordField, SubmitField, IntegerField, DateField,
+                     FieldList, FormField, SelectField
+                     )
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
 from dyno_med import database
+from Index_of_countries import african_countries_states as african
 
 class AddressForm(FlaskForm):
     country = StringField('Country', validators=[DataRequired(), Length(min=2, max=50)])
@@ -26,7 +29,8 @@ class DoctorForm(FlaskForm):
     last_name = StringField('Last Name', validators=[DataRequired(), Length(min=3, max=30)])
     age = IntegerField('Age', validators=[DataRequired()])
     date_of_birth = DateField('Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
-    country_of_origin = StringField('Country of Origin', validators=[DataRequired(), Length(min=2, max=50)])
+    country_of_origin = SelectField('Country of Origin', validators=[DataRequired()],
+                                    choices=[(country, country) for country, states in african.items()])
     state_of_origin = StringField('State of Origin', validators=[DataRequired(), Length(min=2, max=50)])
     local_government_area = StringField('Local Government Area', validators=[DataRequired(), Length(min=2, max=50)])
     town_of_origin = StringField('Town of Origin', validators=[Length(max=50)])
