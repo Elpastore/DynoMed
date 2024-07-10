@@ -1,14 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, DateField, SubmitField, FormField, FieldList
+from wtforms import StringField, SelectField, DateField, SubmitField, FormField, FieldList, IntegerField
 from wtforms.validators import DataRequired, Length, Email, Regexp
 from dyno_med import database
-from dyno_med.Medical_pratitional import index_of_countries
+from dyno_med.Medical_pratitional.Index_of_countries import african_countries_states as countries
 
-countries = index_of_countries.african_countries_states
 
 class AddressForm(FlaskForm):
-    country = SelectField('Country', validators=[DataRequired()], choices=[(country, country), for country in countries.keys()])
-    state = SelectField('State', validators=[DataRequired()], choices=[()])
+    # country = SelectField('Country', validators=[DataRequired()],
+    #                     choices=[(country, country) for country in countries.keys()])
+    country = StringField('Country', validators=[DataRequired(), Length(min=2, max=50)])
+    state = StringField('State', validators=[DataRequired()])
     city = StringField('City', validators=[DataRequired(), Length(min=2, max=50)])
     town = StringField('Town', validators=[Length(max=50)])
     street = StringField('Street', validators=[Length(max=100)])
@@ -24,12 +25,15 @@ class MedicalPersonel(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=3, max=30)])
     middle_name = StringField('Middle Name', validators=[Length(min=3, max=30)])
     last_name = StringField('Last Name', validators=[DataRequired(), Length(min=3, max=30)])
-    age = SelectField('Age', validators=[DataRequired()], choices=[(num, num) for num in range(18, 60)])
+    age = IntegerField('Age', validators=[DataRequired()])
+    # age = SelectField('Age', validators=[DataRequired()], choices=[(num, num) for num in range(18, 60)])
     gender = SelectField('Gender', validators=[DataRequired()], choices=[("Male", "Male"), ("Female", "Female")])
     date_of_birth = DateField('Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
-    country_of_origin = SelectField('Country of Origin', validators=[DataRequired()], 
-                                    choices=[(country, country) for country in countries.keys()])
-    state_of_origin = SelectField('State of Origin', validators=[DataRequired()], choices=[])
+    # country_of_origin = SelectField('Country of Origin', validators=[DataRequired()],
+    #                                choices=[(country, country) for country in countries.keys()])
+    country = StringField('Country', validators=[DataRequired(), Length(min=2, max=50)])
+    # state_of_origin = SelectField('State of Origin', validators=[DataRequired()], choices=[])
+    State_of_origin = StringField('State of Origin', validators=[DataRequired()])
 
     local_government_area = StringField('Local Government Area', validators=[DataRequired(), Length(min=2, max=50)])
     town_of_origin = StringField('Town of Origin', validators=[Length(max=50)])

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """module for all medical pratitioners"""
+from flask import Flask, jsonify
 
 class Medical:
     def __init__(self) -> None:
