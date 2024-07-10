@@ -2,12 +2,13 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, DateField, SubmitField, FormField, FieldList
 from wtforms.validators import DataRequired, Length, Email, Regexp
 from dyno_med import database
+from dyno_med.Medical_pratitional import index_of_countries
 
-
+countries = index_of_countries.african_countries_states
 
 class AddressForm(FlaskForm):
-    country = StringField('Country', validators=[DataRequired(), Length(min=2, max=50)])
-    state = StringField('State', validators=[DataRequired(), Length(min=2, max=50)])
+    country = SelectField('Country', validators=[DataRequired()], choices=[(country, country), for country in countries.keys()])
+    state = SelectField('State', validators=[DataRequired()], choices=[()])
     city = StringField('City', validators=[DataRequired(), Length(min=2, max=50)])
     town = StringField('Town', validators=[Length(max=50)])
     street = StringField('Street', validators=[Length(max=100)])
@@ -27,7 +28,7 @@ class MedicalPersonel(FlaskForm):
     gender = SelectField('Gender', validators=[DataRequired()], choices=[("Male", "Male"), ("Female", "Female")])
     date_of_birth = DateField('Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
     country_of_origin = SelectField('Country of Origin', validators=[DataRequired()], 
-                                    choices=[(country, country) for country in african_countries_states.keys()])
+                                    choices=[(country, country) for country in countries.keys()])
     state_of_origin = SelectField('State of Origin', validators=[DataRequired()], choices=[])
 
     local_government_area = StringField('Local Government Area', validators=[DataRequired(), Length(min=2, max=50)])

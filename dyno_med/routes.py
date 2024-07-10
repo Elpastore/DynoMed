@@ -91,6 +91,7 @@ def medical_practitioner_registration():
         return jsonify({'message': 'Registration failed due to validation errors.', 'errors': errors}, 400)
     
     if request.method == 'GET':
+        
 
 
 @app.route('/patient/profile', methods=['GET', 'POST'])
