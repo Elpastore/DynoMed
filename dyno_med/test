@@ -1,3 +1,6 @@
+curl -X GET http://127.0.0.1:5000/patient/profile -H "Content-Type: application/json" -b cookies.txt
+
+
 curl -X POST http://127.0.0.1:5000/patient/profile -H "Content-Type: application/json" -d '{
     "full_name": "Abdoulaye Sadio",
     "birthday": "1985-05-15",
@@ -49,7 +52,77 @@ curl -X POST http://127.0.0.1:5000/patient/registration -H "Content-Type: applic
     "confirm_password": "elpastore"
     }'
 
+    
     curl -X GET http://127.0.0.1:5000/patient/profile -H "Content-Type: application/json" -b cookies.txt
+
+    curl -X POST http://127.0.0.1:5000/login -H "Content-Type: application/json" -d '{"email": "abdoulayesadio1997@gmail.com", "password": "elpastore"}' -c cookies.txt
+
+    curl -X POST http://127.0.0.1:5000/login -H "Content-Type: application/json" -d '{"email": "wisdom@gmail.com", "password": "wisdom"}' -c cookies.txt
+
+
+
+    curl -X PUT http://127.0.0.1:5000/patient/profile -H "Content-Type: application/json" -d '{
+        "full_name": "Abdoulaye Sadio",
+        "birthday": "1997-02-24",
+        "gender": "Male",
+        "contact_information": "987-654-3210",
+        "emergency_contact": "Jane Smith, 987-654-3210",
+        "medical_history": [
+            {
+                "chief_complaint": "Back Pain",
+                "symptoms": ["Back Pain", "Stiffness"],
+                "diagnoses": ["Muscle Strain"],
+                "surgeries": [],
+                "allergies": [],
+                "vital_signs": {
+                    "blood_pressure": "130/85",
+                    "heart_rate": 75,
+                    "temperature": 98.7,
+                    "respiration_rate": 19
+                },
+                "medications": [
+                    {
+                        "name": "Acetaminophen",
+                        "dosage": "500mg",
+                        "start_date": "2024-08-01",
+                        "end_date": "2024-08-10"
+                    }
+                ]
+            }
+        ],
+        "immunization_records": ["Flu Shot"],
+        "insurance_information": "Insurance Company ABC"
+    }' -b cookies.txt
+    
+
+
+    curl -X POST http://127.0.0.1:5000/patient/new_medical_record -H "Content-Type: application/json" -d '{
+        "chief_complaint": "Stomach ache",
+        "symptoms": ["Diarrhoe"],
+        "diagnoses": ["Food poisoning"],
+        "surgeries": [],
+        "allergies": [
+            {
+            "name": "Peanuts",
+            "reaction": "Anaphylaxis"
+            }
+        ],
+        "vital_signs": {
+            "blood_pressure": "130/85",
+            "heart_rate": 75,
+            "temperature": 98.7,
+            "respiration_rate": 19
+        },
+        "medications": [
+            {
+                "name": "Amoxyline",
+                "dosage": "500mg",
+                "start_date": "2024-08-01",
+                "end_date": "2024-08-10"
+            }
+        ]
+    }' -b cookies.txt
+
     general registration part:
         -medical partitioner()
         -patient()

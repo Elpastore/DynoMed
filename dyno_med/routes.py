@@ -4,7 +4,7 @@ from dyno_med import app, database, patient_record
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
 from flask_wtf.csrf import generate_csrf
-from Medical_pratitional.Doctor import MedicalPersonel
+#from dyno_med.Medical_pratitional.Doctor import MedicalPersonel
 # from werkzeug.security import generate_password_hash
 from model.patient import *
 from bson import ObjectId
@@ -23,9 +23,10 @@ def register_user():
         hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         username = form.username.data
         email = form.email.data
+        user_type = form.user_type.data
 
-        database['users'].insert_one({'username': username, 'email': email, 'password': hashed_password})
-        return jsonify({'message': 'Your account has been successfully created! You are now able to log in'})
+        database['users'].insert_one({'username': username, 'email': email, 'password': hashed_password, 'user_type': user_type})
+        return jsonify({'message': f'Your account has been successfully created! You are now able to log in as a {user_type}'})
     
     errors = form.errors
     return jsonify({'message': 'Please try again, error occurred!', 'errors': errors}, 400)
@@ -56,26 +57,16 @@ def login():
 def logout():
     # Logout logic to setup clearing cookies, tokens, or other authentication data
     # when a session will be setting up
-    session.pop('user_id', None)
-    return jsonify({'message': 'Logged out successfully'})
+    user_id = session.get('user_id')
+    user = database.users.find_one({'_id': ObjectId(user_id)})
+    if user_id:
+        session.pop('user_id', None)
+        return jsonify({'message': f'{user["username"]} Logged out successfully'})
+    else:
+        return jsonify({'message': 'Not need to loggout since you are not login'})
 
-@app.route('/patient/registration', methods=['POST'])
-def patient_registration():
-    data = request.get_json()
-    form = RegistrationForm(data=data, meta={'csrf': False})
-    
-    if form.validate():
-        hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        username = form.username.data
-        email = form.email.data
 
-        new_user = database['users'].insert_one({'username': username, 'email': email, 'password': hashed_password})
-        return jsonify({'message': f'Your account has been successfully created! You are now able to log in with id: {new_user.inserted_id}'})
-    
-    errors = form.errors
-    return jsonify({'message': 'Please try again, error occurred!', 'errors': errors}, 400)
-
-@app.route('/patient/profile', methods=['GET', 'POST'])
+@app.route('/patient/profile', methods=['GET', 'POST', 'PUT'], strict_slashes=False)
 def patient_profile():
     user_id = session.get('user_id')
     if not user_id:
@@ -94,18 +85,22 @@ def patient_profile():
         # Convert ObjectId to string for JSON serialization
         patient_user['_id'] = str(patient_user['_id'])
         
-        return jsonify(patient_user['full_name'])
+        return jsonify(patient_user)
     
     elif request.method == 'POST':
         data = request.get_json()
-        user = database.users.find_one({ '_id': user_id })
+        user = database.users.find_one({'_id': ObjectId(user_id)})
         if user:
+            if user.user_type == 'patient':
+                return jsonify({'message': 'You don"t have access to this part!'}), 401
             # Create patient data using user's _id as the _id field in MongoDB
             patient = Patient(
-            id = ObjectId(user.id),  # not working
+            id=ObjectId(user_id),
             full_name=data['full_name'],
             birthday=datetime.strptime(data['birthday'], '%Y-%m-%d'),
             gender=data['gender'],
+            blood_group = data['blood_group'],
+            rhesus_factor = data['rhesus_factor'],
             medical_history=[MedicalRecord(
                     chief_complaint=data['medical_history']['chief_complaint'],
                     symptoms=data['medical_history']['symptoms'],
@@ -134,16 +129,138 @@ def patient_profile():
             patient.save()
 
             return jsonify({'message': 'Patient profile created successfully', 'patient_id': str(patient.id)})
+                
         else:
             return jsonify({'message': 'Patient not found in the users database'})
+    elif request.method == 'PUT':
+        data = request.get_json()
+        try:
+            # Find the patient document by user_id
+            patient_user = patient_record.patient.find_one({'_id': ObjectId(user_id)})
+            if not patient_user:
+                return jsonify({'message': 'Patient not found'}), 404
+            if user.user_type == 'patient':
+                return jsonify({'message': 'You don"t have access to this part!'}), 401
+            
+            # Update patient data with provided data
+            update_data = {
+                'full_name': data.get('full_name', patient_user.get('full_name')),
+                'birthday': datetime.strptime(data['birthday'], '%Y-%m-%d') if 'birthday' in data else patient_user.get('birthday'),
+                'gender': data.get('gender', patient_user.get('gender')),
+                'contact_information': data.get('contact_information', patient_user.get('contact_information')),
+                'emergency_contact': data.get('emergency_contact', patient_user.get('emergency_contact')),
+                'blood_group': data.get('blood_group', patient_user.get('blood_group')),
+                'rhesus_factor': data.get('rhesus_factor', patient_user.get('rhesus_factor')),
+                'immunization_records': data.get('immunization_records', patient_user.get('immunization_records')),
+                'insurance_information': data.get('insurance_information', patient_user.get('insurance_information'))
+            }
+            
+            if 'medical_history' in data:
+                update_data['medical_history'] = [
+                    {
+                        'chief_complaint': mh['chief_complaint'],
+                        'symptoms': mh['symptoms'],
+                        'diagnoses': mh['diagnoses'],
+                        'surgeries': [
+                            {
+                                'procedure': surgery['procedure'],
+                                'date': datetime.strptime(surgery['date'], '%Y-%m-%d'),
+                                'outcome': surgery['outcome']
+                            } for surgery in mh['surgeries']
+                        ],
+                        'allergies': [
+                            {
+                                'name': allergy['name'],
+                                'reaction': allergy['reaction']
+                            } for allergy in mh['allergies']
+                        ],
+                        'vital_signs': {
+                            'blood_pressure': mh['vital_signs']['blood_pressure'],
+                            'heart_rate': mh['vital_signs']['heart_rate'],
+                            'temperature': mh['vital_signs']['temperature'],
+                            'respiration_rate': mh['vital_signs']['respiration_rate']
+                        },
+                        'medications': [
+                            {
+                                'name': med['name'],
+                                'dosage': med['dosage'],
+                                'start_date': datetime.strptime(med['start_date'], '%Y-%m-%d'),
+                                'end_date': datetime.strptime(med['end_date'], '%Y-%m-%d')
+                            } for med in mh['medications']
+                        ]
+                    } for mh in data['medical_history']
+                ]
+            
+            # Update the patient document
+            patient_record.patient.update_one(
+                {'_id': ObjectId(user_id)},
+                {'$set': update_data}
+            )
+
+            return jsonify({'message': 'Patient profile updated successfully'})
+        except Exception as e:
+            return jsonify({'message': f'An error occurred: {e}'}), 400
 
     else:
         return jsonify({'message': 'Method not allowed'}), 405
 
+
+@app.route('/patient/new_medical_record', methods=['POST'], strict_slashes=False)
+def add_new_medical_record():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'message': 'Unauthorized access'}), 401
+    
+    data = request.get_json()
+    try:
+        patient_user = patient_record.patient.find_one({'_id': ObjectId(user_id)})
+        if not patient_user:
+            return jsonify({'message': 'Patient not found'}), 404
+        
+        new_medical_record = {
+            'chief_complaint': data['chief_complaint'],
+            'symptoms': data['symptoms'],
+            'diagnoses': data['diagnoses'],
+            'surgeries': [
+                {
+                    'procedure': surgery['procedure'],
+                    'date': datetime.strptime(surgery['date'], '%Y-%m-%d'),
+                    'outcome': surgery['outcome']
+                } for surgery in data['surgeries']
+            ],
+            'allergies': [
+                {
+                    'name': allergy['name'],
+                    'reaction': allergy['reaction']
+                } for allergy in data['allergies']
+            ],
+            'vital_signs': {
+                'blood_pressure': data['vital_signs']['blood_pressure'],
+                'heart_rate': data['vital_signs']['heart_rate'],
+                'temperature': data['vital_signs']['temperature'],
+                'respiration_rate': data['vital_signs']['respiration_rate']
+            },
+            'medications': [
+                {
+                    'name': med['name'],
+                    'dosage': med['dosage'],
+                    'start_date': datetime.strptime(med['start_date'], '%Y-%m-%d'),
+                    'end_date': datetime.strptime(med['end_date'], '%Y-%m-%d')
+                } for med in data['medications']
+            ]
+        }
+        # Update the patient document by adding the new medical record to the medical_history array
+        patient_record.patient.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$push': {'medical_history': new_medical_record}}
+        )
+        return jsonify({'message': 'New medical record added successfully!'})
+    except Exception as e:
+        return jsonify({'message': f'An error occured: {e}'}), 400
         
     # return the html file with patient option
-@app.route('/reg_medical_personel', methods=['PSOT', 'GET'], strict_slashes=False)
+"""@app.route('/reg_medical_personel', methods=['PSOT', 'GET'], strict_slashes=False)
 def reg_medical_personel():
-    """register all medical personel"""
-    form = MedicalPersonel()
+    register all medical personel
+    form = MedicalPersonel()"""
     

@@ -51,6 +51,8 @@ class Patient(Document):
     gender = StringField(required=True)
     contact_information = StringField()
     emergency_contact = StringField()
+    blood_group = StringField(choices=('A', 'B', 'AB', 'O', 'Unknow'), default='Unknow')
+    rhesus_factor = StringField(choices=('Positive', 'Negative', 'Unknow'), default='Unknow')
     medical_history = ListField(EmbeddedDocumentField(MedicalRecord))
     current_health_information = EmbeddedDocumentField(MedicalRecord)
     immunization_records = ListField(StringField())

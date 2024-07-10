@@ -20,6 +20,8 @@ patient_data = {
     'gender': 'Male',
     'contact_information': '123-456-7890',
     'emergency_contact': 'Jane Doe, 123-456-7890',
+    'blood_group': 'A',
+    'rhesus_factor': 'Positive',
     'medical_history': [
         MedicalRecord(
             chief_complaint='Headache',
@@ -68,6 +70,8 @@ print(f"Date of Birth: {retrieved_patient.birthday}")
 print(f"Gender: {retrieved_patient.gender}")
 print(f"Contact Information: {retrieved_patient.contact_information}")
 print(f"Emergency Contact: {retrieved_patient.emergency_contact}")
+print(f"Blood group: {retrieved_patient.blood_group}")
+print(f"Rhesus factor: {retrieved_patient.rhesus_factor}")
 print(f"Chief Complaint: {retrieved_patient.medical_history[0].chief_complaint}")
 
 # Print details of all prescribed medications
@@ -126,6 +130,8 @@ if patient:
         'full_name': original_patient.full_name,
         'birthday': original_patient.birthday,
         'gender': original_patient.gender,
+        'blood_group': original_patient.blood_group,
+        'rhesus_factor': original_patient.rhesus_factor,
         'contact_information': original_patient.contact_information,
         'emergency_contact': original_patient.emergency_contact,
         'medical_history': original_patient.medical_history,

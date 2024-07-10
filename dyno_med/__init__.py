@@ -32,6 +32,7 @@ csrf.exempt('dyno_med.routes.register')
 csrf.exempt('dyno_med.routes.login')
 csrf.exempt('dyno_med.routes.patient_registration')
 csrf.exempt('dyno_med.routes.patient_profile')
+csrf.exempt('dyno_med.routes.add_new_medical_record')
 
 
 from dyno_med import routes
