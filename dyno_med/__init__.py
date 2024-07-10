@@ -35,3 +35,4 @@ csrf.exempt('dyno_med.routes.patient_profile')
 
 
 from dyno_med import routes
+from dyno_med import medical_practitioners

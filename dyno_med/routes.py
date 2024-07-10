@@ -4,6 +4,7 @@ from dyno_med import app, database, patient_record
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
 from flask_wtf.csrf import generate_csrf
+from Medical_pratitional.Doctor import MedicalPersonel
 # from werkzeug.security import generate_password_hash
 from model.patient import *
 from bson import ObjectId
@@ -14,7 +15,7 @@ def home():
     return jsonify({'message': 'Welcome to our Medical application system management'})
 
 @app.route('/registration', methods=['POST'], strict_slashes=False)
-def register():
+def register_user():
     data = request.get_json()
     form = RegistrationForm(data=data, meta={'csrf': False})
     
@@ -141,3 +142,8 @@ def patient_profile():
 
         
     # return the html file with patient option
+@app.route('/reg_medical_personel', methods=['PSOT', 'GET'], strict_slashes=False)
+def reg_medical_personel():
+    """register all medical personel"""
+    form = MedicalPersonel()
+    
