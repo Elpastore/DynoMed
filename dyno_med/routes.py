@@ -97,42 +97,47 @@ def patient_profile():
     
     elif request.method == 'POST':
         data = request.get_json()
+        user = database.users.find_one({ '_id': user_id })
+        if user:
+            # Create patient data using user's _id as the _id field in MongoDB
+            patient = Patient(
+            id = ObjectId(user.id),  # not working
+            full_name=data['full_name'],
+            birthday=datetime.strptime(data['birthday'], '%Y-%m-%d'),
+            gender=data['gender'],
+            medical_history=[MedicalRecord(
+                    chief_complaint=data['medical_history']['chief_complaint'],
+                    symptoms=data['medical_history']['symptoms'],
+                    diagnoses=data['medical_history']['diagnoses'],
+                    surgeries=data['medical_history']['surgeries'],
+                    allergies=data['medical_history']['allergies'],
+                    
+                    vital_signs=VitalSigns(
+                        blood_pressure=data['medical_history']['vital_signs']['blood_pressure'],
+                        heart_rate=data['medical_history']['vital_signs']['heart_rate'],
+                        temperature=data['medical_history']['vital_signs']['temperature'],
+                        respiration_rate=data['medical_history']['vital_signs']['respiration_rate']),
+                    
+                    medications=[
+                        Medication(
+                            name=med['name'],
+                            dosage=med['dosage'],
+                            start_date=datetime.strptime(med['start_date'], '%Y-%m-%d'),
+                            end_date=datetime.strptime(med['end_date'], '%Y-%m-%d')
+                        ) for med in data['medical_history']['medications']
+                    ]
+                )],
+            immunization_records=data['immunization_records']
+            )
+            
+            patient.save()
 
-        # Create patient data using user's _id as the _id field in MongoDB
-        patient = Patient(
-        full_name=data['full_name'],
-        birthday=datetime.strptime(data['birthday'], '%Y-%m-%d'),
-        gender=data['gender'],
-        medical_history=[MedicalRecord(
-                chief_complaint=data['medical_history']['chief_complaint'],
-                symptoms=data['medical_history']['symptoms'],
-                diagnoses=data['medical_history']['diagnoses'],
-                surgeries=data['medical_history']['surgeries'],
-                allergies=data['medical_history']['allergies'],
-                
-                vital_signs=VitalSigns(
-                    blood_pressure=data['medical_history']['vital_signs']['blood_pressure'],
-                    heart_rate=data['medical_history']['vital_signs']['heart_rate'],
-                    temperature=data['medical_history']['vital_signs']['temperature'],
-                    respiration_rate=data['medical_history']['vital_signs']['respiration_rate']),
-                
-                medications=[
-                    Medication(
-                        name=med['name'],
-                        dosage=med['dosage'],
-                        start_date=datetime.strptime(med['start_date'], '%Y-%m-%d'),
-                        end_date=datetime.strptime(med['end_date'], '%Y-%m-%d')
-                    ) for med in data['medical_history']['medications']
-                ]
-            )],
-        immunization_records=data['immunization_records']
-        )
-        
-        patient.save()
-
-        return jsonify({'message': 'Patient profile created successfully', 'patient_id': str(patient.id)})
+            return jsonify({'message': 'Patient profile created successfully', 'patient_id': str(patient.id)})
+        else:
+            return jsonify({'message': 'Patient not found in the users database'})
 
     else:
         return jsonify({'message': 'Method not allowed'}), 405
-    
+
+        
     # return the html file with patient option

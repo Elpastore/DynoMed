@@ -39,3 +39,20 @@ curl -X POST http://127.0.0.1:5000/patient/profile -H "Content-Type: application
     "immunization_records": ["MMR", "Tetanus"],
     "insurance_information": "Insurance Company XYZ"
 }' -b cookies.txt
+
+
+
+curl -X POST http://127.0.0.1:5000/patient/registration -H "Content-Type: application/json" -d '{
+    "username": "elpastore",
+    "email": "abdoulayesadio1997@gmail.com",
+    "password": "elpastore",
+    "confirm_password": "elpastore"
+    }'
+
+    curl -X GET http://127.0.0.1:5000/patient/profile -H "Content-Type: application/json" -b cookies.txt
+    general registration part:
+        -medical partitioner()
+        -patient()
+    
+    login part:
+        -type of user:==> part 
