@@ -103,4 +103,3 @@ class UpdateAccountForm(FlaskForm):
         user = database.users.find_one({"email": email.data})
         if user:
             raise ValidationError("That email is taken. Please choose a different one.")
-        

@@ -50,3 +50,4 @@ class MedicalPersonel(FlaskForm):
     certificates = FieldList(StringField('Certificate Path', validators=[Length(max=200)]), min_entries=1)
 
     submit = SubmitField('Submit')
+        
