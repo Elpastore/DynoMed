@@ -10,7 +10,7 @@ african_countries_states = {
             'Mayo Belwa', 'Michika', 'Mubi North', 'Mubi South', 'Numan', 'Shelleng', 'Song', 'Toungo', 'Yola North', 
             'Yola South'
         ],
-        # Add other states and their LGAs...
+
     },
     'South Africa': {
         'Eastern Cape': [
@@ -22,7 +22,7 @@ african_countries_states = {
             'Fezile Dabi District Municipality', 'Lejweleputswa District Municipality', 'Mangaung Metropolitan Municipality', 
             'Thabo Mofutsanyana District Municipality', 'Xhariep District Municipality'
         ],
-        # Add other provinces and their municipalities...
+
     },
     'Kenya': {
         'Baringo': [
@@ -31,6 +31,66 @@ african_countries_states = {
         'Bomet': [
             'Bomet Central', 'Bomet East', 'Chepalungu', 'Konoin', 'Sotik'
         ],
-        # Add other counties and their constituencies...
+    }
+}
+
+african_universities = {
+    'Nigeria': {
+        'Lagos': [
+            'University of Lagos (UNILAG)',
+            'Lagos State University (LASU)',
+            'Covenant University',
+            'Pan-Atlantic University',
+            'Lagos Business School',
+            'Caleb University',
+            'Anchor University',
+            'Eko University of Medicine and Health Sciences'
+        ],
+        'Abia': [
+            'Abia State University (ABSU)',
+            'Gregory University',
+            'Michael Okpara University of Agriculture',
+            'Clifford University'
+        ],
+        'Adamawa': [
+            'Modibbo Adama University of Technology (MAUTECH)',
+            'American University of Nigeria (AUN)',
+            'Adamawa State University (ADSU)'
+        ]
+
+    },
+    'South Africa': {
+        'Eastern Cape': [
+            'Rhodes University',
+            'Nelson Mandela University',
+            'University of Fort Hare',
+            'Walter Sisulu University'
+        ],
+        'Gauteng': [
+            'University of Johannesburg',
+            'University of Pretoria',
+            'University of the Witwatersrand',
+            'Tshwane University of Technology',
+            'University of South Africa (UNISA)'
+        ],
+        'KwaZulu-Natal': [
+            'University of KwaZulu-Natal',
+            'Durban University of Technology',
+            'Mangosuthu University of Technology'
+        ]
+    },
+    'Senegal': {
+        'Dakar': [
+            'Cheikh Anta Diop University (UCAD)',
+            'Université Gaston Berger de Saint-Louis (UGB)',
+            'Université Alioune Diop de Bambey (UADB)',
+            'Université Amadou Makhtar Mbow (UAM)'
+        ],
+        'Diourbel': [
+            'Université Virtuelle du Sénégal (UVS)'
+        ],
+        'Thiès': [
+            'Université de Thiès (UT)'
+        ]
     }
 }
