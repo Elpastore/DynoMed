@@ -4,11 +4,14 @@ from dyno_med import app, database, patient_record
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
 from flask_wtf.csrf import generate_csrf
-from Medical_pratitional.Doctor import MedicalPersonel
+from dyno_med.Medical_pratitional import (med_forms, med_pract)
 # from werkzeug.security import generate_password_hash
 from model.patient import *
 from bson import ObjectId
 #from bson.objectid import ObjectId
+
+Medical = med_pract.Medical()
+MedPersonel = med_forms.MedicalPersonel()
 
 @app.route('/home', methods=['GET'])
 def home():
@@ -75,6 +78,21 @@ def patient_registration():
     errors = form.errors
     return jsonify({'message': 'Please try again, error occurred!', 'errors': errors}, 400)
 
+@app.route('/medical_practitioner/registration', methods=['POST', 'GET'])
+def medical_practitioner_registration():
+    med_data = request.get_json()
+    form = MedPersonel(data=med_data, meta={'csrf': False})
+    
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            return Medical.insert_db(form)
+        
+        errors = form.errors
+        return jsonify({'message': 'Registration failed due to validation errors.', 'errors': errors}, 400)
+    
+    if request.method == 'GET':
+
+
 @app.route('/patient/profile', methods=['GET', 'POST'])
 def patient_profile():
     user_id = session.get('user_id')
@@ -102,7 +120,7 @@ def patient_profile():
         if user:
             # Create patient data using user's _id as the _id field in MongoDB
             patient = Patient(
-            id = ObjectId(user.id),  # not working
+            # id = ObjectId(user.id),  # not working
             full_name=data['full_name'],
             birthday=datetime.strptime(data['birthday'], '%Y-%m-%d'),
             gender=data['gender'],
@@ -141,7 +159,7 @@ def patient_profile():
         return jsonify({'message': 'Method not allowed'}), 405
 
         
-    # return the html file with patient option
+# register a new medial practitioner
 @app.route('/reg_medical_personel', methods=['PSOT', 'GET'], strict_slashes=False)
 def reg_medical_personel():
     """register all medical personel"""
