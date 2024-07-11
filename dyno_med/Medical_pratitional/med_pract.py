@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """module for all medical pratitioners"""
 from flask import Flask, jsonify
+from dyno_med import database
+from datetime import date
 
 class Medical:
     def __init__(self) -> None:
@@ -14,9 +16,10 @@ class Medical:
         last_name = form.last_name.data
         age = form.age.data
         gender = form.gender.data
-        date_of_birth = form.date_of_birth.data
-        country_of_origin = form.country_of_origin.data
-        state_of_origin = form.state_of_origin.data
+        # date_of_birth = form.date_of_birth.data
+        date_of_birth = form.date_of_birth.data.isoformat() if isinstance(form.date_of_birth.data, date) else form.date_of_birth.data
+        country = form.country.data
+        State_of_origin = form.State_of_origin.data
         local_government_area = form.local_government_area.data
         town_of_origin = form.town_of_origin.data
 
@@ -63,8 +66,8 @@ class Medical:
             'age': age,
             'gender': gender,
             'date_of_birth': date_of_birth,
-            'country_of_origin': country_of_origin,
-            'state_of_origin': state_of_origin,
+            'country_of_origin': country,
+            'state_of_origin': State_of_origin,
             'local_government_area': local_government_area,
             'town_of_origin': town_of_origin,
             'residential_address': residential_address,

@@ -11,7 +11,8 @@ app.config['SECRET_KEY'] = 'dyno_med'
 client = MongoClient('mongodb://127.0.0.1:27017')
 school_collection = client.my_db.school
 
-database = client.medical_system
+# database = client.medical_system
+database = client.dynoMed
 patient_record = client.Record
 
 # Added by wizy

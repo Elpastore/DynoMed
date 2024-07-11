@@ -6,10 +6,12 @@ from dyno_med.Medical_pratitional.Index_of_countries import african_countries_st
 
 
 class AddressForm(FlaskForm):
+    class Meta:
+        csrf = False
     # country = SelectField('Country', validators=[DataRequired()],
     #                     choices=[(country, country) for country in countries.keys()])
-    country = StringField('Country', validators=[DataRequired(), Length(min=2, max=50)])
-    state = StringField('State', validators=[DataRequired()])
+    country = StringField('Country') #, validators=[DataRequired(), Length(min=2, max=50)])
+    state = StringField('State') #, validators=[DataRequired()])
     city = StringField('City', validators=[DataRequired(), Length(min=2, max=50)])
     town = StringField('Town', validators=[Length(max=50)])
     street = StringField('Street', validators=[Length(max=100)])
@@ -18,10 +20,14 @@ class AddressForm(FlaskForm):
     telephone_num = StringField('Telephone Number', validators=[DataRequired(), Regexp(r'^\d{7,15}$', message="Invalid telephone number")])
 
 class EducationForm(FlaskForm):
-    institution = StringField('Institution', validators=[DataRequired(), Length(min=2, max=100)])
-    degree = StringField('Degree', validators=[DataRequired(), Length(min=2, max=50)])
+    class Meta:
+        csrf = False
+    institution = StringField('Institution') #, validators=[DataRequired(), Length(min=2, max=100)])
+    degree = StringField('Degree') #, validators=[DataRequired(), Length(min=2, max=50)])
 
 class MedicalPersonel(FlaskForm):
+    class Meta:
+        csrf = False
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=3, max=30)])
     middle_name = StringField('Middle Name', validators=[Length(min=3, max=30)])
     last_name = StringField('Last Name', validators=[DataRequired(), Length(min=3, max=30)])
@@ -31,9 +37,9 @@ class MedicalPersonel(FlaskForm):
     date_of_birth = DateField('Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
     # country_of_origin = SelectField('Country of Origin', validators=[DataRequired()],
     #                                choices=[(country, country) for country in countries.keys()])
-    country = StringField('Country', validators=[DataRequired(), Length(min=2, max=50)])
+    country = StringField('Country') #, validators=[DataRequired(), Length(min=2, max=50)])
     # state_of_origin = SelectField('State of Origin', validators=[DataRequired()], choices=[])
-    State_of_origin = StringField('State of Origin', validators=[DataRequired()])
+    State_of_origin = StringField('State of Origin') #, validators=[DataRequired()])
 
     local_government_area = StringField('Local Government Area', validators=[DataRequired(), Length(min=2, max=50)])
     town_of_origin = StringField('Town of Origin', validators=[Length(max=50)])
