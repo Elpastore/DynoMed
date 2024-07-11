@@ -4,11 +4,12 @@ from dyno_med import app, database, patient_record
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
 from flask_wtf.csrf import generate_csrf
-#from dyno_med.Medical_pratitional.Doctor import MedicalPersonel
+from dyno_med.dyno_med.Medical_pratitional import (med_forms, med_pract)
 # from werkzeug.security import generate_password_hash
 from model.patient import *
 from bson import ObjectId
 #from bson.objectid import ObjectId
+
 
 @app.route('/home', methods=['GET'])
 def home():
@@ -66,7 +67,19 @@ def logout():
         return jsonify({'message': 'Not need to loggout since you are not login'})
 
 
-@app.route('/patient/profile', methods=['GET', 'POST', 'PUT'], strict_slashes=False)
+@app.route('/medical_practitioner/registration', methods=['POST'])
+def medical_practitioner_registration():
+    med_data = request.get_json()
+    form = med_forms.MedicalPersonel(data=med_data, meta={'csrf': False})
+    
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            return med_pract.Medical.insert_db(form)
+        
+        errors = form.errors
+        return jsonify({'message': 'Registration failed due to validation errors.', 'errors': errors}, 400)
+
+@app.route('/patient/profile', methods=['GET', 'POST'])
 def patient_profile():
     user_id = session.get('user_id')
     if not user_id:
@@ -95,7 +108,7 @@ def patient_profile():
                 return jsonify({'message': 'You don"t have access to this part!'}), 401
             # Create patient data using user's _id as the _id field in MongoDB
             patient = Patient(
-            id=ObjectId(user_id),
+            # id = ObjectId(user.id),  # not working
             full_name=data['full_name'],
             birthday=datetime.strptime(data['birthday'], '%Y-%m-%d'),
             gender=data['gender'],
@@ -203,64 +216,3 @@ def patient_profile():
 
     else:
         return jsonify({'message': 'Method not allowed'}), 405
-
-
-@app.route('/patient/new_medical_record', methods=['POST'], strict_slashes=False)
-def add_new_medical_record():
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({'message': 'Unauthorized access'}), 401
-    
-    data = request.get_json()
-    try:
-        patient_user = patient_record.patient.find_one({'_id': ObjectId(user_id)})
-        if not patient_user:
-            return jsonify({'message': 'Patient not found'}), 404
-        
-        new_medical_record = {
-            'chief_complaint': data['chief_complaint'],
-            'symptoms': data['symptoms'],
-            'diagnoses': data['diagnoses'],
-            'surgeries': [
-                {
-                    'procedure': surgery['procedure'],
-                    'date': datetime.strptime(surgery['date'], '%Y-%m-%d'),
-                    'outcome': surgery['outcome']
-                } for surgery in data['surgeries']
-            ],
-            'allergies': [
-                {
-                    'name': allergy['name'],
-                    'reaction': allergy['reaction']
-                } for allergy in data['allergies']
-            ],
-            'vital_signs': {
-                'blood_pressure': data['vital_signs']['blood_pressure'],
-                'heart_rate': data['vital_signs']['heart_rate'],
-                'temperature': data['vital_signs']['temperature'],
-                'respiration_rate': data['vital_signs']['respiration_rate']
-            },
-            'medications': [
-                {
-                    'name': med['name'],
-                    'dosage': med['dosage'],
-                    'start_date': datetime.strptime(med['start_date'], '%Y-%m-%d'),
-                    'end_date': datetime.strptime(med['end_date'], '%Y-%m-%d')
-                } for med in data['medications']
-            ]
-        }
-        # Update the patient document by adding the new medical record to the medical_history array
-        patient_record.patient.update_one(
-            {'_id': ObjectId(user_id)},
-            {'$push': {'medical_history': new_medical_record}}
-        )
-        return jsonify({'message': 'New medical record added successfully!'})
-    except Exception as e:
-        return jsonify({'message': f'An error occured: {e}'}), 400
-        
-    # return the html file with patient option
-"""@app.route('/reg_medical_personel', methods=['PSOT', 'GET'], strict_slashes=False)
-def reg_medical_personel():
-    register all medical personel
-    form = MedicalPersonel()"""
-    
