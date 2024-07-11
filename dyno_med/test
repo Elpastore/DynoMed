@@ -56,3 +56,57 @@ curl -X POST http://127.0.0.1:5000/patient/registration -H "Content-Type: applic
     
     login part:
         -type of user:==> part 
+
+
+
+        curl -X POST http://127.0.0.1:5000/medical_practitioner/registration \
+        -H "Content-Type: application/json" \
+        -d '{
+            "first_name": "John",
+            "middle_name": "Doe",
+            "last_name": "Smith",
+            "age": 30,
+            "gender": "Male",
+            "date_of_birth": "1990-01-01",
+            "country_of_origin": "Nigeria",
+            "state_of_origin": "Lagos",
+            "local_government_area": "Ikeja",
+            "town_of_origin": "Ikeja",
+            "residential_address": {
+                "country": "Nigeria",
+                "state": "Lagos",
+                "city": "Ikeja",
+                "town": "GRA",
+                "street": "Broad Street",
+                "house_num": "23",
+                "email": "john@example.com",
+                "telephone_num": "1234567890"
+            },
+            "next_of_kin_first_name": "Jane",
+            "next_of_kin_middle_name": "Doe",
+            "next_of_kin_last_name": "Smith",
+            "next_of_kin_relationship": "Sister",
+            "next_of_kin_residential_address": {
+                "country": "Nigeria",
+                "state": "Lagos",
+                "city": "Ikeja",
+                "town": "GRA",
+                "street": "Broad Street",
+                "house_num": "23",
+                "email": "jane@example.com",
+                "telephone_num": "1234567891"
+            },
+            "profession": "Doctor",
+            "primary_school": "Primary School Name",
+            "high_school": "High School Name",
+            "universities_colleges_attended": [
+                {
+                    "institution": "University Name",
+                    "degree": "MBBS"
+                }
+            ],
+            "licenses": ["Medical License"],
+            "cv": "path/to/cv.pdf",
+            "certificates": ["path/to/certificate1.pdf", "path/to/certificate2.pdf"]
+        }'
+   

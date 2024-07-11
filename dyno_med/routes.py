@@ -10,8 +10,6 @@ from model.patient import *
 from bson import ObjectId
 #from bson.objectid import ObjectId
 
-Medical = med_pract.Medical()
-MedPersonel = med_forms.MedicalPersonel()
 
 @app.route('/home', methods=['GET'])
 def home():
@@ -78,20 +76,17 @@ def patient_registration():
     errors = form.errors
     return jsonify({'message': 'Please try again, error occurred!', 'errors': errors}, 400)
 
-@app.route('/medical_practitioner/registration', methods=['POST', 'GET'])
+@app.route('/medical_practitioner/registration', methods=['POST'])
 def medical_practitioner_registration():
     med_data = request.get_json()
-    form = MedPersonel(data=med_data, meta={'csrf': False})
+    form = med_forms.MedicalPersonel(data=med_data, meta={'csrf': False})
     
     if request.method == 'POST':
         if form.validate_on_submit():
-            return Medical.insert_db(form)
+            return med_pract.Medical.insert_db(form)
         
         errors = form.errors
         return jsonify({'message': 'Registration failed due to validation errors.', 'errors': errors}, 400)
-    
-    if request.method == 'GET':
-
 
 @app.route('/patient/profile', methods=['GET', 'POST'])
 def patient_profile():
@@ -157,11 +152,3 @@ def patient_profile():
 
     else:
         return jsonify({'message': 'Method not allowed'}), 405
-
-        
-# register a new medial practitioner
-@app.route('/reg_medical_personel', methods=['PSOT', 'GET'], strict_slashes=False)
-def reg_medical_personel():
-    """register all medical personel"""
-    form = MedicalPersonel()
-    

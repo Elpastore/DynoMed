@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = 'dyno_med'
 client = MongoClient('mongodb://127.0.0.1:27017')
 school_collection = client.my_db.school
 
-database = client.dynoMed
+database = client.medical_system
 patient_record = client.Record
 
 # Added by wizy
@@ -32,7 +32,7 @@ csrf.exempt('dyno_med.routes.register')
 csrf.exempt('dyno_med.routes.login')
 csrf.exempt('dyno_med.routes.patient_registration')
 csrf.exempt('dyno_med.routes.patient_profile')
-
+csrf.exempt('dyno_med.routes.medical_practitioner_registration')
 
 from dyno_med import routes
 from dyno_med import medical_practitioners
