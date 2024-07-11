@@ -4,7 +4,7 @@ from dyno_med import app, database, patient_record
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
 from flask_wtf.csrf import generate_csrf
-from dyno_med.dyno_med.Medical_pratitional import (med_forms, med_pract)
+from dyno_med.Medical_pratitional import (med_forms, med_pract)
 # from werkzeug.security import generate_password_hash
 from model.patient import *
 from bson import ObjectId
