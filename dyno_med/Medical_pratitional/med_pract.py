@@ -8,6 +8,10 @@ class Medical:
     def __init__(self) -> None:
         """do nothing here"""
         pass
+
+    def display_med_personel():
+        """display a brief profile of each medical personel"""
+        
     
     def insert_db(form):
         """Insert new record into the medical personnel database"""
