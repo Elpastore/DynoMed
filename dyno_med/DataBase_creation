@@ -6,56 +6,52 @@ db.medical_practitioners.insertOne({
         "middle_name": "",
         "last_name": "",
         "age": null,
-        "data_of_birth": "",
+        "date_of_birth": "",
         "country_of_origin": "",
         "state_of_origin": "",
-        "local_goverment_area": "",
+        "local_government_area": "",
         "town_of_origin": ""
     },
-
     "residential_address": {
         "country": "",
         "state": "",
         "city": "",
-        "Town": "",
+        "town": "",
         "street": "",
         "house_num": ""
     },
-
     "Next_of_Kin": {
         "first_name": "",
         "middle_name": "",
         "last_name": "",
-        "relationship": ""
+        "relationship": "",
         "residential_address": {
             "country": "",
             "state": "",
             "city": "",
-            "Town": "",
+            "town": "",
             "email": "",
             "telephone_num": ""
         }
     },
-
     "Professional_data": {
         "profession": "",
-
         "education": {
             "primary_school": "",
             "high_school": "",
             "university": [
                 {"institution": "", "degree": ""},
                 {"institution": "", "degree": ""}
-                ]
-            "license": ["", "", "", "" ...]
-            "cv": "path/to/cv.pdf",
-            "certificates": [
-            "path/to/certificate1.pdf",
-            "path/to/certificate2.pdf
             ]
-        }
+        },
+        "license": ["", "", "", ""],
+        "cv": "path/to/cv.pdf",
+        "certificates": [
+            "path/to/certificate1.pdf",
+            "path/to/certificate2.pdf"
+        ]
     }
 })
 
-// Retrive all documents from medical_practitioners and format them for easy reading
+// Retrieve all documents from medical_practitioners and format them for easy reading
 db.medical_practitioners.find().pretty()

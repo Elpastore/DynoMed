@@ -13,7 +13,7 @@ from bson import ObjectId
 
 @app.route('/home', methods=['GET'])
 def home():
-    return jsonify({'message': 'Welcome to our Medical application system management'})
+    rende
 
 @app.route('/registration', methods=['POST'], strict_slashes=False)
 def register_user():
