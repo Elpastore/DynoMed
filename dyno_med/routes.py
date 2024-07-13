@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import jsonify, request, session
+from flask import jsonify, request, session, render_template
 from dyno_med import app, database, patient_record
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
@@ -13,7 +13,8 @@ from bson import ObjectId
 
 @app.route('/home', methods=['GET'])
 def home():
-    rende
+    # rende
+    return jsonify({'message': 'Welcome to DynoMed web application'})
 
 @app.route('/registration', methods=['POST'], strict_slashes=False)
 def register_user():
@@ -79,9 +80,11 @@ def medical_practitioner_registration():
         errors = form.errors
         return jsonify({'message': 'Registration failed due to validation errors.', 'errors': errors}, 400)
 
-@app.route('/patient/profile', methods=['GET', 'POST'])
+@app.route('/patient/profile', methods=['GET', 'POST', 'PUT'])
 def patient_profile():
     user_id = session.get('user_id')
+    # return render_template('patient_registration.html')
+    # To be able to use this frontend part we will need the register and login frontend part
     if not user_id:
         return jsonify({'message': 'Unauthorized access'}), 401
 
@@ -214,5 +217,7 @@ def patient_profile():
         except Exception as e:
             return jsonify({'message': f'An error occurred: {e}'}), 400
 
-    else:
+    """else:
         return jsonify({'message': 'Method not allowed'}), 405
+    
+"""

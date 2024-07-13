@@ -16,6 +16,7 @@ class VitalSigns(EmbeddedDocument):
 class Medication(EmbeddedDocument):
     name= StringField()
     dosage = StringField()
+    usage = StringField()
     start_date = DateField()
     end_date  = DateField()
 
@@ -57,4 +58,4 @@ class Patient(Document):
     current_health_information = EmbeddedDocumentField(MedicalRecord)
     immunization_records = ListField(StringField())
     insurance_information = StringField()
-    
+    appointment = DateField()
