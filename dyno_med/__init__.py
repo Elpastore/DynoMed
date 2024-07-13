@@ -5,6 +5,8 @@ from flask_wtf.csrf import CSRFProtect
 from mongoengine import connect
 
 app = Flask(__name__)
+print(f'Template folder: {app.template_folder}')
+
 app.config['SECRET_KEY'] = 'dyno_med'
 # database  connection using mongoclient
 # This will be for registration
