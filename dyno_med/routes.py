@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import jsonify, request, session
+from flask import jsonify, request, session, render_template
 from dyno_med import app, database, patient_record
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
@@ -11,9 +11,10 @@ from bson import ObjectId
 #from bson.objectid import ObjectId
 
 
-@app.route('/home', methods=['GET'])
+@app.route('/', methods=['GET'], strict_slashes=False)
 def home():
-    rende
+    print("acceess home")
+    return render_template('home.html')
 
 @app.route('/registration', methods=['POST'], strict_slashes=False)
 def register_user():
