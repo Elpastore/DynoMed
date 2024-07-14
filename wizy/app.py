@@ -17,6 +17,13 @@ def home():
     """The home page"""
     return render_template('home.html')
 
+@app.route('/user_signup-login', methods=['POST', 'GET'], strict_slashes=False)
+def login_signUp():
+    """signup or login as a user"""
+    if request.method == 'POST':
+        return redirect(url_for('home'))
+    return render_template('login.html')
+
 @app.route('/medical_practitioner/registration', methods=['POST', 'GET'], strict_slashes= False)
 @csrf.exempt
 def medical_practitioner_registration():

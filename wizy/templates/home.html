@@ -21,7 +21,7 @@
 						<a class="nav-link" href="#">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#portfolio">Login</a>
+						<a class="nav-link" href="{{ url_for('login_signUp') }}">Login</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#about">About</a>
@@ -65,7 +65,7 @@
 				<div class="carousel-caption">
 					<h5>Personalized At-Home Care</h5>
 					<p>Request a personal doctor or nurse.</p>
-					<p><a class="btn btn-warning mt-3" href="#">Sign-Up As User</a></p>
+					<p><a class="btn btn-warning mt-3" href="{{ url_for('login_signUp') }}">Sign-Up As User</a></p>
 				</div>
 			</div>
 		</div><button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#carouselExampleIndicators" type="button"><span aria-hidden="true" class="carousel-control-prev-icon"></span> <span class="visually-hidden">Previous</span></button> <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleIndicators" type="button"><span aria-hidden="true" class="carousel-control-next-icon"></span> <span class="visually-hidden">Next</span></button>
