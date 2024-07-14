@@ -29,7 +29,7 @@ class Medical:
             "town_of_origin": form_data.get('town_of_origin', ""),
             "Email": form_data.get('email', ""),
             "mobile_num": form_data.get('mobile_num', ""),
-            "LinkedIn": form_data.get('linkedin', ""),
+            "LinkedIn": form_data.get('linkedIn', ""),
             "Password": form_data.get('passWord', ""),
             "confirm_password ": form_data.get('confirm_password', "")
         }

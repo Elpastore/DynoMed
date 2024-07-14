@@ -23,6 +23,7 @@ def medical_practitioner_registration():
     """register medical experts"""
     if request.method == 'POST':
         form_data = request.form
+        print("Received form data:", form_data)
         med = Medical()
         med.insert(form_data)
         return redirect(url_for('home'))  # Redirect to a success page after registration
