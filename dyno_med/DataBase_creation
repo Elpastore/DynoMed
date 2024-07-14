@@ -10,7 +10,12 @@ db.medical_practitioners.insertOne({
         "country_of_origin": "",
         "state_of_origin": "",
         "local_government_area": "",
-        "town_of_origin": ""
+        "town_of_origin": "",
+        "Email": "",
+        "mobile_num": "",
+        "LinkedIn": "",
+        "password": "",
+        "confirm_password": ""
     },
     "residential_address": {
         "country": "",
