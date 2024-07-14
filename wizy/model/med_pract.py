@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 """module for all medical pratitioners"""
-from flask import Flask, jsonify
 from . import database
 from datetime import date
 
@@ -16,76 +15,77 @@ class Medical:
         """retrieve a collection from the db"""
         return database.medical_practitioner
     
-    def insert_db(form):
-        """Insert new record into the medical personnel database"""
-        first_name = form.first_name.data
-        middle_name = form.middle_name.data
-        last_name = form.last_name.data
-        age = form.age.data
-        gender = form.gender.data
-        # date_of_birth = form.date_of_birth.data
-        date_of_birth = form.date_of_birth.data.isoformat() if isinstance(form.date_of_birth.data, date) else form.date_of_birth.data
-        country = form.country.data
-        State_of_origin = form.State_of_origin.data
-        local_government_area = form.local_government_area.data
-        town_of_origin = form.town_of_origin.data
-
-        residential_address = {
-            "country": form.residential_address.country.data,
-            "state": form.residential_address.state.data,
-            "city": form.residential_address.city.data,
-            "town": form.residential_address.town.data,
-            "street": form.residential_address.street.data,
-            "house_num": form.residential_address.house_num.data,
-            "email": form.residential_address.email.data,
-            "telephone_num": form.residential_address.telephone_num.data,
+    def insert(self, form_data):
+        """craete a new collection of medical experrts"""
+        personal_data = {
+            "First_name": form_data.get('first_name', ""),
+            "middle_name": form_data.get('middle_name', ""),
+            "last_name": form_data.get('last_name', ""),
+            "age": None,
+            "date_of_birth": form_data.get('date_of_birth', ""),
+            "country_of_origin": form_data.get('country_of_origin', ""),
+            "state_of_origin": form_data.get('state_of_origin', ""),
+            "local_government_area": form_data.get('local_government_area', ""),
+            "town_of_origin": form_data.get('town_of_origin', ""),
+            "Email": form_data.get('email', ""),
+            "mobile_num": form_data.get('mobile_num', ""),
+            "LinkedIn": form_data.get('linkedIn', ""),
+            "Password": form_data.get('passWord', ""),
+            "confirm_password ": form_data.get('confirm_password', "")
         }
-
+        
+        residential_address = {
+            "country": form_data.get('residential_country', ""),
+            "state": form_data.get('residential_state', ""),
+            "city": form_data.get('residential_city', ""),
+            "town": form_data.get('residential_town', ""),
+            "street": form_data.get('residential_street', ""),
+            "house_num": form_data.get('residential_house_num', "")
+        }
+        
         next_of_kin = {
-            "first_name": form.next_of_kin_first_name.data,
-            "middle_name": form.next_of_kin_middle_name.data,
-            "last_name": form.next_of_kin_last_name.data,
-            "relationship": form.next_of_kin_relationship.data,
-            "address": {
-                "country": form.next_of_kin_residential_address.country.data,
-                "state": form.next_of_kin_residential_address.state.data,
-                "city": form.next_of_kin_residential_address.city.data,
-                "town": form.next_of_kin_residential_address.town.data,
-                "street": form.next_of_kin_residential_address.street.data,
-                "house_num": form.next_of_kin_residential_address.house_num.data,
-                "email": form.next_of_kin_residential_address.email.data,
-                "telephone_num": form.next_of_kin_residential_address.telephone_num.data,
+            "first_name": form_data.get('nok_first_name', ""),
+            "middle_name": form_data.get('nok_middle_name', ""),
+            "last_name": form_data.get('nok_last_name', ""),
+            "relationship": form_data.get('nok_relationship', ""),
+            "residential_address": {
+                "country": form_data.get('nok_residential_country', ""),
+                "state": form_data.get('nok_residential_state', ""),
+                "city": form_data.get('nok_residential_city', ""),
+                "town": form_data.get('nok_residential_town', ""),
+                "email": form_data.get('nok_email', ""),
+                "telephone_num": form_data.get('nok_telephone_num', "")
             }
         }
+        
+        professional_data = {
+            "profession": form_data.get('profession', ""),
+            "education": {
+                "primary_school": form_data.get('primary_school', ""),
+                "high_school": form_data.get('high_school', ""),
+                "university": [
+                    {"institution": form_data.get('university_1_institution', ""), "degree": form_data.get('university_1_degree', "")},
+                    {"institution": form_data.get('university_2_institution', ""), "degree": form_data.get('university_2_degree', "")}
+                ]
+            },
+            "license": [
+                form_data.get('license_1', ""), 
+                form_data.get('license_2', ""), 
+                form_data.get('license_3', ""), 
+                form_data.get('license_4', "")
+            ],
+            "cv": form_data.get('cv', "path/to/cv.pdf"),
+            "certificates": [
+                form_data.get('certificate_1', "path/to/certificate1.pdf"),
+                form_data.get('certificate_2', "path/to/certificate2.pdf")
+            ]
+        }
 
-        profession = form.profession.data
-        primary_school = form.primary_school.data
-        high_school = form.high_school.data
-        universities_colleges_attended = [{"institution": edu.institution.data, "degree": edu.degree.data} for edu in form.universities_colleges_attended]
-        licenses = [license.data for license in form.licenses]
-        cv = form.cv.data
-        certificates = [certificate.data for certificate in form.certificates]
+        data = {
+            "Personal_data": personal_data,
+            "residential_address": residential_address,
+            "Next_of_Kin": next_of_kin,
+            "Professional_data": professional_data
+        }
 
-        new_medical_practitioner = database['medical_practitioners'].insert_one({
-            'first_name': first_name,
-            'middle_name': middle_name,
-            'last_name': last_name,
-            'age': age,
-            'gender': gender,
-            'date_of_birth': date_of_birth,
-            'country_of_origin': country,
-            'state_of_origin': State_of_origin,
-            'local_government_area': local_government_area,
-            'town_of_origin': town_of_origin,
-            'residential_address': residential_address,
-            'next_of_kin': next_of_kin,
-            'profession': profession,
-            'primary_school': primary_school,
-            'high_school': high_school,
-            'universities_colleges_attended': universities_colleges_attended,
-            'licenses': licenses,
-            'cv': cv,
-            'certificates': certificates
-        })
-
-        return jsonify({'message': f'Medical practitioner registration successful! ID: {new_medical_practitioner.inserted_id}'})
+        database.medical_practitioners.insert_one(data)

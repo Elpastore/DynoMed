@@ -3,7 +3,7 @@
 Main route of the application
 """
 from flask import (Flask, request, render_template, url_for, redirect)
-from model import med_pract
+from model.med_pract import Medical
 from  model import database
 from flask_wtf.csrf import CSRFProtect
 
@@ -18,16 +18,17 @@ def home():
     return render_template('home.html')
 
 @app.route('/medical_practitioner/registration', methods=['POST', 'GET'], strict_slashes= False)
+@csrf.exempt
 def medical_practitioner_registration():
     """register medical experts"""
     if request.method == 'POST':
-        med_data = request.get_json()
-        data = med_pract.Medical.insert_db(med_data)
-        print(data)
-        return redirect(url_for('registration Successful'))
-    
-    practitioners = list(database.medical_practitioner.find())        
-    return render_template('med-expert_reg.html', practitioners=practitioners)
+        form_data = request.form
+        print("Received form data:", form_data)
+        med = Medical()
+        med.insert(form_data)
+        return redirect(url_for('home'))  # Redirect to a success page after registration
+
+    return render_template('med-expert_reg.html')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
