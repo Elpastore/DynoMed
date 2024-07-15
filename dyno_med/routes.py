@@ -11,10 +11,10 @@ from bson import ObjectId
 #from bson.objectid import ObjectId
 
 
-@app.route('/home', methods=['GET'])
+@app.route('/', methods=['GET'], strict_slashes=False)
 def home():
-    # rende
-    return jsonify({'message': 'Welcome to DynoMed web application'})
+    print("acceess home")
+    return render_template('home.html')
 
 @app.route('/registration', methods=['POST'], strict_slashes=False)
 def register_user():
