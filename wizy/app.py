@@ -24,6 +24,14 @@ def login_signUp():
         return redirect(url_for('home'))
     return render_template('login.html')
 
+@app.route('/medical_practitioner/profile', methods=['POST', 'GET'], strict_slashes=False)
+@csrf.exempt
+def medical_expert_page():
+    """medical expert page"""
+    if request.method == 'POST':
+        return redirect(url_for('home'))
+    return render_template('med-expert_profile.html')
+
 @app.route('/medical_practitioner/registration', methods=['POST', 'GET'], strict_slashes= False)
 @csrf.exempt
 def medical_practitioner_registration():
@@ -33,7 +41,7 @@ def medical_practitioner_registration():
         print("Received form data:", form_data)
         med = Medical()
         med.insert(form_data)
-        return redirect(url_for('home'))  # Redirect to a success page after registration
+        return redirect(url_for('home'))
 
     return render_template('med-expert_reg.html')
 
