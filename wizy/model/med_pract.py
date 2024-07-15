@@ -8,8 +8,13 @@ class Medical:
         """do nothing here"""
         pass
 
-    def display_med_personel():
-        """display a brief profile of each medical personel"""
+    def login(self, email, password):
+        """login"""
+        med_expert_record = database.medical_practitioners.find({'Email': email, "password": password})
+        if med_expert_record:
+            return med_expert_record
+        return None
+
     
     def retrieve_form_format():
         """retrieve a collection from the db"""

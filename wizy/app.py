@@ -2,7 +2,7 @@
 """
 Main route of the application
 """
-from flask import (Flask, request, render_template, url_for, redirect)
+from flask import (Flask, request, render_template, url_for, redirect, flash)
 from model.med_pract import Medical
 from  model import database
 from flask_wtf.csrf import CSRFProtect
@@ -18,11 +18,27 @@ def home():
     return render_template('home.html')
 
 @app.route('/user_signup-login', methods=['POST', 'GET'], strict_slashes=False)
+@csrf.exempt
 def login_signUp():
     """signup or login as a user"""
     if request.method == 'POST':
-        return redirect(url_for('home'))
+        action = request.form['action']
+        if action == "signin":
+            email = request.form['email']
+            password = request.form['password']
+            print(f"email:{email}, password:{password}")
+            med = Medical()
+            response = med.login(email, password)
+            if response == None:
+                flash('you are not a registered user! please signUp')
+            print(response)
+            return render_template('med-expert_profile.html', response=response)
+        if action == 'signup':
+            form_data = request.form
+            med = Medical()
+            med.insert(form_data)
     return render_template('login.html')
+    
 
 @app.route('/medical_practitioner/profile', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
