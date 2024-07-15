@@ -15,7 +15,8 @@
 </head>
 <body>
     <div id="logreg-forms">
-        <form class="form-signin">
+        <form class="form-signin", action="{{ url_for('login_signUp') }}", method="POST">
+            {{ csrf_token() }}
             <h1 class="h3 mb-3 font-weight-normal" style="text-align: center"> Sign in</h1>
             <div class="social-login">
                 <button class="btn facebook-btn social-btn" type="button"><span><i class="fab fa-facebook-f"></i> Sign in with Facebook</span> </button>
@@ -24,7 +25,7 @@
             <p style="text-align:center"> OR  </p>
             <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-            
+            <input type="hidden" name="action", value="form-signin">
             <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
             <a href="#" id="forgot_pswd">Forgot password?</a>
             <hr>
@@ -52,6 +53,7 @@
                 <input type="email" id="user-email" class="form-control" placeholder="Email address" required autofocus="">
                 <input type="password" id="user-pass" class="form-control" placeholder="Password" required autofocus="">
                 <input type="password" id="user-repeatpass" class="form-control" placeholder="Repeat Password" required autofocus="">
+                <input type="hidden" name="action", value="form-signup">
 
                 <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
                 <a href="#" id="cancel_signup"><i class="fas fa-angle-left"></i> Back</a>
