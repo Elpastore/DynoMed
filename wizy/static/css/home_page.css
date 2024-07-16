@@ -7,6 +7,8 @@ body {
 }
 .section-padding {
 	padding: 100px 0;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 .carousel-item {
 	height: 100vh;
@@ -89,6 +91,10 @@ body {
 }
 .team .card-body i {
 	font-size: 20px;
+}
+
+.row {
+	padding-top: 2px;
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
 	.carousel-caption {
