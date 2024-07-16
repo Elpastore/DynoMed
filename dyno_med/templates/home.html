@@ -15,19 +15,28 @@
 	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="#"><span class="text-warning">Dyno</span>Med</a> <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+			{% with messages = get_flashed_messages(with_categories=true) %}
+				{% if messages %}
+					{% for category, message in messages %}
+					<div class="alert alert-{{ category }}">
+						{{ message }}
+					</div>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 					<li class="nav-item">
 						<a class="nav-link" href="#">Home</a>
 					</li>
 					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('login_signUp') }}">Login</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link" href="#about">About</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#services">Services</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#portfolio">Portfolio</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#team">Team</a>
@@ -49,7 +58,7 @@
 				<div class="carousel-caption">
 					<h5>Freelance as a Medical Expert</h5>
 					<p>Join our platform to provide flexible, high-quality care on your terms.</p>
-					<p><a class="btn btn-warning mt-3" href="#">Sign-Up</a></p>
+					<p><a class="btn btn-warning mt-3" href="">Register Your Hospital</a></p>
 				</div>
 			</div>
 			<div class="carousel-item">
@@ -57,7 +66,7 @@
 				<div class="carousel-caption">
 					<h5>Online Consultations</h5>
 					<p>Schedule and attend virtual consultations with doctors.</p>
-					<p><a class="btn btn-warning mt-3" href="#">Sign-Up</a></p>
+					<p><a class="btn btn-warning mt-3" href="{{ url_for('medical_practitioner_registration') }}">Sign-Up As Medical Expert</a></p>
 				</div>
 			</div>
 			<div class="carousel-item">
@@ -65,7 +74,7 @@
 				<div class="carousel-caption">
 					<h5>Personalized At-Home Care</h5>
 					<p>Request a personal doctor or nurse.</p>
-					<p><a class="btn btn-warning mt-3" href="#">Sign-Up</a></p>
+					<p><a class="btn btn-warning mt-3" href="{{ url_for('login_signUp') }}">Sign-Up As User</a></p>
 				</div>
 			</div>
 		</div><button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#carouselExampleIndicators" type="button"><span aria-hidden="true" class="carousel-control-prev-icon"></span> <span class="visually-hidden">Previous</span></button> <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleIndicators" type="button"><span aria-hidden="true" class="carousel-control-next-icon"></span> <span class="visually-hidden">Next</span></button>

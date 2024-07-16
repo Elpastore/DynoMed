@@ -25,7 +25,6 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators= [DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    # type of user
     user_type = SelectField('Select user type', choices=[('patient', 'Patient'), ('medical', 'Medical Person')], validators=[DataRequired()])
     submit = SubmitField('Sign Up')
     
