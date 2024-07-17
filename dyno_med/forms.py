@@ -25,7 +25,7 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators= [DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    user_type = SelectField('Select user type', choices=[('patient', 'Patient'), ('medical', 'Medical Person')], validators=[DataRequired()])
+    user_type = SelectField('Select user type', choices=[('patient', 'Patient'), ('medical', 'Medical Practitionner')], validators=[DataRequired()])
     submit = SubmitField('Sign Up')
     
     def validate_username(self, username):
@@ -51,6 +51,7 @@ class LoginForm(FlaskForm):
     """
     email = StringField('Email', validators= [DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
+    user_type = SelectField('Select user type', choices=[('patient', 'Patient'), ('medical', 'Medical Practitionner')], validators=[DataRequired()])
     # remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
     

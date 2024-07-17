@@ -12,6 +12,7 @@ from bson import ObjectId
 from flask_wtf.csrf import CSRFProtect
 from model.med_pract import Medical
 
+
 # csrf = CSRFProtect(app)
 from dyno_med import csrf
 
@@ -88,38 +89,31 @@ def login_signUp():
         if action == 'form-signin':
             email = request.form.get('email')
             password = request.form.get('password')
-            user = database.users.find_one({'email': email})
+            user_type = request.form.get('user_type')
             
+            if login_form.validate_on_submit():
+                user = database.users.find_one({'email': email, 'user_type': user_type})
+                
 
-            if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-                user_id = str(user['_id'])
-                session['user_id'] = user_id
-                # return jsonify({'message': 'Login successful', 'redirect': url_for('home')}), 200
-                flash('Login success.', 'success')
-                return redirect(url_for('home'))
-            else:
-                #return jsonify({'message': 'Login Unsuccessful. Please check your email and password'}), 401
-                print('Please check your email and password')
-                flash('Please check your email and password.', 'danger')
-                return render_template('login.html')
+                if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+                    user_id = str(user['_id'])
+                    session['user_id'] = user_id
+                    # return jsonify({'message': 'Login successful', 'redirect': url_for('home')}), 200
+                    flash('Login success.', 'success')
+                    if user.get('user_type') == 'patient':
+                        return redirect(url_for('patient_profile'))
+                    else:
+                        #return redirect(url_for('medical_practionner_profile'))
+                        return redirect(url_for('home'))
+                else:
+                    #return jsonify({'message': 'Login Unsuccessful. Please check your email and password'}), 401
+                    print('Please check your email and password')
+                    flash('Login Unsuccessful. Please check your email and your password', 'danger')
+                return render_template('login.html', login_form=login_form, signup_form=signup_form)
                 
                 #return redirect(url_for('login_signUp'))
 
         elif action == 'form-signup':
-            """full_name = request.form.get('fullname')
-            email = request.form.get('email')
-            password = request.form.get('password')
-            repeat_password = request.form.get('repeat_password')
-            
-            if password != repeat_password:
-                flash('Please check passwords: not equal')
-                
-
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-            new_user = {'email': email, 'password': hashed_password}
-            database.users.insert_one(new_user)
-            return jsonify({'message': 'Registration successful', 'redirect': url_for('home')}), 201"""
-
             if signup_form.validate_on_submit():
                 username = signup_form.username.data
                 email = signup_form.email.data
@@ -175,8 +169,9 @@ def patient_profile():
     if not user_id:
         return jsonify({'message': 'Unauthorized access'}), 401
 
-    if request.method == 'GET':            
-        try:
+    if request.method == 'GET':
+        return render_template('patient_profil.html')            
+        """try:
             # Convert the user_id to an ObjectId
             patient_user = patient_record.patient.find_one({'_id': ObjectId(user_id)})
         except Exception as e:
@@ -188,7 +183,7 @@ def patient_profile():
         # Convert ObjectId to string for JSON serialization
         patient_user['_id'] = str(patient_user['_id'])
         
-        return jsonify(patient_user)
+        return jsonify(patient_user)"""
     
     elif request.method == 'POST':
         data = request.get_json()

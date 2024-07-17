@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Profile</title>
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/med-expert_profile.css') }}">
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside id="sidebar">
+            <div class="d-flex">
+                <button class="toggle-btn" type="button">
+                    <i class="lni lni-grid-alt"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="#">DynoMed</a>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-agenda"></i>
+                        <span>General Information</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#medical" aria-expanded="false" aria-controls="medical">
+                        <i class="lni lni-protection"></i>
+                        <span>Medical Record</span>
+                    </a>
+                    <ul id="medical" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">History Record</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Medications</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Appointments</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Health Record</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Allergies</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-popup"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="{{ url_for('logout') }}" class="sidebar-link">
+                    <i class="lni lni-exit"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+        <div class="main">
+            <nav class="navbar navbar-expand px-4 py-3">
+                <form action="#" class="d-none d-sm-inline-block"></form>
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                                <img src="{{ url_for('static', filename='img/account.png') }}" class="avatar img-fluid" alt="">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end rounded">
+                                <!-- User options can be added here -->
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3 class="fw-bold fs-4 mb-3">Patient Profile</h3>
+                        <div class="row">
+                            <div class="col-12 col-md-4 mb-4">
+                                <div class="card border-0">
+                                    <div class="card-body py-4">
+                                        <h5 class="mb-2 fw-bold">Personal Information</h5>
+                                        <p><strong>Name:</strong> John Doe</p>
+                                        <p><strong>Date of Birth:</strong> 01/01/1970</p>
+                                        <p><strong>Gender:</strong> Male</p>
+                                        <p><strong>Blood Type:</strong> O+</p>
+                                        <p><strong>Contact:</strong> (123) 456-7890</p>
+                                        <p><strong>Email:</strong> john.doe@example.com</p>
+                                        <p><strong>Address:</strong> 123 Main St, Anytown, USA</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 mb-4">
+                                <div class="card border-0">
+                                    <div class="card-body py-4">
+                                        <h5 class="mb-2 fw-bold">Medical History</h5>
+                                        <ul>
+                                            <li>Hypertension</li>
+                                            <li>Diabetes</li>
+                                            <li>Allergy to penicillin</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 mb-4">
+                                <div class="card border-0">
+                                    <div class="card-body py-4">
+                                        <h5 class="mb-2 fw-bold">Health Record</h5>
+                                        <ul>
+                                            <li><strong>Height:</strong> 5'10"</li>
+                                            <li><strong>Weight:</strong> 180 lbs</li>
+                                            <li><strong>BMI:</strong> 25.8</li>
+                                            <li><strong>Heart Rate:</strong> 70 bpm</li>
+                                            <li><strong>Blood Pressure:</strong> 120/80 mmHg</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="fw-bold fs-4 my-3">Current Medications</h3>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr class="highlight">
+                                            <th scope="col">#</th>
+                                            <th scope="col">Medication</th>
+                                            <th scope="col">Dosage</th>
+                                            <th scope="col">Frequency</th>
+                                            <th scope="col">Prescribed By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>Lisinopril</td>
+                                            <td>10mg</td>
+                                            <td>Once daily</td>
+                                            <td>Dr. Smith</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+                                            <td>Metformin</td>
+                                            <td>500mg</td>
+                                            <td>Twice daily</td>
+                                            <td>Dr. Johnson</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+                                            <td>Amlodipine</td>
+                                            <td>5mg</td>
+                                            <td>Once daily</td>
+                                            <td>Dr. Brown</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <h3 class="fw-bold fs-4 my-3">Upcoming Appointments</h3>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr class="highlight">
+                                            <th scope="col">#</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Time</th>
+                                            <th scope="col">Doctor</th>
+                                            <th scope="col">Department</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>2024-08-01</td>
+                                            <td>10:00 AM</td>
+                                            <td>Dr. Smith</td>
+                                            <td>Cardiology</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+                                            <td>2024-08-15</td>
+                                            <td>2:00 PM</td>
+                                            <td>Dr. Johnson</td>
+                                            <td>Endocrinology</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row text-body-secondary">
+                        <div class="col-6 text-start ">
+                            <a class="text-body-secondary" href="#">
+                                <strong>CodzSwod</strong>
+                            </a>
+                        </div>
+                        <div class="col-6 text-end text-body-secondary d-none d-md-block">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item">
+                                    <a class="text-body-secondary" href="#">Contact</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="text-body-secondary" href="#">About Us</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="text-body-secondary" href="#">Terms & Conditions</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/med-expert_profile.js') }}"></script>
+</body>
+
+</html>

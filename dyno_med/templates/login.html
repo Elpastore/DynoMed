@@ -27,8 +27,34 @@
                 <button class="btn google-btn social-btn" type="button"><span><i class="fab fa-google-plus-g"></i> Sign in with Google+</span></button>
             </div>
             <p style="text-align:center">OR</p>
-            <input type="email" id="loginEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
-            <input type="password" id="loginPassword" name="password" class="form-control" placeholder="Password" required>
+            {{ login_form.hidden_tag() }}
+            {% if login_form.email.errors %}
+                {{ login_form.email(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in login_form.email.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                    {{ signup_form.email (class="form-control", id="loginEmail", placeholder="Email address") }}
+            {% endif %}
+            <select id="user-type" name="user_type" class="form-control">
+                {% for  value, label in signup_form.user_type.choices  %}
+                    <option value="{{ value }}">
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+            {% if login_form.password.errors %}
+                {{ login_form.password(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in login_form.password.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                    {{ signup_form.password (class="form-control", id="loginPassword", placeholder="Password") }}
+            {% endif %}
             <input type="hidden" name="action" value="form-signin">
             <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
             <a href="#" id="forgot_pswd">Forgot password?</a>
