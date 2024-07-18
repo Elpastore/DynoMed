@@ -103,13 +103,15 @@
                                 <div class="card border-0">
                                     <div class="card-body py-4">
                                         <h5 class="mb-2 fw-bold">Personal Information</h5>
-                                        <p><strong>Name:</strong> John Doe</p>
-                                        <p><strong>Date of Birth:</strong> 01/01/1970</p>
-                                        <p><strong>Gender:</strong> Male</p>
-                                        <p><strong>Blood Type:</strong> O+</p>
-                                        <p><strong>Contact:</strong> (123) 456-7890</p>
-                                        <p><strong>Email:</strong> john.doe@example.com</p>
-                                        <p><strong>Address:</strong> 123 Main St, Anytown, USA</p>
+                                        <p><strong>Name:</strong> {{ patient_data.full_name }}</p>
+                                        <p><strong>Date of Birth:</strong> {{ patient_data['birthday']['$date'] if patient_data['birthday'] else 'N_A' }}</p>
+
+                                        <p><strong>Gender:</strong> {{ patient_data['gender'] if patient_data['gender'] else 'N_A' }}</p>
+                                        <p><strong>Blood Type:</strong> {{ patient_data.blood_group }} </p>
+                                        <p><strong>Contact:</strong> {{ patient_data.contact_information if patient_data.contact_information else 'N_A' }}</p>
+                                        <p><strong>Emergency Contact:</strong> {{ patient_data.emergency_contact if patient_data.emergency_contact else 'N_A' }}</p>
+                                        <p><strong>Email:</strong> {{ patient_data.email }}</p>
+                                        <p><strong>Address:</strong> {{ patient_data.address if patient_data.address else 'N_A' }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -117,10 +119,15 @@
                                 <div class="card border-0">
                                     <div class="card-body py-4">
                                         <h5 class="mb-2 fw-bold">Medical History</h5>
-                                        <ul>
-                                            <li>Hypertension</li>
-                                            <li>Diabetes</li>
-                                            <li>Allergy to penicillin</li>
+                                        {% if patient_data.medical_history %}
+                                            {% for medical_history in patient_data.medical_history %}
+                                                <p><strong>Chief Complaint:</strong> {{ medical_history.chief_complaint }} </p>
+                                                <p><strong>Symptoms:</strong> {{ medical_history.symptoms | join(', ') }}</p>
+                                                <p><strong> Diagnoses:</strong> {{ medical_history.diagnoses | join(', ') }} </p>
+                                            {% endfor %}
+                                            {% else %}
+                                            <p>No medical history found</p>
+                                        {% endif %}
                                         </ul>
                                     </div>
                                 </div>
@@ -130,55 +137,50 @@
                                     <div class="card-body py-4">
                                         <h5 class="mb-2 fw-bold">Health Record</h5>
                                         <ul>
-                                            <li><strong>Height:</strong> 5'10"</li>
-                                            <li><strong>Weight:</strong> 180 lbs</li>
-                                            <li><strong>BMI:</strong> 25.8</li>
-                                            <li><strong>Heart Rate:</strong> 70 bpm</li>
-                                            <li><strong>Blood Pressure:</strong> 120/80 mmHg</li>
+                                            {% for record in patient_data.medical_history %}
+                                                    <li><strong>Blood Pressure:</strong> {{ record.vital_signs.blood_pressure if record.vital_signs.blood_pressure else 'N_A' }}</li>
+                                                    <li><strong>Heart Rate:</strong> {{ record.vital_signs.heart_rate if record.vital_signs.heart_rate else 'N_A' }}</li>
+                                                    <li><strong>Temperature:</strong> {{ record.vital_signs.temperature if record.vital_signs.temperature else 'N_A' }}</li>
+                                                    <li><strong>Respiration Rate:</strong> {{ record.vital_signs.respiration_rate if record.vital_signs.respiration_rate else 'N_A' }}</li>
+                                            {% endfor %}
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <h3 class="fw-bold fs-4 my-3">Current Medications</h3>
+                        
                         <div class="row">
                             <div class="col-12">
+                                <h4>Medications</h4>
                                 <table class="table table-striped">
                                     <thead>
-                                        <tr class="highlight">
+                                        <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Medication</th>
+                                            <th scope="col">Medication Name</th>
                                             <th scope="col">Dosage</th>
-                                            <th scope="col">Frequency</th>
-                                            <th scope="col">Prescribed By</th>
+                                            <th scope="col">Usage</th>
+                                            <th scope="col">Start Date</th>
+                                            <th scope="col">End Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Lisinopril</td>
-                                            <td>10mg</td>
-                                            <td>Once daily</td>
-                                            <td>Dr. Smith</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Metformin</td>
-                                            <td>500mg</td>
-                                            <td>Twice daily</td>
-                                            <td>Dr. Johnson</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Amlodipine</td>
-                                            <td>5mg</td>
-                                            <td>Once daily</td>
-                                            <td>Dr. Brown</td>
-                                        </tr>
+                                        {% for record in patient_data.medical_history %}
+                                            {% for medication in record.medications %}
+                                                <tr>
+                                                    <th scope="row">{{ loop.index }}</th>
+                                                    <td>{{ medication.name }}</td>
+                                                    <td>{{ medication.dosage }}</td>
+                                                    <td>{{ medication.usage }}</td>
+                                                    <td>{{ medication.start_date.strftime('%Y-%m-%d') }}</td>
+                                                    <td>{{ medication.end_date.strftime('%Y-%m-%d') }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                        
                         <h3 class="fw-bold fs-4 my-3">Upcoming Appointments</h3>
                         <div class="row">
                             <div class="col-12">

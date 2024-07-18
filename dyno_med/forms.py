@@ -28,13 +28,13 @@ class RegistrationForm(FlaskForm):
     user_type = SelectField('Select user type', choices=[('patient', 'Patient'), ('medical', 'Medical Practitionner')], validators=[DataRequired()])
     submit = SubmitField('Sign Up')
     
-    def validate_username(self, username):
-        """
+    """def validate_username(self, username):
+        
         function that check if the user already exist in the database.
-        """
+
         user = database.users.find_one({"username": username.data})
         if user:
-            raise ValidationError("That username is taken. Please choose a different one.")
+            raise ValidationError("That username is taken. Please choose a different one.")"""
 
     def validate_email(self, email):
         """function that check if the user already exist in the database."""
@@ -89,13 +89,13 @@ class UpdateAccountForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[EqualTo('password')])
     submit = SubmitField('Update')
     
-    def validate_username(self, username):
-        """
+    """def validate_username(self, username):
+        
         function that check if the user already exist in the database.
-        """
+        
         user = database.users.find_one({"username": username.data})
         if user:
-            raise ValidationError("That username is taken. Please choose a different one.")
+            raise ValidationError("That username is taken. Please choose a different one.")"""
 
     def validate_email(self, email):
         """function that check if the user already exist in the database."""
