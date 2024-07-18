@@ -25,17 +25,16 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators= [DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    # type of user
-    user_type = SelectField('Select user type', choices=[('patient', 'Patient'), ('medical', 'Medical Person')], validators=[DataRequired()])
+    user_type = SelectField('Select user type', choices=[('patient', 'Patient'), ('medical', 'Medical Practitionner')], validators=[DataRequired()])
     submit = SubmitField('Sign Up')
     
-    def validate_username(self, username):
-        """
+    """def validate_username(self, username):
+        
         function that check if the user already exist in the database.
-        """
+
         user = database.users.find_one({"username": username.data})
         if user:
-            raise ValidationError("That username is taken. Please choose a different one.")
+            raise ValidationError("That username is taken. Please choose a different one.")"""
 
     def validate_email(self, email):
         """function that check if the user already exist in the database."""
@@ -52,6 +51,7 @@ class LoginForm(FlaskForm):
     """
     email = StringField('Email', validators= [DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
+    user_type = SelectField('Select user type', choices=[('patient', 'Patient'), ('medical', 'Medical Practitionner')], validators=[DataRequired()])
     # remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
     
@@ -89,13 +89,13 @@ class UpdateAccountForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[EqualTo('password')])
     submit = SubmitField('Update')
     
-    def validate_username(self, username):
-        """
+    """def validate_username(self, username):
+        
         function that check if the user already exist in the database.
-        """
+        
         user = database.users.find_one({"username": username.data})
         if user:
-            raise ValidationError("That username is taken. Please choose a different one.")
+            raise ValidationError("That username is taken. Please choose a different one.")"""
 
     def validate_email(self, email):
         """function that check if the user already exist in the database."""

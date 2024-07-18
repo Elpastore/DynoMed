@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Patient Registration</h2>
+        <form id="patientForm" method="POST" action="/patient_new_record">
+            <!-- Basic Patient Information -->
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <input type="text" class="form-control" id="full_name" name="full_name" required>
+            </div>
+            <div class="form-group">
+                <label for="birthday">Birthday</label>
+                <input type="date" class="form-control" id="birthday" name="birthday" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select class="form-control" id="gender" name="gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="contact_information">Contact Information</label>
+                <input type="text" class="form-control" id="contact_information" name="contact_information">
+            </div>
+            <div class="form-group">
+                <label for="emergency_contact">Emergency Contact</label>
+                <input type="text" class="form-control" id="emergency_contact" name="emergency_contact">
+            </div>
+            <div class="form-group">
+                <label for="blood_group">Blood Group</label>
+                <select class="form-control" id="blood_group" name="blood_group">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="AB">AB</option>
+                    <option value="O">O</option>
+                    <option value="Unknown">Unknown</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="rhesus_factor">Rhesus Factor</label>
+                <select class="form-control" id="rhesus_factor" name="rhesus_factor">
+                    <option value="Positive">Positive</option>
+                    <option value="Negative">Negative</option>
+                    <option value="Unknown">Unknown</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="insurance_information">Insurance Information</label>
+                <input type="text" class="form-control" id="insurance_information" name="insurance_information">
+            </div>
+
+            <!-- Current Health Information -->
+            <h4>Current Health Information</h4>
+            <div class="form-group">
+                <label for="chief_complaint">Chief Complaint</label>
+                <input type="text" class="form-control" id="chief_complaint" name="chief_complaint">
+            </div>
+            <div class="form-group">
+                <label for="symptoms">Symptoms (comma separated)</label>
+                <input type="text" class="form-control" id="symptoms" name="symptoms">
+            </div>
+            <div class="form-group">
+                <label for="diagnoses">Diagnoses (comma separated)</label>
+                <input type="text" class="form-control" id="diagnoses" name="diagnoses">
+            </div>
+            <h5>Vital Signs</h5>
+            <div class="form-group">
+                <label for="blood_pressure">Blood Pressure</label>
+                <input type="text" class="form-control" id="blood_pressure" name="blood_pressure">
+            </div>
+            <div class="form-group">
+                <label for="heart_rate">Heart Rate</label>
+                <input type="number" class="form-control" id="heart_rate" name="heart_rate">
+            </div>
+            <div class="form-group">
+                <label for="temperature">Temperature</label>
+                <input type="number" step="0.1" class="form-control" id="temperature" name="temperature">
+            </div>
+            <div class="form-group">
+                <label for="respiration_rate">Respiration Rate</label>
+                <input type="number" class="form-control" id="respiration_rate" name="respiration_rate">
+            </div>
+
+            <h5>Medications</h5>
+            <div id="medications">
+                <div class="medication-entry">
+                    <div class="form-group">
+                        <label for="medications_0_name">Medication Name</label>
+                        <input type="text" class="form-control" id="medications_0_name" name="medications[0][name]">
+                    </div>
+                    <div class="form-group">
+                        <label for="medications_0_dosage">Dosage</label>
+                        <input type="text" class="form-control" id="medications_0_dosage" name="medications[0][dosage]">
+                    </div>
+                    <div class="form-group">
+                        <label for="medications_0_usage">Usage</label>
+                        <input type="text" class="form-control" id="medications_0_usage" name="medications[0][usage]">
+                    </div>
+                    <div class="form-group">
+                        <label for="medications_0_start_date">Start Date</label>
+                        <input type="date" class="form-control" id="medications_0_start_date" name="medications[0][start_date]">
+                    </div>
+                    <div class="form-group">
+                        <label for="medications_0_end_date">End Date</label>
+                        <input type="date" class="form-control" id="medications_0_end_date" name="medications[0][end_date]">
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary" id="addMed">Add Another Medication</button>
+
+            <!-- Immunization Records -->
+            <div class="form-group mt-3">
+                <label for="immunization_records">Immunization Records (comma separated)</label>
+                <input type="text" class="form-control" id="immunization_records" name="immunization_records">
+            </div>
+
+            <!-- Appointment Date -->
+            <h5>Appointments</h5>
+            <div id="appointments">
+                <div class="form-group mt-3 appointment-entry">
+                    <label for="appointment_date">Appointment Date</label>
+                    <input type="date" class="form-control" id="appointment_date" name="appointments[0][date]">
+
+                    <label for="appointment_time">Time</label>
+                    <input type="time" class="form-control" id="appointment_time" name="appointments[0][time]">
+
+                    <label for="doctor">Doctor</label>
+                    <input type="text" class="form-control" id="doctor" name="appointments[0][doctor]">
+
+                    <label for="department">Department</label>
+                    <input type="text" class="form-control" id="department" name="appointments[0][department]">
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary" id="addAppointment">Add Another Appointment</button>
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('addMed').addEventListener('click', function() {
+            let medicationsDiv = document.getElementById('medications');
+            let medicationEntries = medicationsDiv.getElementsByClassName('medication-entry');
+            let newEntryIndex = medicationEntries.length;
+        
+            let newEntry = document.createElement('div');
+            newEntry.className = 'medication-entry';
+        
+            newEntry.innerHTML = `
+                <div class="form-group">
+                    <label for="medications_${newEntryIndex}_name">Medication Name</label>
+                    <input type="text" class="form-control" id="medications_${newEntryIndex}_name" name="medications[${newEntryIndex}][name]">
+                </div>
+                <div class="form-group">
+                    <label for="medications_${newEntryIndex}_dosage">Dosage</label>
+                    <input type="text" class="form-control" id="medications_${newEntryIndex}_dosage" name="medications[${newEntryIndex}][dosage]">
+                </div>
+                <div class="form-group">
+                    <label for="medications_${newEntryIndex}_usage">Usage</label>
+                    <input type="text" class="form-control" id="medications_${newEntryIndex}_usage" name="medications[${newEntryIndex}][usage]">
+                </div>
+                <div class="form-group">
+                    <label for="medications_${newEntryIndex}_start_date">Start Date</label>
+                    <input type="date" class="form-control" id="medications_${newEntryIndex}_start_date" name="medications[${newEntryIndex}][start_date]">
+                </div>
+                <div class="form-group">
+                    <label for="medications_${newEntryIndex}_end_date">End Date</label>
+                    <input type="date" class="form-control" id="medications_${newEntryIndex}_end_date" name="medications[${newEntryIndex}][end_date]">
+                </div>
+            `;
+        
+            medicationsDiv.appendChild(newEntry);
+        });
+
+        document.getElementById('addAppointment').addEventListener('click', function() {
+            let appointmentsDiv = document.getElementById('appointments');
+            let appointmentEntries = appointmentsDiv.getElementsByClassName('appointment-entry');
+            let newEntryIndex = appointmentEntries.length;
+        
+            let newEntry = document.createElement('div');
+            newEntry.className = 'appointment-entry';
+        
+            newEntry.innerHTML = `
+                <div class="form-group mt-3">
+                    <label for="appointment_date_${newEntryIndex}">Appointment Date</label>
+                    <input type="date" class="form-control" id="appointment_date_${newEntryIndex}" name="appointments[${newEntryIndex}][date]">
+                </div>
+                <div class="form-group">
+                    <label for="appointment_time_${newEntryIndex}">Time</label>
+                    <input type="time" class="form-control" id="appointment_time_${newEntryIndex}" name="appointments[${newEntryIndex}][time]">
+                </div>
+                <div class="form-group">
+                    <label for="doctor_${newEntryIndex}">Doctor</label>
+                    <input type="text" class="form-control" id="doctor_${newEntryIndex}" name="appointments[${newEntryIndex}][doctor]">
+                </div>
+                <div class="form-group">
+                    <label for="department_${newEntryIndex}">Department</label>
+                    <input type="text" class="form-control" id="department_${newEntryIndex}" name="appointments[${newEntryIndex}][department]">
+                </div>
+            `;
+        
+            appointmentsDiv.appendChild(newEntry);
+        });
+        
+    </script>
+</body>
+</html>

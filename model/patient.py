@@ -16,16 +16,18 @@ class VitalSigns(EmbeddedDocument):
 class Medication(EmbeddedDocument):
     name= StringField()
     dosage = StringField()
+    usage = StringField()
     start_date = DateField()
     end_date  = DateField()
+    prescripted_by = StringField()
 
 class Surgery(EmbeddedDocument):
-    procedure = StringField(required=True)
+    procedure = StringField()
     date = DateField()
     outcome = StringField()
 
 class Allergy(EmbeddedDocument):
-    name = StringField(required=True)
+    name = StringField()
     reaction = StringField()
 
 class MedicalRecord(EmbeddedDocument):
@@ -45,16 +47,24 @@ class Laboratory(EmbeddedDocument):
     result = StringField()
     pathology_reports = StringField()
 
+class Appointment(EmbeddedDocument):
+    date = DateField()
+    time = DateTimeField()
+    doctor = StringField()
+    department= StringField()
+    
 class Patient(Document):
     full_name = StringField(required=True)
     birthday = DateField(require=True)
-    gender = StringField(required=True)
+    gender = StringField()
     contact_information = StringField()
     emergency_contact = StringField()
+    email = StringField()
+    address = StringField()
     blood_group = StringField(choices=('A', 'B', 'AB', 'O', 'Unknow'), default='Unknow')
     rhesus_factor = StringField(choices=('Positive', 'Negative', 'Unknow'), default='Unknow')
     medical_history = ListField(EmbeddedDocumentField(MedicalRecord))
     current_health_information = EmbeddedDocumentField(MedicalRecord)
     immunization_records = ListField(StringField())
     insurance_information = StringField()
-    
+    appointment = ListField(EmbeddedDocumentField(Appointment))
