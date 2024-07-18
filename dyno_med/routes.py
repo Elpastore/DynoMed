@@ -293,9 +293,10 @@ def new_record():
             heart_rate = int(request.form.get('heart_rate')) if request.form.get('heart_rate') else None
             temperature = float(request.form.get('temperature')) if request.form.get('temperature') else None
             respiration_rate = int(request.form.get('respiration_rate')) if request.form.get('respiration_rate') else None
-            appointment_date = request.form.get('appointment_date')
+            """appointment_date = datetime.strptime(request.form.get('appointment_date'), '%Y-%m-%d')
             appointment_time = request.form.get('appointment_time')
             doctor = request.form.get('doctor')
+            department = request.form.get('department')"""
             
             # Extract medications list
             medications = []
@@ -314,6 +315,23 @@ def new_record():
                     'usage': usage,
                     'start_date': start_date,
                     'end_date': end_date
+                })
+                index += 1
+                
+            appointments = []
+            index = 0
+            while True:
+                appointment_date = request.form.get(f'appointments[{index}][date]')
+                if not appointment_date:
+                    break
+                appointment_time = request.form.get(f'appointments[{index}][time]')
+                doctor = request.form.get(f'appointments[{index}][doctor]')
+                department = request.form.get(f'appointments[{index}][department]')
+                appointments.append({
+                    'date': datetime.strptime(appointment_date, '%Y-%m-%d'),
+                    'time': appointment_time,
+                    'doctor': doctor,
+                    'department': department
                 })
                 index += 1
 
@@ -349,11 +367,7 @@ def new_record():
                     )
                 ],
                 immunization_records=immunization_records,
-                appointment=Appointment(
-                    date=appointment_date,
-                    time=appointment_time,
-                    doctor=doctor
-                )
+                appointment= appointments
             )
 
             # Save patient to the database
