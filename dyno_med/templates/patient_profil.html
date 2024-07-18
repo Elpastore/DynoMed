@@ -195,20 +195,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>2024-08-01</td>
-                                            <td>10:00 AM</td>
-                                            <td>Dr. Smith</td>
-                                            <td>Cardiology</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>2024-08-15</td>
-                                            <td>2:00 PM</td>
-                                            <td>Dr. Johnson</td>
-                                            <td>Endocrinology</td>
-                                        </tr>
+                                        {% for appointment in patient_data.appointment %}
+                                            <tr>
+                                                <th scope="row">{{ loop.index }}</th>
+                                                <td>{{ appointment.date }}</td>
+                                                <td>{{ appointment.time }}</td>
+                                                <td>{{ appointment.doctor }}</td>
+                                                <td>{{ appointment.department }}</td>
+                                            </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>

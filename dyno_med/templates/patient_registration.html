@@ -124,18 +124,23 @@
             </div>
 
             <!-- Appointment Date -->
-            <h5>Appointment</h5>
-            <div class="form-group mt-3">
-                <label for="appointment_date">Next Appointment Date</label>
-                <input type="date" class="form-control" id="appointment_date" name="appointment_date">
+            <h5>Appointments</h5>
+            <div id="appointments">
+                <div class="form-group mt-3 appointment-entry">
+                    <label for="appointment_date">Appointment Date</label>
+                    <input type="date" class="form-control" id="appointment_date" name="appointments[0][date]">
 
-                <label for="appointment_time">Time</label>
-                <input type="time" class="form-control" id="appointment_time" name="appointment_time">
+                    <label for="appointment_time">Time</label>
+                    <input type="time" class="form-control" id="appointment_time" name="appointments[0][time]">
 
-                <label for="doctor">Doctor</label>
-                <input type="text" class="form-control" id="doctor" name="doctor">
+                    <label for="doctor">Doctor</label>
+                    <input type="text" class="form-control" id="doctor" name="appointments[0][doctor]">
+
+                    <label for="department">Department</label>
+                    <input type="text" class="form-control" id="department" name="appointments[0][department]">
+                </div>
             </div>
-
+            <button type="button" class="btn btn-secondary" id="addAppointment">Add Another Appointment</button>
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
@@ -174,6 +179,37 @@
         
             medicationsDiv.appendChild(newEntry);
         });
+
+        document.getElementById('addAppointment').addEventListener('click', function() {
+            let appointmentsDiv = document.getElementById('appointments');
+            let appointmentEntries = appointmentsDiv.getElementsByClassName('appointment-entry');
+            let newEntryIndex = appointmentEntries.length;
+        
+            let newEntry = document.createElement('div');
+            newEntry.className = 'appointment-entry';
+        
+            newEntry.innerHTML = `
+                <div class="form-group mt-3">
+                    <label for="appointment_date_${newEntryIndex}">Appointment Date</label>
+                    <input type="date" class="form-control" id="appointment_date_${newEntryIndex}" name="appointments[${newEntryIndex}][date]">
+                </div>
+                <div class="form-group">
+                    <label for="appointment_time_${newEntryIndex}">Time</label>
+                    <input type="time" class="form-control" id="appointment_time_${newEntryIndex}" name="appointments[${newEntryIndex}][time]">
+                </div>
+                <div class="form-group">
+                    <label for="doctor_${newEntryIndex}">Doctor</label>
+                    <input type="text" class="form-control" id="doctor_${newEntryIndex}" name="appointments[${newEntryIndex}][doctor]">
+                </div>
+                <div class="form-group">
+                    <label for="department_${newEntryIndex}">Department</label>
+                    <input type="text" class="form-control" id="department_${newEntryIndex}" name="appointments[${newEntryIndex}][department]">
+                </div>
+            `;
+        
+            appointmentsDiv.appendChild(newEntry);
+        });
+        
     </script>
 </body>
 </html>

@@ -51,6 +51,7 @@ class Appointment(EmbeddedDocument):
     date = DateField()
     time = DateTimeField()
     doctor = StringField()
+    department= StringField()
     
 class Patient(Document):
     full_name = StringField(required=True)
@@ -66,4 +67,4 @@ class Patient(Document):
     current_health_information = EmbeddedDocumentField(MedicalRecord)
     immunization_records = ListField(StringField())
     insurance_information = StringField()
-    appointment = EmbeddedDocumentField(Appointment)
+    appointment = ListField(EmbeddedDocumentField(Appointment))
