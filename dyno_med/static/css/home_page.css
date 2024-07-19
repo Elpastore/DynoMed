@@ -7,6 +7,8 @@ body {
 }
 .section-padding {
 	padding: 100px 0;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 .carousel-item {
 	height: 100vh;
@@ -90,6 +92,10 @@ body {
 .team .card-body i {
 	font-size: 20px;
 }
+
+.row {
+	padding-top: 2px;
+}
 @media only screen and (min-width: 768px) and (max-width: 991px) {
 	.carousel-caption {
 		bottom: 370px;
@@ -129,4 +135,13 @@ body {
 	.card {
 		margin-bottom: 30px;
 	}
+}
+
+#our-team-section{
+    height: 100vh; /* Ensures the section takes up the full viewport height */
+    display: flex;
+	flex-direction: column;
+    align-items: center; /* Centers vertically */
+    justify-content: center; /* Centers horizontally */
+    text-align: center; /* Centers text and content inside */
 }

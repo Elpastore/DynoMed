@@ -1,16 +1,17 @@
 #!/usr/bin/python3
 from flask import jsonify, request, session, render_template, redirect, url_for, flash
 from dyno_med import app, database, patient_record
+from . import forms
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
 from flask_wtf.csrf import generate_csrf
 # from dyno_med.Medical_pratitional import (med_forms, med_pract)
 # from werkzeug.security import generate_password_hash
-from model.patient import *
+from .model.patient import *
 from bson import ObjectId
 #from bson.objectid import ObjectId
 from flask_wtf.csrf import CSRFProtect
-from model.med_pract import Medical
+from .model.med_pract import Medical
 
 
 # csrf = CSRFProtect(app)
@@ -22,6 +23,11 @@ from dyno_med import csrf
 def home():
     """The home page"""
     return render_template('home.html')
+
+@app.route('/learn_more', methods=['GET'], strict_slashes=False)
+def learn_more():
+    """return the learnmore page"""
+    return render_template('learn_more.html')
 
 @app.route('/registration', methods=['POST'], strict_slashes=False)
 def register_user():
@@ -73,7 +79,8 @@ def logout():
     user = database.users.find_one({'_id': ObjectId(user_id)})
     if user_id:
         session.pop('user_id', None)
-        return jsonify({'message': f'{user["username"]} Logged out successfully'})
+        return redirect(url_for('home'))
+        # return jsonify({'message': f'{user["username"]} Logged out successfully'})
     else:
         return jsonify({'message': 'Not need to loggout since you are not login'})
 

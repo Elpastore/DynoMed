@@ -1,4 +1,5 @@
-
+#!/usr/bin/env python3
+""" module to initialize """
 from flask import Flask
 from pymongo import MongoClient
 from flask_wtf.csrf import CSRFProtect
@@ -40,4 +41,4 @@ csrf.exempt('dyno_med.routes.add_new_medical_record')
 # csrf.exempt('dyno_med.routes.medical_practitioner_registration')
 
 from dyno_med import routes
-from dyno_med import medical_practitioners
+#from dyno_med import medical_pract
