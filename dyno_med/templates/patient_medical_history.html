@@ -98,115 +98,35 @@
             <main class="content px-3 py-4">
                 <div class="container-fluid">
                     <div class="mb-3">
-                        <h3 class="fw-bold fs-4 mb-3">Patient Profile</h3>
-                        <div class="row">
-                            <div class="col-12 col-md-4 mb-4">
-                                <div class="card border-0">
-                                    <div class="card-body py-4">
-                                        <h5 class="mb-2 fw-bold">Personal Information</h5>
-                                        <p><strong>Name:</strong> {{ patient_data.full_name }}</p>
-                                        <p><strong>Date of Birth:</strong> {{ patient_data['birthday']['$date'] if patient_data['birthday'] else 'N_A' }}</p>
-
-                                        <p><strong>Gender:</strong> {{ patient_data['gender'] if patient_data['gender'] else 'N_A' }}</p>
-                                        <p><strong>Blood Type:</strong> {{ patient_data.blood_group }} </p>
-                                        <p><strong>Contact:</strong> {{ patient_data.contact_information if patient_data.contact_information else 'N_A' }}</p>
-                                        <p><strong>Emergency Contact:</strong> {{ patient_data.emergency_contact if patient_data.emergency_contact else 'N_A' }}</p>
-                                        <p><strong>Email:</strong> {{ patient_data.email }}</p>
-                                        <p><strong>Address:</strong> {{ patient_data.address if patient_data.address else 'N_A' }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-4 mb-4">
-                                <div class="card border-0">
-                                    <div class="card-body py-4">
-                                        <h5 class="mb-2 fw-bold">Medical History</h5>
-                                        {% if patient_data.medical_history %}
-                                            {% for medical_history in patient_data.medical_history %}
-                                                <p><strong>Chief Complaint:</strong> {{ medical_history.chief_complaint }} </p>
-                                                <p><strong>Symptoms:</strong> {{ medical_history.symptoms | join(', ') }}</p>
-                                                <p><strong> Diagnoses:</strong> {{ medical_history.diagnoses | join(', ') }} </p>
-                                            {% endfor %}
-                                            {% else %}
-                                            <p>No medical history found</p>
-                                        {% endif %}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-4 mb-4">
-                                <div class="card border-0">
-                                    <div class="card-body py-4">
-                                        <h5 class="mb-2 fw-bold">Health Record</h5>
-                                        <ul>
-                                            {% for record in patient_data.medical_history %}
-                                                    <li><strong>Blood Pressure:</strong> {{ record.vital_signs.blood_pressure if record.vital_signs.blood_pressure else 'N_A' }}</li>
-                                                    <li><strong>Heart Rate:</strong> {{ record.vital_signs.heart_rate if record.vital_signs.heart_rate else 'N_A' }}</li>
-                                                    <li><strong>Temperature:</strong> {{ record.vital_signs.temperature if record.vital_signs.temperature else 'N_A' }}</li>
-                                                    <li><strong>Respiration Rate:</strong> {{ record.vital_signs.respiration_rate if record.vital_signs.respiration_rate else 'N_A' }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
+                        <h3 class="fw-bold fs-4 mb-3">Patient medical history</h3>
                         <div class="row">
                             <div class="col-12">
-                                <h4>Medications</h4>
+                                {% if patient_data.medical_history %}
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Medication Name</th>
-                                            <th scope="col">Dosage</th>
-                                            <th scope="col">Usage</th>
-                                            <th scope="col">Start Date</th>
-                                            <th scope="col">End Date</th>
+                                            <th scope="col">Chief Complaint</th>
+                                            <th scope="col">Symptoms</th>
+                                            <th scope="col">Diagnoses</th>
+                                            <th scope="col">By doctor</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for record in patient_data.medical_history %}
-                                            {% for medication in record.medications %}
-                                                <tr>
-                                                    <th scope="row">{{ loop.index }}</th>
-                                                    <td>{{ medication.name }}</td>
-                                                    <td>{{ medication.dosage }}</td>
-                                                    <td>{{ medication.usage }}</td>
-                                                    <td>{{ medication.start_date.strftime('%Y-%m-%d') }}</td>
-                                                    <td>{{ medication.end_date.strftime('%Y-%m-%d') }}</td>
-                                                </tr>
-                                            {% endfor %}
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        
-                        <h3 class="fw-bold fs-4 my-3">Upcoming Appointments</h3>
-                        <div class="row">
-                            <div class="col-12">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr class="highlight">
-                                            <th scope="col">#</th>
-                                            <th scope="col">Date</th>
-                                            <th scope="col">Time</th>
-                                            <th scope="col">Doctor</th>
-                                            <th scope="col">Department</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for appointment in patient_data.appointment %}
+                                        {% for medical_history in patient_data.medical_history %}
                                             <tr>
                                                 <th scope="row">{{ loop.index }}</th>
-                                                <td>{{ appointment.date }}</td>
-                                                <td>{{ appointment.time }}</td>
-                                                <td>{{ appointment.doctor }}</td>
-                                                <td>{{ appointment.department }}</td>
+                                                <td>{{ medical_history.chief_complaint }}</td>
+                                                <td>{{ medical_history.symptoms | join(', ') }}</td>
+                                                <td>{{ medical_history.diagnoses | join(', ') }}</td>
+                                                <td>{{ medical_history.doctor }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
+                                {% else %}
+                                    <p><strong>No medical history found!</strong></p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

@@ -208,76 +208,7 @@ def patient_profile():
         
         #return jsonify(patient_user)
         
-        return render_template('patient_profil.html', patient_data=patient_user)        
-
-    elif request.method == 'PUT':
-        data = request.get_json()
-        try:
-            # Find the patient document by user_id
-            patient_user = patient_record.patient.find_one({'_id': ObjectId(user_id)})
-            if not patient_user:
-                return jsonify({'message': 'Patient not found'}), 404
-            if user.user_type == 'patient':
-                return jsonify({'message': 'You don"t have access to this part!'}), 401
-            
-            # Update patient data with provided data
-            update_data = {
-                'full_name': data.get('full_name', patient_user.get('full_name')),
-                'birthday': datetime.strptime(data['birthday'], '%Y-%m-%d') if 'birthday' in data else patient_user.get('birthday'),
-                'gender': data.get('gender', patient_user.get('gender')),
-                'contact_information': data.get('contact_information', patient_user.get('contact_information')),
-                'emergency_contact': data.get('emergency_contact', patient_user.get('emergency_contact')),
-                'blood_group': data.get('blood_group', patient_user.get('blood_group')),
-                'rhesus_factor': data.get('rhesus_factor', patient_user.get('rhesus_factor')),
-                'immunization_records': data.get('immunization_records', patient_user.get('immunization_records')),
-                'insurance_information': data.get('insurance_information', patient_user.get('insurance_information'))
-            }
-            
-            if 'medical_history' in data:
-                update_data['medical_history'] = [
-                    {
-                        'chief_complaint': mh['chief_complaint'],
-                        'symptoms': mh['symptoms'],
-                        'diagnoses': mh['diagnoses'],
-                        'surgeries': [
-                            {
-                                'procedure': surgery['procedure'],
-                                'date': datetime.strptime(surgery['date'], '%Y-%m-%d'),
-                                'outcome': surgery['outcome']
-                            } for surgery in mh['surgeries']
-                        ],
-                        'allergies': [
-                            {
-                                'name': allergy['name'],
-                                'reaction': allergy['reaction']
-                            } for allergy in mh['allergies']
-                        ],
-                        'vital_signs': {
-                            'blood_pressure': mh['vital_signs']['blood_pressure'],
-                            'heart_rate': mh['vital_signs']['heart_rate'],
-                            'temperature': mh['vital_signs']['temperature'],
-                            'respiration_rate': mh['vital_signs']['respiration_rate']
-                        },
-                        'medications': [
-                            {
-                                'name': med['name'],
-                                'dosage': med['dosage'],
-                                'start_date': datetime.strptime(med['start_date'], '%Y-%m-%d'),
-                                'end_date': datetime.strptime(med['end_date'], '%Y-%m-%d')
-                            } for med in mh['medications']
-                        ]
-                    } for mh in data['medical_history']
-                ]
-            
-            # Update the patient document
-            patient_record.patient.update_one(
-                {'_id': ObjectId(user_id)},
-                {'$set': update_data}
-            )
-
-            return jsonify({'message': 'Patient profile updated successfully'})
-        except Exception as e:
-            return jsonify({'message': f'An error occurred: {e}'}), 400
+        return render_template('patient_profil.html', patient_data=patient_user)
 
 
 @app.route('/patient_new_record', methods=['POST', 'GET'])
@@ -303,6 +234,7 @@ def new_record():
             chief_complaint = request.form.get('chief_complaint')
             symptoms = request.form.get('symptoms').split(',') if request.form.get('symptoms') else []
             diagnoses = request.form.get('diagnoses').split(',') if request.form.get('diagnoses') else []
+            by_doctor = request.form.get('by_doctor')
             blood_pressure = request.form.get('blood_pressure')
             heart_rate = int(request.form.get('heart_rate')) if request.form.get('heart_rate') else None
             temperature = float(request.form.get('temperature')) if request.form.get('temperature') else None
@@ -367,6 +299,7 @@ def new_record():
                         chief_complaint=chief_complaint,
                         symptoms=symptoms,
                         diagnoses=diagnoses,
+                        doctor=by_doctor,
                         vital_signs=VitalSigns(
                             blood_pressure=blood_pressure,
                             heart_rate=heart_rate,
@@ -391,6 +324,116 @@ def new_record():
     # If method is GET, return the patient registration form
     return render_template('patient_registration.html')
 
+
+@app.route('/patient_update', methods=['POST', 'GET'])
+@csrf.exempt
+def update_record():
+    user_id = session.get('user_id')
+
+    if not user_id:
+        return jsonify({'message': 'Unauthorized access'}), 401
+
+    if request.method == 'POST':
+        data = request.form
+        
+        try:
+            # Find the patient document by user_id
+            patient_user = patient_record.patient.find_one({'_id': ObjectId(user_id)})
+            if not patient_user:
+                return jsonify({'message': 'Patient not found'}), 404
+            
+            # Update patient data with provided data
+            update_data = {
+                'full_name': data.get('full_name', patient_user.get('full_name')),
+                'birthday': datetime.strptime(data['birthday'], '%Y-%m-%d') if 'birthday' in data else patient_user.get('birthday'),
+                'gender': data.get('gender', patient_user.get('gender')),
+                'contact_information': data.get('contact_information', patient_user.get('contact_information')),
+                'emergency_contact': data.get('emergency_contact', patient_user.get('emergency_contact')),
+                'blood_group': data.get('blood_group', patient_user.get('blood_group')),
+                'rhesus_factor': data.get('rhesus_factor', patient_user.get('rhesus_factor')),
+                'immunization_records': data.get('immunization_records', patient_user.get('immunization_records')),
+                'insurance_information': data.get('insurance_information', patient_user.get('insurance_information')),
+                'medical_history': patient_user.get('medical_history')
+            }
+
+            medical_history = patient_user.get('medical_history', [])
+            
+            # Extract new medical history record from the form data
+            chief_complaint = data.get('chief_complaint')
+            symptoms = data.get('symptoms').split(',') if data.get('symptoms') else []
+            diagnoses = data.get('diagnoses').split(',') if data.get('diagnoses') else []
+            by_doctor = data.get('by_doctor')
+            blood_pressure = data.get('blood_pressure')
+            heart_rate = int(data.get('heart_rate')) if data.get('heart_rate') else None
+            temperature = float(data.get('temperature')) if data.get('temperature') else None
+            respiration_rate = int(data.get('respiration_rate')) if data.get('respiration_rate') else None
+            
+            # Extract medications list
+            medications = []
+            index = 0
+            while True:
+                med_name = data.get(f'medications[{index}][name]')
+                if not med_name:
+                    break
+                dosage = data.get(f'medications[{index}][dosage]')
+                usage = data.get(f'medications[{index}][usage]')
+                start_date = datetime.strptime(data.get(f'medications[{index}][start_date]'), '%Y-%m-%d')
+                end_date = datetime.strptime(data.get(f'medications[{index}][end_date]'), '%Y-%m-%d')
+                medications.append({
+                    'name': med_name,
+                    'dosage': dosage,
+                    'usage': usage,
+                    'start_date': start_date,
+                    'end_date': end_date
+                })
+                index += 1
+
+            # Extract appointments list
+            appointments = []
+            index = 0
+            while True:
+                appointment_date = data.get(f'appointments[{index}][date]')
+                if not appointment_date:
+                    break
+                appointment_time = data.get(f'appointments[{index}][time]')
+                doctor = data.get(f'appointments[{index}][doctor]')
+                department = data.get(f'appointments[{index}][department]')
+                appointments.append({
+                    'date': datetime.strptime(appointment_date, '%Y-%m-%d'),
+                    'time': appointment_time,
+                    'doctor': doctor,
+                    'department': department
+                })
+                index += 1
+
+            new_record = {
+                'chief_complaint': chief_complaint,
+                'symptoms': symptoms,
+                'diagnoses': diagnoses,
+                'doctor': by_doctor, 
+                'vital_signs': {
+                    'blood_pressure': blood_pressure, 
+                    'heart_rate': heart_rate, 
+                    'temperature': temperature, 
+                    'respiration_rate': respiration_rate
+                },
+                'medications': medications,
+                'appointments': appointments
+            }
+
+            update_data['medical_history'].append(new_record)
+
+            patient_record.patient.update_one(
+                {'_id': ObjectId(user_id)},
+                {'$set': update_data}
+            )
+
+            return jsonify({'message': 'Patient profile updated successfully'})
+        except Exception as e:
+            return jsonify({'message': f'An error occurred: {e}'}), 400
+
+    # If method is GET, return the patient update form
+    return render_template('patient_update.html')
 
 def compute_age(birthdate):
     today = datetime.today()
@@ -428,11 +471,15 @@ def personal_information():
     12: "Décembre"
     }
     #return jsonify(patient_user)
-    birthday = patient_user['birthday']
+    birthday = patient_user.get('birthday')
 
-    # Format the date into the desired string format
-    formatted_date = f"{birthday.day} {month_names[birthday.month]} {birthday.year}"
-    age = compute_age(birthday)
+    if birthday:
+        # Format the date into the desired string format
+        formatted_date = f"{birthday.day} {month_names[birthday.month]} {birthday.year}"
+        age = compute_age(birthday)
+    else:
+        formatted_date = "Unknow"
+        age = 'Unknow'
 
     return render_template('patient_personal_info.html', patient_data=patient_user, birthday=formatted_date, age=age)   
 
@@ -451,4 +498,38 @@ def patient_appointment():
     if not patient_user:
         return jsonify({'message': 'Patient not found'}), 404
 
-    return render_template('patient_appointment.html', patient_data=patient_user)   
+    return render_template('patient_appointment.html', patient_data=patient_user)
+
+@app.route('/patient/profile/medical_history', methods=['GET', 'POST'], strict_slashes=False)
+def medical_history():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'message': 'Unauthorized access'}), 401
+    
+    try:
+        # Convert the user_id to an ObjectId
+        patient_user = patient_record.patient.find_one({'_id': ObjectId(user_id)})
+    except Exception as e:
+        return jsonify({'message': f'Invalid user ID: {e}'}), 400
+    
+    if not patient_user:
+        return jsonify({'message': 'Patient not found'}), 404
+
+    return render_template('patient_medical_history.html', patient_data=patient_user)
+
+@app.route('/patient/profile/medication', methods=['GET'], strict_slashes=False)
+def patient_medication():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'message': 'Unauthorized access'}), 401
+    
+    try:
+        # Convert the user_id to an ObjectId
+        patient_user = patient_record.patient.find_one({'_id': ObjectId(user_id)})
+    except Exception as e:
+        return jsonify({'message': f'Invalid user ID: {e}'}), 400
+    
+    if not patient_user:
+        return jsonify({'message': 'Patient not found'}), 404
+
+    return render_template('patient_medication.html', patient_data=patient_user)

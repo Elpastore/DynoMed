@@ -34,6 +34,7 @@ class MedicalRecord(EmbeddedDocument):
     chief_complaint = StringField()
     symptoms = ListField(StringField())
     diagnoses = ListField(StringField())
+    doctor = StringField()
     vital_signs = EmbeddedDocumentField(VitalSigns)
     medications = ListField(EmbeddedDocumentField(Medication))
     surgeries = ListField(EmbeddedDocumentField(Surgery))
