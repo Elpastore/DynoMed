@@ -42,10 +42,10 @@
                     </a>
                     <ul id="medical" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">History Record</a>
+                            <a href="{{ url_for('medical_history') }}" class="sidebar-link">History Record</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Medications</a>
+                            <a href="{{ url_for('patient_medication') }}" class="sidebar-link">Medications</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{{ url_for('patient_appointment') }}" class="sidebar-link">Appointments</a>
