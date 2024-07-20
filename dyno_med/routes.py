@@ -14,12 +14,8 @@ from flask_wtf.csrf import CSRFProtect
 from .model.med_pract import Medical
 from datetime import datetime
 
-
-
 # csrf = CSRFProtect(app)
 from dyno_med import csrf
-
-
 
 @app.route('/', methods=['GET'], strict_slashes=False)
 def home():
