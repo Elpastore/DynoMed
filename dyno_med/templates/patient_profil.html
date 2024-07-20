@@ -24,13 +24,13 @@
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="{{url_for('patient_profile')}}" class="sidebar-link">
                         <i class="lni lni-user"></i>
                         <span>Profile</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="{{url_for('personal_information')}}" class="sidebar-link">
                         <i class="lni lni-agenda"></i>
                         <span>General Information</span>
                     </a>
@@ -48,7 +48,7 @@
                             <a href="#" class="sidebar-link">Medications</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Appointments</a>
+                            <a href="{{ url_for('patient_appointment') }}" class="sidebar-link">Appointments</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="#" class="sidebar-link">Health Record</a>
@@ -94,6 +94,7 @@
                     </ul>
                 </div>
             </nav>
+            
             <main class="content px-3 py-4">
                 <div class="container-fluid">
                     <div class="mb-3">

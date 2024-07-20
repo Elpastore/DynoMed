@@ -12,6 +12,8 @@ from bson import ObjectId
 #from bson.objectid import ObjectId
 from flask_wtf.csrf import CSRFProtect
 from .model.med_pract import Medical
+from datetime import datetime
+
 
 
 # csrf = CSRFProtect(app)
@@ -269,10 +271,7 @@ def patient_profile():
         except Exception as e:
             return jsonify({'message': f'An error occurred: {e}'}), 400
 
-    """else:
-        return jsonify({'message': 'Method not allowed'}), 405
-    
-"""
+
 @app.route('/patient_new_record', methods=['POST', 'GET'])
 @csrf.exempt
 def new_record():
@@ -300,10 +299,6 @@ def new_record():
             heart_rate = int(request.form.get('heart_rate')) if request.form.get('heart_rate') else None
             temperature = float(request.form.get('temperature')) if request.form.get('temperature') else None
             respiration_rate = int(request.form.get('respiration_rate')) if request.form.get('respiration_rate') else None
-            """appointment_date = datetime.strptime(request.form.get('appointment_date'), '%Y-%m-%d')
-            appointment_time = request.form.get('appointment_time')
-            doctor = request.form.get('doctor')
-            department = request.form.get('department')"""
             
             # Extract medications list
             medications = []
@@ -387,3 +382,65 @@ def new_record():
 
     # If method is GET, return the patient registration form
     return render_template('patient_registration.html')
+
+
+def compute_age(birthdate):
+    today = datetime.today()
+    age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+    return age
+@app.route('/patient/profile/personal_info', methods=['GET', 'POST'], strict_slashes=False)
+def personal_information():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'message': 'Unauthorized access'}), 401
+    
+    try:
+        # Convert the user_id to an ObjectId
+        patient_user = patient_record.patient.find_one({'_id': ObjectId(user_id)})
+    except Exception as e:
+        return jsonify({'message': f'Invalid user ID: {e}'}), 400
+    
+    if not patient_user:
+        return jsonify({'message': 'Patient not found'}), 404
+    
+    # Convert ObjectId to string for JSON serialization
+    patient_user['_id'] = str(patient_user['_id'])
+    month_names = {
+    1: "Janvier",
+    2: "Février",
+    3: "Mars",
+    4: "Avril",
+    5: "Mai",
+    6: "Juin",
+    7: "Juillet",
+    8: "Août",
+    9: "Septembre",
+    10: "Octobre",
+    11: "Novembre",
+    12: "Décembre"
+    }
+    #return jsonify(patient_user)
+    birthday = patient_user['birthday']
+
+    # Format the date into the desired string format
+    formatted_date = f"{birthday.day} {month_names[birthday.month]} {birthday.year}"
+    age = compute_age(birthday)
+
+    return render_template('patient_personal_info.html', patient_data=patient_user, birthday=formatted_date, age=age)   
+
+@app.route('/patient/profile/appointment', methods=['GET', 'POST'], strict_slashes=False)
+def patient_appointment():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'message': 'Unauthorized access'}), 401
+    
+    try:
+        # Convert the user_id to an ObjectId
+        patient_user = patient_record.patient.find_one({'_id': ObjectId(user_id)})
+    except Exception as e:
+        return jsonify({'message': f'Invalid user ID: {e}'}), 400
+    
+    if not patient_user:
+        return jsonify({'message': 'Patient not found'}), 404
+
+    return render_template('patient_appointment.html', patient_data=patient_user)   
