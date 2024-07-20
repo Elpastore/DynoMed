@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--divinectorweb.com-->
+<head>
+	<meta charset="UTF-8">
+	<meta content="IE=edge" http-equiv="X-UA-Compatible">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<title>Dyno Med</title>
+	<!-- All CSS -->
+  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+	<link href="{{ url_for('static', filename='css/med-expert-update.css') }}" rel="stylesheet">
+</head>
+<body>
+	<form method="POST" enctype="multipart/form-data" class="container mt-5">
+		<h2 class="mb-4">Profile Picture</h2>
+		<div class="row g-3 mb-4">
+			<div class="col-md-6">
+				<label for="profile-picture" class="form-label">Upload Profile Picture</label>
+				<input type="file" class="form-control" id="profile-picture" name="profile-picture" accept="image/*" required>
+			</div>
+			<div class="col-md-6">
+				<img id="profile-picture-preview" src="#" alt="Profile Picture Preview" style="max-width: 200px; max-height: 200px; display: none;">
+			</div>
+		</div>
+		
+		<h2 class="mb-4">Personal Data</h2>
+		<div class="row g-3">
+			<div class="col-md-4">
+				<label for="first_name" class="form-label">First Name</label>
+				<input type="text" class="form-control" id="first_name" name="first_name" required minlength="2" maxlength="50">
+			</div>
+			<div class="col-md-4">
+				<label for="middle_name" class="form-label">Middle Name</label>
+				<input type="text" class="form-control" id="middle_name" name="middle_name" maxlength="50">
+			</div>
+			<div class="col-md-4">
+				<label for="last_name" class="form-label">Last Name</label>
+				<input type="text" class="form-control" id="last_name" name="last_name" required minlength="2" maxlength="50">
+			</div>
+			<div class="col-md-4">
+				<label for="age" class="form-label">Age</label>
+				<select class="form-select" id="age" name="age" required>
+					<option value="">Choose...</option>
+					<!-- Add age options here -->
+				</select>
+			</div>
+			<div class="row g-3">
+				<div class="col-md-6">
+					<label for="gender" class="form-label">Gender</label>
+					<select class="form-select" id="gender" name="gender" required>
+						<option value="">Choose...</option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+						<option value="other">Other</option>
+						<option value="prefer_not_to_say">Prefer not to say</option>
+					</select>
+				</div>
+			<div class="col-md-4">
+				<label for="date_of_birth" class="form-label">Date of Birth</label>
+				<input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+			</div>
+			<div class="col-md-4">
+				<label for="country_of_origin" class="form-label">Country of Origin</label>
+				<input type="text" class="form-control" id="country_of_origin" name="country_of_origin" required>
+			</div>
+			<div class="col-md-4">
+				<label for="state_of_origin" class="form-label">State of Origin</label>
+				<input type="text" class="form-control" id="state_of_origin" name="state_of_origin" required>
+			</div>
+			<div class="col-md-4">
+				<label for="local_government_area" class="form-label">Local Government Area</label>
+				<input type="text" class="form-control" id="local_government_area" name="local_government_area" required>
+			</div>
+			<div class="col-md-4">
+				<label for="town_of_origin" class="form-label">Town of Origin</label>
+				<input type="text" class="form-control" id="town_of_origin" name="town_of_origin" required>
+			</div>
+			<div class="col-md-4">
+				<label for="email" class="form-label">Email</label>
+				<input type="email" class="form-control" id="email" name="email" required>
+			</div>
+			<div class="col-md-4">
+				<label for="mobile_num" class="form-label">Mobile Number</label>
+				<input type="tel" class="form-control" id="mobile_num" name="mobile_num" required>
+			</div>
+			<div class="col-md-4">
+				<label for="linkedin" class="form-label">LinkedIn</label>
+				<input type="text" class="form-control" id="linkedin" name="linkedin">
+			</div>
+			<div class="col-md-6">
+				<label for="password" class="form-label">Password</label>
+				<input type="password" class="form-control" id="password" name="password" required>
+			</div>
+			<div class="col-md-6">
+				<label for="confirm_password" class="form-label">Confirm Password</label>
+				<input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+			</div>
+		</div>
+	
+		<h2 class="mt-5 mb-4">Residential Address</h2>
+		<div class="row g-3">
+			<div class="col-md-4">
+				<label for="residential_address-country" class="form-label">Country</label>
+				<input type="text" class="form-control" id="residential_address-country" name="residential_address-country" required>
+			</div>
+			<div class="col-md-4">
+				<label for="residential_address-state" class="form-label">State</label>
+				<input type="text" class="form-control" id="residential_address-state" name="residential_address-state" required>
+			</div>
+			<div class="col-md-4">
+				<label for="residential_address-city" class="form-label">City</label>
+				<input type="text" class="form-control" id="residential_address-city" name="residential_address-city" required>
+			</div>
+			<div class="col-md-4">
+				<label for="residential_address-town" class="form-label">Town</label>
+				<input type="text" class="form-control" id="residential_address-town" name="residential_address-town" required>
+			</div>
+			<div class="col-md-4">
+				<label for="residential_address-street" class="form-label">Street</label>
+				<input type="text" class="form-control" id="residential_address-street" name="residential_address-street" required>
+			</div>
+			<div class="col-md-4">
+				<label for="residential_address-house_num" class="form-label">House Number</label>
+				<input type="text" class="form-control" id="residential_address-house_num" name="residential_address-house_num" required>
+			</div>
+		</div>
+	
+		<h2 class="mt-5 mb-4">Next of Kin</h2>
+		<div class="row g-3">
+			<div class="col-md-4">
+				<label for="next_of_kin-first_name" class="form-label">First Name</label>
+				<input type="text" class="form-control" id="next_of_kin-first_name" name="next_of_kin-first_name" required minlength="2" maxlength="50">
+			</div>
+			<div class="col-md-4">
+				<label for="next_of_kin-middle_name" class="form-label">Middle Name</label>
+				<input type="text" class="form-control" id="next_of_kin-middle_name" name="next_of_kin-middle_name" maxlength="50">
+			</div>
+			<div class="col-md-4">
+				<label for="next_of_kin-last_name" class="form-label">Last Name</label>
+				<input type="text" class="form-control" id="next_of_kin-last_name" name="next_of_kin-last_name" required minlength="2" maxlength="50">
+			</div>
+			<div class="col-md-4">
+				<label for="next_of_kin-relationship" class="form-label">Relationship</label>
+				<input type="text" class="form-control" id="next_of_kin-relationship" name="next_of_kin-relationship" required>
+			</div>
+			<div class="col-md-4">
+				<label for="next_of_kin-residential_address-country" class="form-label">Country</label>
+				<input type="text" class="form-control" id="next_of_kin-residential_address-country" name="next_of_kin-residential_address-country" required>
+			</div>
+			<div class="col-md-4">
+				<label for="next_of_kin-residential_address-state" class="form-label">State</label>
+				<input type="text" class="form-control" id="next_of_kin-residential_address-state" name="next_of_kin-residential_address-state" required>
+			</div>
+			<div class="col-md-4">
+				<label for="next_of_kin-residential_address-city" class="form-label">City</label>
+				<input type="text" class="form-control" id="next_of_kin-residential_address-city" name="next_of_kin-residential_address-city" required>
+			</div>
+			<div class="col-md-4">
+				<label for="next_of_kin-residential_address-town" class="form-label">Town</label>
+				<input type="text" class="form-control" id="next_of_kin-residential_address-town" name="next_of_kin-residential_address-town" required>
+			</div>
+			<div class="col-md-4">
+				<label for="next_of_kin-residential_address-email" class="form-label">Email</label>
+				<input type="email" class="form-control" id="next_of_kin-residential_address-email" name="next_of_kin-residential_address-email" required>
+			</div>
+			<div class="col-md-4">
+				<label for="next_of_kin-residential_address-telephone_num" class="form-label">Telephone Number</label>
+				<input type="tel" class="form-control" id="next_of_kin-residential_address-telephone_num" name="next_of_kin-residential_address-telephone_num" required>
+			</div>
+		</div>
+		
+		<h2 class="mt-5 mb-4">Professional Data</h2>
+		<div class="row g-3">
+			<!-- ... previous fields ... -->
+
+			<div class="col-12">
+				<h5>Universities and Degrees</h5>
+				<!-- ... university and degree fields ... -->
+				<div id="university-degree-container">
+					<div class="row g-3 mb-3">
+						<div class="col-md-3">
+							<label for="education-country-0" class="form-label">Country of Education</label>
+							<select class="form-select" id="education-country-0" name="education-country-0" required>
+								<option value="">Choose...</option>
+								<option value="US">United States</option>
+								<option value="UK">United Kingdom</option>
+								<option value="CA">Canada</option>
+								<!-- Add more countries as needed -->
+							</select>
+						</div>
+						<div class="col-md-4">
+							<label for="professional_data-education-university-0" class="form-label">University</label>
+							<input type="text" class="form-control" id="professional_data-education-university-0" name="professional_data-education-university-0" list="university-list-0" required>
+							<datalist id="university-list-0">
+								<option value="Harvard University">
+								<option value="Oxford University">
+								<option value="Stanford University">
+								<!-- Add more universities as needed -->
+							</datalist>
+						</div>
+						<div class="col-md-3">
+							<label for="professional_data-education-degree-0" class="form-label">Degree</label>
+							<input type="text" class="form-control" id="professional_data-education-degree-0" name="professional_data-education-degree-0" required>
+						</div>
+						<div class="col-md-2 d-flex align-items-end">
+							<button type="button" class="btn btn-danger remove-university-degree">Remove</button>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="btn btn-secondary mt-2" id="add-university-degree">Add Another University/Degree</button>
+			</div>
+
+			<div class="col-12">
+				<h5>Certificates</h5>
+				<div id="certificate-container">
+					<div class="row g-3 mb-3">
+						<div class="col-md-4">
+							<label for="certificate-type-0" class="form-label">Certificate Type</label>
+							<select class="form-select" id="certificate-type-0" name="certificate-type-0" required>
+								<option value="">Choose...</option>
+								<option value="degree">Degree Certificate</option>
+								<option value="professional">Professional Certificate</option>
+								<option value="training">Training Certificate</option>
+								<option value="other">Other</option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label for="certificate-file-0" class="form-label">Upload Certificate</label>
+							<input type="file" class="form-control" id="certificate-file-0" name="certificate-file-0" accept=".pdf,.jpg,.jpeg,.png" required>
+						</div>
+						<div class="col-md-2 d-flex align-items-end">
+							<button type="button" class="btn btn-danger remove-certificate">Remove</button>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="btn btn-secondary mt-2" id="add-certificate">Add Another Certificate</button>
+			</div>
+
+			<div class="col-12">
+				<label for="description" class="form-label">Professional Description</label>
+				<textarea class="form-control" id="description" name="description" rows="5" placeholder="Describe yourself, your specialties, and previous work experience (if any)"></textarea>
+			</div>
+
+			<div class="col-12 mt-4">
+				<button type="submit" class="btn btn-primary">Update Profile</button>
+			</div>
+			<!-- ... remaining fields ... -->
+		</div>
+	</form>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// Profile picture preview
+			const profilePictureInput = document.getElementById('profile-picture');
+			const profilePicturePreview = document.getElementById('profile-picture-preview');
+
+			profilePictureInput.addEventListener('change', function(event) {
+				const file = event.target.files[0];
+				if (file) {
+					const reader = new FileReader();
+					reader.onload = function(e) {
+						profilePicturePreview.src = e.target.result;
+						profilePicturePreview.style.display = 'block';
+					}
+					reader.readAsDataURL(file);
+				}
+			});
+
+			// University and Degree fields
+			let universityDegreeCount = 1;
+			const universityContainer = document.getElementById('university-degree-container');
+			const addUniversityButton = document.getElementById('add-university-degree');
+
+			addUniversityButton.addEventListener('click', function() {
+				const newFields = document.createElement('div');
+				newFields.className = 'row g-3 mb-3';
+				newFields.innerHTML = `
+					<div class="col-md-3">
+						<label for="education-country-${universityDegreeCount}" class="form-label">Country of Education</label>
+						<select class="form-select" id="education-country-${universityDegreeCount}" name="education-country-${universityDegreeCount}" required>
+							<option value="">Choose...</option>
+							<option value="US">United States</option>
+							<option value="UK">United Kingdom</option>
+							<option value="CA">Canada</option>
+							<!-- Add more countries as needed -->
+						</select>
+					</div>
+					<div class="col-md-3">
+						<label for="professional_data-education-university-${universityDegreeCount}" class="form-label">University</label>
+						<input type="text" class="form-control" id="professional_data-education-university-${universityDegreeCount}" name="professional_data-education-university-${universityDegreeCount}" list="university-list-${universityDegreeCount}" required>
+						<datalist id="university-list-${universityDegreeCount}">
+							<option value="Harvard University">
+							<option value="Oxford University">
+							<option value="Stanford University">
+							<!-- Add more universities as needed -->
+						</datalist>
+					</div>
+					<div class="col-md-4">
+						<label for="professional_data-education-degree-${universityDegreeCount}" class="form-label">Degree</label>
+						<input type="text" class="form-control" id="professional_data-education-degree-${universityDegreeCount}" name="professional_data-education-degree-${universityDegreeCount}" required>
+					</div>
+					<div class="col-md-2 d-flex align-items-end">
+						<button type="button" class="btn btn-danger remove-university-degree">Remove</button>
+					</div>
+				`;
+				universityContainer.appendChild(newFields);
+				universityDegreeCount++;
+			});
+
+			// Event delegation for remove university/degree buttons
+			universityContainer.addEventListener('click', function(e) {
+				if (e.target && e.target.classList.contains('remove-university-degree')) {
+					e.target.closest('.row').remove();
+				}
+			});
+
+			// Certificate fields
+			let certificateCount = 1;
+			const certificateContainer = document.getElementById('certificate-container');
+			const addCertificateButton = document.getElementById('add-certificate');
+
+			addCertificateButton.addEventListener('click', function() {
+				const newFields = document.createElement('div');
+				newFields.className = 'row g-3 mb-3';
+				newFields.innerHTML = `
+					<div class="col-md-4">
+						<label for="certificate-type-${certificateCount}" class="form-label">Certificate Type</label>
+						<select class="form-select" id="certificate-type-${certificateCount}" name="certificate-type-${certificateCount}" required>
+							<option value="">Choose...</option>
+							<option value="degree">Degree Certificate</option>
+							<option value="professional">Professional Certificate</option>
+							<option value="training">Training Certificate</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+					<div class="col-md-6">
+						<label for="certificate-file-${certificateCount}" class="form-label">Upload Certificate</label>
+						<input type="file" class="form-control" id="certificate-file-${certificateCount}" name="certificate-file-${certificateCount}" accept=".pdf,.jpg,.jpeg,.png" required>
+					</div>
+					<div class="col-md-2 d-flex align-items-end">
+						<button type="button" class="btn btn-danger remove-certificate">Remove</button>
+					</div>
+				`;
+				certificateContainer.appendChild(newFields);
+				certificateCount++;
+			});
+
+			// Event delegation for remove certificate buttons
+			certificateContainer.addEventListener('click', function(e) {
+				if (e.target && e.target.classList.contains('remove-certificate')) {
+					e.target.closest('.row').remove();
+				}
+			});
+		});
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
+
