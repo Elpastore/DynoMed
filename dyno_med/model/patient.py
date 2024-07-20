@@ -61,6 +61,7 @@ class Patient(Document):
     emergency_contact = StringField()
     email = StringField()
     address = StringField()
+    residence = StringField()
     blood_group = StringField(choices=('A', 'B', 'AB', 'O', 'Unknow'), default='Unknow')
     rhesus_factor = StringField(choices=('Positive', 'Negative', 'Unknow'), default='Unknow')
     medical_history = ListField(EmbeddedDocumentField(MedicalRecord))
