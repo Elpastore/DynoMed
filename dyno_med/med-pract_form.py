@@ -1,14 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import (StringField, PasswordField, SubmitField, BooleanField, SelectField,
+from wtforms import (StringField, PasswordField, SubmitField, SelectField,
                      DateField, FieldList, FormField)
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from flask_login import current_user
-from wtforms.fields import SelectMultipleField
-from dyno_med import database
+from wtforms.validators import (DataRequired, Length, Email, EqualTo)
 from forms import (RegistrationForm, LoginForm, ResetPasswordRequestForm)
 
 # for importing file and validators
 from flask_wtf.file import FileField, FileAllowed
+
 
 class ExpertRegistrationForm(RegistrationForm):
     """registration class for all medical experts- inherits from """
