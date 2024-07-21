@@ -15,12 +15,15 @@
 	<form method="POST" enctype="multipart/form-data" class="container mt-5">
 		<h2 class="mb-4">Profile Picture</h2>
 		<div class="row g-3 mb-4">
-			<div class="col-md-6">
+			<div class="col-12 mb-3">
+				<div id="profile-picture-container" class="d-flex justify-content-center align-items-center bg-light mx-auto" style="height: 200px; width: 200px; border: 1px solid #ced4da; border-radius: 4px; overflow: hidden;">
+					<span id="profile-picture-placeholder" class="text-muted">Profile picture preview</span>
+					<img id="profile-picture-preview" src="#" alt="Profile Picture Preview" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+				</div>
+			</div>
+			<div class="col-12">
 				<label for="profile-picture" class="form-label">Upload Profile Picture</label>
 				<input type="file" class="form-control" id="profile-picture" name="profile-picture" accept="image/*" required>
-			</div>
-			<div class="col-md-6">
-				<img id="profile-picture-preview" src="#" alt="Profile Picture Preview" style="max-width: 200px; max-height: 200px; display: none;">
 			</div>
 		</div>
 		
@@ -243,7 +246,10 @@
 			</div>
 
 			<div class="col-12 mt-4">
-				<button type="submit" class="btn btn-primary">Update Profile</button>
+				<div class="d-flex justify-content-center gap-3">
+					<button type="submit" class="btn btn-primary">Update Profile</button>
+					<button type="button" class="btn btn-warning">Unverified</button>
+				</div>
 			</div>
 			<!-- ... remaining fields ... -->
 		</div>
@@ -353,6 +359,37 @@
 			});
 		});
 	</script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// Profile picture preview
+			const profilePictureInput = document.getElementById('profile-picture');
+			const profilePicturePreview = document.getElementById('profile-picture-preview');
+			const profilePicturePlaceholder = document.getElementById('profile-picture-placeholder');
+			const profilePictureContainer = document.getElementById('profile-picture-container');
+		
+			profilePictureInput.addEventListener('change', function(event) {
+				const file = event.target.files[0];
+				if (file) {
+					const reader = new FileReader();
+					reader.onload = function(e) {
+						profilePicturePreview.src = e.target.result;
+						profilePicturePreview.style.display = 'block';
+						profilePicturePlaceholder.style.display = 'none';
+						profilePictureContainer.style.backgroundColor = 'transparent';
+					}
+					reader.readAsDataURL(file);
+				} else {
+					profilePicturePreview.style.display = 'none';
+					profilePicturePlaceholder.style.display = 'block';
+					profilePictureContainer.style.backgroundColor = '#f8f9fa';  // Light gray background
+				}
+			});
+		
+			// ... rest of your JavaScript code ...
+		});
+	</script>
+
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
