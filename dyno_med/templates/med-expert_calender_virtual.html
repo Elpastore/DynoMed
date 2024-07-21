@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Your Availability</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Set Your Availability</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="availability-picker">Select Dates and Times:</label>
+                    <input type="text" id="availability-picker" class="form-control" placeholder="Select dates and times">
+                </div>
+                <button id="add-availability" class="btn btn-primary mt-2">Add Availability</button>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Selected Availability</h5>
+                        <ul id="selected-slots" class="list-group">
+                            <!-- Selected slots will be displayed here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="save-availability" class="btn btn-success mt-3">Save Availability</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const availabilityPicker = flatpickr("#availability-picker", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                minDate: "today",
+                time_24hr: true,
+                mode: "multiple",
+                conjunction: " - "
+            });
+
+            const selectedSlotsList = document.getElementById('selected-slots');
+            const addButton = document.getElementById('add-availability');
+            const saveButton = document.getElementById('save-availability');
+            const selectedSlots = new Set();
+
+            addButton.addEventListener('click', function() {
+                const selectedDates = availabilityPicker.selectedDates;
+                selectedDates.forEach(date => {
+                    const formattedDate = date.toLocaleString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                    });
+                    if (!selectedSlots.has(formattedDate)) {
+                        selectedSlots.add(formattedDate);
+                    }
+                });
+                updateSelectedSlots();
+                availabilityPicker.clear();
+            });
+
+            function updateSelectedSlots() {
+                selectedSlotsList.innerHTML = '';
+                selectedSlots.forEach(slot => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    listItem.innerHTML = `
+                        ${slot}
+                        <button class="btn btn-danger btn-sm remove-slot">Remove</button>
+                    `;
+                    selectedSlotsList.appendChild(listItem);
+                });
+
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-slot').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const slotToRemove = this.parentElement.textContent.trim().replace('Remove', '').trim();
+                        selectedSlots.delete(slotToRemove);
+                        updateSelectedSlots();
+                    });
+                });
+            }
+
+            saveButton.addEventListener('click', function() {
+                // Here you would typically send this data to your server
+                console.log('Selected slots:', Array.from(selectedSlots));
+                alert('Availability saved!');
+            });
+        });
+    </script>
+</body>
+
+</html>

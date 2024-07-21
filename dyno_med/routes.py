@@ -164,6 +164,14 @@ def medical_expert_page():
         return redirect(url_for('home'))
     return render_template('med-expert_profile.html')
 
+@app.route('/medical_practitioner/profile/virtual', methods=['POST', 'GET'], strict_slashes=False)
+@csrf.exempt
+def medical_expert_visual_consult():
+    """medical expert page"""
+    if request.method == 'POST':
+        return redirect(url_for('medical-expert_page'))
+    return render_template('med-expert_calender.html')
+
 @app.route('/medical_practitioner/profile/update', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
 def med_expert_reg():
