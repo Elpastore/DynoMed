@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from flask import jsonify, request, session, render_template, redirect, url_for, flash
-from dyno_med import app, database, patient_record
+from dyno_med import app, database, patient_record, medical_practitioners
 from . import forms
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
@@ -11,7 +11,7 @@ from .model.patient import *
 from bson import ObjectId
 #from bson.objectid import ObjectId
 from flask_wtf.csrf import CSRFProtect
-from .model.med_pract import Medical
+from dyno_med import Medical, Expert
 from datetime import datetime
 
 
@@ -111,9 +111,9 @@ def login_signUp():
                     flash('Login success.', 'success')
                     if user.get('user_type') == 'patient':
                         return redirect(url_for('patient_profile'))
-                    else:
-                        #return redirect(url_for('medical_practionner_profile'))
-                        return redirect(url_for('home'))
+                    
+                    elif user.get('user_type') == 'medical':
+                        return redirect(url_for('medical_expert_page'))
                 else:
                     #return jsonify({'message': 'Login Unsuccessful. Please check your email and password'}), 401
                     print('Please check your email and password')
@@ -138,6 +138,8 @@ def login_signUp():
                     database.users.insert_one(new_user)
                     if user_type == 'patient':
                         Patient(id=ObjectId(new_user['_id']), full_name=username, email=email).save()
+                    if user_type == 'medical':
+                        Expert(id=ObjectId(new_user['_id']), username=username, email=email).save()
                     print(new_user['user_type'])
 
                     flash('Registration successful. Please login.', 'success')
@@ -156,17 +158,9 @@ def login_signUp():
     return render_template('login.html', login_form=login_form, signup_form=signup_form)
 
 
-@app.route('/medical_practitioner/profile', methods=['POST', 'GET'], strict_slashes=False)
+@app.route('/medical_practitioner/profile/calender', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
-def medical_expert_page():
-    """medical expert page"""
-    if request.method == 'POST':
-        return redirect(url_for('home'))
-    return render_template('med-expert_profile.html')
-
-@app.route('/medical_practitioner/profile/virtual', methods=['POST', 'GET'], strict_slashes=False)
-@csrf.exempt
-def medical_expert_visual_consult():
+def medical_expert_calender():
     """medical expert page"""
     if request.method == 'POST':
         return redirect(url_for('medical-expert_page'))
@@ -174,24 +168,12 @@ def medical_expert_visual_consult():
 
 @app.route('/medical_practitioner/profile/update', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
-def med_expert_reg():
+def med_expert_update():
     """medical expert page"""
     if request.method == 'POST':
-        return redirect(url_for('home'))
+
+        Medical.insert(request.form, request.file)
     return render_template('med-expert-update.html')
-
-@app.route('/medical_practitioner/registration', methods=['POST', 'GET'], strict_slashes= False)
-@csrf.exempt
-def medical_practitioner_registration():
-    """register medical experts"""
-    if request.method == 'POST':
-        form_data = request.form
-        print("Received form data:", form_data)
-        med = Medical()
-        med.insert(form_data)
-        return redirect(url_for('home'))
-
-    return render_template('med-expert_reg.html')
 
 @app.route('/patient/profile', methods=['GET', 'POST', 'PUT'])
 def patient_profile():
@@ -218,6 +200,43 @@ def patient_profile():
         
         return render_template('patient_profil.html', patient_data=patient_user)
 
+@app.route('/medical_practitioner/profile', methods=['POST', 'GET'], strict_slashes=False)
+@csrf.exempt
+def medical_expert_page():
+    """medical expert page"""
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'message': 'Unauthorized access'}), 401
+
+    if request.method == 'GET':
+        try:
+            med_user = medical_practitioners.Expert.find_one({'_id': ObjectId(user_id)})
+        except Exception as e:
+             return jsonify({'message': f'Invalid user ID: {e}'}), 400
+
+        return render_template('med-expert_profile.html', med_user=med_user)
+
+@app.route('/medical_practitioner/update', methods=['POST', 'GET'], strict_slashes= False)
+@csrf.exempt
+def med_user_update():
+    """register medical experts"""
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'message': 'Unauthorized access'}), 401
+
+    if request.method == 'GET':
+        try:
+            med_user = medical_practitioners.Expert.find_one({'_id': ObjectId(user_id)})
+        except Exception as e:
+             return jsonify({'message': f'Invalid user ID: {e}'}), 400
+        return render_template('med-expert-update.html', med_user=med_user)
+
+    if request.method == 'POST':
+        form_data = request.form
+        print("Received form data:", form_data)
+        med = Medical()
+        med.insert(form_data)
+        return redirect(url_for('medical_expert_page'))
 
 @app.route('/patient_new_record', methods=['POST', 'GET'])
 @csrf.exempt
