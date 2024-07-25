@@ -11,6 +11,8 @@ print(f'Template folder: {app.template_folder}')
 app.config['SECRET_KEY'] = 'dyno_med'
 # database  connection using mongoclient
 # This will be for registration
+
+# connect using pymongodb
 client = MongoClient('mongodb://127.0.0.1:27017')
 
 # database = client.medical_system

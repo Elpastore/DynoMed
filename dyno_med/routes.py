@@ -14,12 +14,8 @@ from flask_wtf.csrf import CSRFProtect
 from dyno_med import Medical, Expert
 from datetime import datetime
 
-
-
 # csrf = CSRFProtect(app)
 from dyno_med import csrf
-
-
 
 @app.route('/', methods=['GET'], strict_slashes=False)
 def home():
@@ -242,7 +238,11 @@ def med_user_update():
 @csrf.exempt
 def new_record():
     user_id = session.get('user_id')
-
+    # user_id = '669bd069d5346b9bc0e962f3'
+    """
+    user_id = request.form(user_id)
+    user = database.users.find_one({'id': user_id})
+    """
     if not user_id:
         return jsonify({'message': 'Unauthorized access'}), 401
     
