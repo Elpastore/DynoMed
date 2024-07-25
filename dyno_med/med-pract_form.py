@@ -33,10 +33,11 @@ class CertificateForm(FlaskForm):
     certificate_type = SelectField('Certificate Type', choices=[('degree', 'Degree Certificate'), ('professional', 'Professional Certificate'), ('training', 'Training Certificate'), ('other', 'Other')], validators=[DataRequired()])
     certificate_file = FileField('Upload Certificate', validators=[FileAllowed(['pdf', 'jpg', 'jpeg', 'png']), DataRequired()])
 
-class ExpertRegistrationForm(FlaskForm):
+class Expert(FlaskForm):
     profile_picture = FileField('Upload Profile Picture', validators=[FileAllowed(['jpg', 'jpeg', 'png']), DataRequired()])
     
     # Personal Data
+    username = StringField('username', validators=[DataRequired(), Length(min=2, max=50)])
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=50)])
     middle_name = StringField('Middle Name', validators=[Length(max=50)])
     last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=50)])

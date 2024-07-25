@@ -12,7 +12,6 @@ app.config['SECRET_KEY'] = 'dyno_med'
 # database  connection using mongoclient
 # This will be for registration
 client = MongoClient('mongodb://127.0.0.1:27017')
-school_collection = client.my_db.school
 
 # database = client.medical_system
 database = client.dynoMed
@@ -39,6 +38,18 @@ csrf.exempt('dyno_med.routes.patient_profile')
 csrf.exempt('dyno_med.routes.add_new_medical_record')
 
 # csrf.exempt('dyno_med.routes.medical_practitioner_registration')
+from .model.med_expert import (
+    Expert, ResidentialAddress,
+    NextOfKin, Education, Certificate
+)
 
-from dyno_med import routes
-#from dyno_med import medical_pract
+from .model.med_pract import Medical
+# Import from med_expert.py in the model directory
+from .model.med_expert import Expert
+
+# Import routes
+from . import routes
+
+# Import from med_pract.py in the model directory
+from .model.med_pract import Medical
+
