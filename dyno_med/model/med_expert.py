@@ -6,63 +6,63 @@ from mongoengine import connect
 # connect('Expert', host='mongodb://127.0.0.1:27017/Expert')
 
 class ResidentialAddress(EmbeddedDocument):
-    country = StringField(required=True)
-    state = StringField(required=True)
-    city = StringField(required=True)
-    town = StringField(required=True)
-    street = StringField(required=True)
-    house_num = StringField(required=True)
+    country = StringField(required=False)
+    state = StringField(required=False)
+    city = StringField(required=False)
+    town = StringField(required=False)
+    street = StringField(required=False)
+    house_num = StringField(required=False)
 
 class NextOfKin(EmbeddedDocument):
-    first_name = StringField(required=True, min_length=2, max_length=50)
+    first_name = StringField(required=False, min_length=2, max_length=50)
     middle_name = StringField(max_length=50)
-    last_name = StringField(required=True, min_length=2, max_length=50)
-    relationship = StringField(required=True)
-    residential_address_country = StringField(required=True)
-    residential_address_state = StringField(required=True)
-    residential_address_city = StringField(required=True)
-    residential_address_town = StringField(required=True)
-    residential_address_email = EmailField(required=True)
-    residential_address_telephone_num = StringField(required=True)
+    last_name = StringField(required=False, min_length=2, max_length=50)
+    relationship = StringField(required=False)
+    residential_address_country = StringField(required=False)
+    residential_address_state = StringField(required=False)
+    residential_address_city = StringField(required=False)
+    residential_address_town = StringField(required=False)
+    residential_address_email = EmailField(required=False)
+    residential_address_telephone_num = StringField(required=False)
 
 class Education(EmbeddedDocument):
-    country = StringField(required=True, choices=['US', 'UK', 'CA'])
-    university = StringField(required=True)
-    degree = StringField(required=True)
+    country = StringField(required=False, choices=['US', 'UK', 'CA'])
+    university = StringField(required=False)
+    degree = StringField(required=False)
 
 class Certificate(EmbeddedDocument):
-    certificate_type = StringField(required=True, choices=['degree', 'professional', 'training', 'other'])
-    certificate_file = FileField(required=True)
+    certificate_type = StringField(required=False, choices=['degree', 'professional', 'training', 'other'])
+    certificate_file = FileField(required=False)
 
 class Expert(Document):
-    profile_picture = FileField(required=True)
+    profile_picture = FileField(required=False)
     
     # Personal Data
-    username = StringField(required=True, min_length=2, max_length=50)
-    first_name = StringField(required=True, min_length=2, max_length=50)
+    username = StringField(min_length=2, max_length=50)
+    first_name = StringField(min_length=2, max_length=50)
     middle_name = StringField(max_length=50)
-    last_name = StringField(required=True, min_length=2, max_length=50)
-    age = IntField(required=True, min_value=18, max_value=79)
-    gender = StringField(required=True, choices=['male', 'female', 'other', 'prefer_not_to_say'])
-    date_of_birth = DateField(required=True)
-    country_of_origin = StringField(required=True)
-    state_of_origin = StringField(required=True)
-    local_government_area = StringField(required=True)
-    town_of_origin = StringField(required=True)
-    email = EmailField(required=True)
-    mobile_num = StringField(required=True)
+    last_name = StringField(min_length=2, max_length=50)
+    age = IntField(min_value=18, max_value=79)
+    gender = StringField(choices=['male', 'female', 'other', 'prefer_not_to_say'])
+    date_of_birth = DateField(required=False)
+    country_of_origin = StringField(required=False)
+    state_of_origin = StringField(required=False)
+    local_government_area = StringField(required=False)
+    town_of_origin = StringField(required=False)
+    email = EmailField(required=False)
+    mobile_num = StringField(required=False)
     linkedin = StringField()
     passWord = StringField()
 
     # Residential Address
-    residential_address = EmbeddedDocumentField(ResidentialAddress, required=True)
+    residential_address = EmbeddedDocumentField(ResidentialAddress, required=False)
 
     # Next of Kin
-    next_of_kin = EmbeddedDocumentField(NextOfKin, required=True)
+    next_of_kin = EmbeddedDocumentField(NextOfKin, required=False)
 
     # Professional Data
-    education = ListField(EmbeddedDocumentField(Education), required=True)
-    certificates = ListField(EmbeddedDocumentField(Certificate), required=True)
+    education = ListField(EmbeddedDocumentField(Education), required=False)
+    certificates = ListField(EmbeddedDocumentField(Certificate), required=False)
     description = StringField()
 
     # Metadata
@@ -75,12 +75,12 @@ class Expert(Document):
     }
 
 class ExpertLogin(Document):
-    email = EmailField(required=True)
-    password = StringField(required=True)  # Note: In practice, store hashed passwords
+    email = EmailField(required=False)
+    password = StringField(required=False)  # Note: In practice, store hashed passwords
 
 class ExpertPasswordResetRequest(Document):
-    email = EmailField(required=True)
+    email = EmailField(required=False)
 
 class ExpertPasswordReset(Document):
-    password = StringField(required=True)
-    confirm_password = StringField(required=True)
+    password = StringField(required=False)
+    confirm_password = StringField(required=False)

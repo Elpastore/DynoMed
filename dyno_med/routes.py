@@ -226,7 +226,11 @@ def med_user_update():
 
     if request.method == 'GET':
         try:
-            med_user = medical_practitioners.Expert.find_one({'_id': ObjectId(user_id)})
+            med_user = Expert.objects.get(id=user_id)
+            # med_user = medical_practitioners.find_one({'_id': ObjectId(user_id)})
+            if not med_user:
+                return jsonify({'user': f'invalid user: {e}'}), 400
+            print(str(med_user.email))
         except Exception as e:
              return jsonify({'message': f'Invalid user ID: {e}'}), 400
         return render_template('med-expert-update.html', med_user=med_user)
