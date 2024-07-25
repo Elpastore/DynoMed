@@ -3,8 +3,9 @@
 from mongoengine import  Document, EmbeddedDocument, StringField, ListField, EmbeddedDocumentField, DateTimeField, IntField, FloatField, DateField
 from datetime import datetime
 from mongoengine import connect
+from dyno_med import record
 
-connect('Record', host='mongodb://127.0.0.1:27017/Record')
+# connect('Record', host='mongodb://127.0.0.1:27017/Record')
 
 
 class VitalSigns(EmbeddedDocument):

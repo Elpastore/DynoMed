@@ -211,7 +211,11 @@ def patient_profile():
 @csrf.exempt
 def new_record():
     user_id = session.get('user_id')
-
+    # user_id = '669bd069d5346b9bc0e962f3'
+    """
+    user_id = request.form(user_id)
+    user = database.users.find_one({'id': user_id})
+    """
     if not user_id:
         return jsonify({'message': 'Unauthorized access'}), 401
     
