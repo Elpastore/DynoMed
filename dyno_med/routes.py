@@ -22,6 +22,11 @@ def home():
     """The home page"""
     return render_template('home.html')
 
+@app.route('/calender', methods=['GET'], strict_slashes=False)
+def calender():
+    """The home page"""
+    return render_template('med-expert_calender_virtual.html')
+
 @app.route('/learn_more', methods=['GET'], strict_slashes=False)
 def learn_more():
     """return the learnmore page"""
@@ -233,10 +238,35 @@ def med_user_update():
 
     if request.method == 'POST':
         form_data = request.form
+        files = request.files
         print("Received form data:", form_data)
-        med = Medical()
-        med.insert(form_data)
-        return redirect(url_for('medical_expert_page'))
+        print("Received files:", files)
+        
+        try:
+            expert = Expert.objects.get(id=user_id)
+            
+            # Update expert fields based on form_data
+            for key, value in form_data.items():
+                setattr(expert, key, value)
+            
+            # Handle file uploads
+            if 'profile-picture' in files:
+                profile_picture = files['profile-picture']
+                # Save the profile picture (you'll need to implement this)
+                # expert.save_profile_picture(profile_picture)
+            
+            # Save the updated expert
+            expert.save()
+            
+            # Print the saved data
+            print("Updated Expert Data:")
+            for key, value in expert.to_mongo().to_dict().items():
+                print(f"{key}: {value}")
+            
+            return redirect(url_for('medical_expert_page'))
+        except Exception as e:
+            print(f"Error updating expert: {e}")
+            return jsonify({'error': str(e)}), 400
 
 @app.route('/patient_new_record', methods=['POST', 'GET'])
 @csrf.exempt
