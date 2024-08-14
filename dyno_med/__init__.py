@@ -24,7 +24,8 @@ medical_practitioners = client.dynoMed.medical_practitioners
 
 
 # connection to the database using mongoengine
-record = connect('Record', host='mongodb://127.0.0.1:27017/Record')
+record = connect('Record', alias="record", host='mongodb://127.0.0.1:27017/Record')
+# expert = connect('Expert', alias="expert", host='mongodb://127.0.0.1:27017/Expert')
 
 
 # Initialize CSRF protection
