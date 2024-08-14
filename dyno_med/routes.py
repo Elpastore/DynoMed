@@ -347,7 +347,7 @@ def new_record():
             # Save patient to the database
             patient.save()
 
-            return jsonify({'message': 'Patient profile created successfully', 'patient_id': str(patient.id)})
+            return jsonify({'message': 'Patient profile updated successfully', 'patient_id': str(patient.id)})
         
         except Exception as e:
             return jsonify({'message': str(e)}), 400
