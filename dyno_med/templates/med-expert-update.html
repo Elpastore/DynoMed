@@ -12,7 +12,7 @@
 	<link href="{{ url_for('static', filename='css/med-expert-update.css') }}" rel="stylesheet">
 </head>
 <body>
-	<form method="POST" action= "{{ url_for('med_user_update') }}"enctype="multipart/form-data" class="container mt-5">
+	<form method="POST" action="{{ url_for('med_user_update') }}" enctype="multipart/form-data" class="container mt-5">
 		<h2 class="mb-4">Profile Picture</h2>
 		<div class="row g-3 mb-4">
 			<div class="col-12 mb-3">
@@ -23,19 +23,19 @@
 			</div>
 			<div class="col-12">
 				<label for="profile-picture" class="form-label">Upload Profile Picture</label>
-				<input type="file" class="form-control" id="profile-picture" name="profile-picture" accept="image/*" required>
+				<input type="file" class="form-control" id="profile-picture" name="profile_picture" accept="image/*">
 			</div>
 		</div>
 		
 		<h2 class="mb-4">Personal Data</h2>
 		<div class="row g-3">
 			<div class="col-md-4">
-				<label for="first_name" class="form-label">User Name</label>
-				<input type="text" class="form-control" id="first_name" name="username" required minlength="2" maxlength="50" value="{{ med_user.username if med_user.username else '' }}">
+				<label for="username" class="form-label">User Name</label>
+				<input type="text" class="form-control" id="username" name="username" minlength="2" maxlength="50" value="{{ med_user.username if med_user.username else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="first_name" class="form-label">First Name</label>
-				<input type="text" class="form-control" id="first_name" name="first_name" required minlength="2" maxlength="50" value="{{ med_user.first_name if med_user.first_name else '' }}">
+				<input type="text" class="form-control" id="first_name" name="first_name" minlength="2" maxlength="50" value="{{ med_user.first_name if med_user.first_name else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="middle_name" class="form-label">Middle Name</label>
@@ -43,185 +43,171 @@
 			</div>
 			<div class="col-md-4">
 				<label for="last_name" class="form-label">Last Name</label>
-				<input type="text" class="form-control" id="last_name" name="last_name" required minlength="2" maxlength="50" value="{{ med_user.last_name if med_user.last_name else '' }}">
+				<input type="text" class="form-control" id="last_name" name="last_name" minlength="2" maxlength="50" value="{{ med_user.last_name if med_user.last_name else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="age" class="form-label">Age</label>
-				<select class="form-select" id="age" name="age" required>
+				<select class="form-select" id="age" name="age">
 					<option value="">Choose...</option>
-						{% for i in range(18-20) %}
-							<option
-								value="{{ i }}"
-								{% if med_user and med_user.age == i %}
-									selected
-								{% endif %} 
-							> {{ i }}</option>
-						{% endfor %}
-					<!-- Add age options here -->
+					{% for i in range(18, 80) %}
+						<option value="{{ i }}" {% if med_user and med_user.age == i %}selected{% endif %}>{{ i }}</option>
+					{% endfor %}
 				</select>
 			</div>
-			<div class="row g-3">
-				<div class="col-md-6">
-					<label for="gender" class="form-label">Gender</label>
-					<select class="form-select" id="gender" name="gender" required>
-						<option value="">Choose...</option>
-						<option value="male" {% if med_user and med_user.gender == 'male' %}selected{% endif %}></option>>Male</option>
-						<option value="female" {% if med_user and med_user.gender == 'female' %}selected{% endif %}>Female</option>
-						<option value="other" {% if med_user and med_user.gender == 'other' %}selected{% endif %}>Other</option>
-						<option value="prefer_not_to_say" {% if med_user and med_user.gender == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
-					</select>
-				</div>
+			<div class="col-md-4">
+				<label for="gender" class="form-label">Gender</label>
+				<select class="form-select" id="gender" name="gender">
+					<option value="">Choose...</option>
+					<option value="male" {% if med_user and med_user.gender == 'male' %}selected{% endif %}>Male</option>
+					<option value="female" {% if med_user and med_user.gender == 'female' %}selected{% endif %}>Female</option>
+					<option value="other" {% if med_user and med_user.gender == 'other' %}selected{% endif %}>Other</option>
+					<option value="prefer_not_to_say" {% if med_user and med_user.gender == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
+				</select>
+			</div>
 			<div class="col-md-4">
 				<label for="date_of_birth" class="form-label">Date of Birth</label>
-				<input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required value="{{ med_user.date_of_birth.strftime('%Y-%m-%d') if med_user.date_of_birth else '' }}">
+				<input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ med_user.date_of_birth.strftime('%Y-%m-%d') if med_user.date_of_birth else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="country_of_origin" class="form-label">Country of Origin</label>
-				<input type="text" class="form-control" id="country_of_origin" name="country_of_origin" required value="{{ med_user.country_of_origin if med_user.country_of_origin else ''}}">
+				<input type="text" class="form-control" id="country_of_origin" name="country_of_origin" value="{{ med_user.country_of_origin if med_user.country_of_origin else ''}}">
 			</div>
 			<div class="col-md-4">
 				<label for="state_of_origin" class="form-label">State of Origin</label>
-				<input type="text" class="form-control" id="state_of_origin" name="state_of_origin" required value="{{ med_user.state_of_origin if med_user.state_of_origin else '' }}">
+				<input type="text" class="form-control" id="state_of_origin" name="state_of_origin" value="{{ med_user.state_of_origin if med_user.state_of_origin else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="local_government_area" class="form-label">Local Government Area</label>
-				<input type="text" class="form-control" id="local_government_area" name="local_government_area" required value="{{ med_user.local_government_area if med_user.local_government_area else '' }}">
+				<input type="text" class="form-control" id="local_government_area" name="local_government_area" value="{{ med_user.local_government_area if med_user.local_government_area else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="town_of_origin" class="form-label">Town of Origin</label>
-				<input type="text" class="form-control" id="town_of_origin" name="town_of_origin" required value="{{ med_user.town_of_origin if med_user.town_of_origin else '' }}">
+				<input type="text" class="form-control" id="town_of_origin" name="town_of_origin" value="{{ med_user.town_of_origin if med_user.town_of_origin else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="email" class="form-label">Email</label>
-				<input type="email" class="form-control" id="email" name="email" required value="{{ med_user.email if med_user.email else '' }}">
+				<input type="email" class="form-control" id="email" name="email" value="{{ med_user.email if med_user.email else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="mobile_num" class="form-label">Mobile Number</label>
-				<input type="tel" class="form-control" id="mobile_num" name="mobile_num" required value="{{ med_user.mobile_num if med_user.mobile_num else '' }}">
+				<input type="tel" class="form-control" id="mobile_num" name="mobile_num" value="{{ med_user.mobile_num if med_user.mobile_num else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="linkedin" class="form-label">LinkedIn</label>
-				<input type="text" class="form-control" id="linkedin" name="linkedin" required value="{{ med_user.linkedin if med_user.linkedin else ''}}">
+				<input type="text" class="form-control" id="linkedin" name="linkedin" value="{{ med_user.linkedin if med_user.linkedin else ''}}">
 			</div>
 			<div class="col-md-6">
-				<label for="password" class="form-label">Password</label>
-				<input type="password" class="form-control" id="password" name="password" required>
+				<label for="passWord" class="form-label">Password</label>
+				<input type="password" class="form-control" id="passWord" name="passWord">
 			</div>
 			<div class="col-md-6">
 				<label for="confirm_password" class="form-label">Confirm Password</label>
-				<input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+				<input type="password" class="form-control" id="confirm_password" name="confirm_password">
 			</div>
 		</div>
 	
+		<!-- Residential Address -->
 		<h2 class="mt-5 mb-4">Residential Address</h2>
 		<div class="row g-3">
 			<div class="col-md-4">
 				<label for="residential_address-country" class="form-label">Country</label>
-				<input type="text" class="form-control" id="residential_address-country" name="residential_address-country" required value="{{ med_user.residential_address.country if med_user.residential_address.country else ''}}">
+				<input type="text" class="form-control" id="residential_address-country" name="residential_address.country" value="{{ med_user.residential_address.country if med_user.residential_address and med_user.residential_address.country else ''}}">
 			</div>
 			<div class="col-md-4">
 				<label for="residential_address-state" class="form-label">State</label>
-				<input type="text" class="form-control" id="residential_address-state" name="residential_address-state" required value="{{ med_user.residential_address.state if med_user.residential_address.state else '' }}">
+				<input type="text" class="form-control" id="residential_address-state" name="residential_address.state" value="{{ med_user.residential_address.state if med_user.residential_address and med_user.residential_address.state else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="residential_address-city" class="form-label">City</label>
-				<input type="text" class="form-control" id="residential_address-city" name="residential_address-city" required value="{{ med_user.residential_address.city if med_user.residential_address.city else '' }}">
+				<input type="text" class="form-control" id="residential_address-city" name="residential_address.city" value="{{ med_user.residential_address.city if med_user.residential_address and med_user.residential_address.city else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="residential_address-town" class="form-label">Town</label>
-				<input type="text" class="form-control" id="residential_address-town" name="residential_address-town" required value="{{ med_user.residential_address.town if med_user.residential_address.town else '' }}">
+				<input type="text" class="form-control" id="residential_address-town" name="residential_address.town" value="{{ med_user.residential_address.town if med_user.residential_address and med_user.residential_address.town else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="residential_address-street" class="form-label">Street</label>
-				<input type="text" class="form-control" id="residential_address-street" name="residential_address-street" required value="{{ med_user.residential_address.street if med_user.residential_address.street else '' }}">
+				<input type="text" class="form-control" id="residential_address-street" name="residential_address.street" value="{{ med_user.residential_address.street if med_user.residential_address and med_user.residential_address.street else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="residential_address-house_num" class="form-label">House Number</label>
-				<input type="text" class="form-control" id="residential_address-house_num" name="residential_address-house_num" required value="{{ med_user.residential_address.house_num if med_user.residential_address.house_num else '' }}">
+				<input type="text" class="form-control" id="residential_address-house_num" name="residential_address.house_num" value="{{ med_user.residential_address.house_num if med_user.residential_address and med_user.residential_address.house_num else '' }}">
 			</div>
 		</div>
 	
+		<!-- Next of Kin -->
 		<h2 class="mt-5 mb-4">Next of Kin</h2>
 		<div class="row g-3">
 			<div class="col-md-4">
 				<label for="next_of_kin-first_name" class="form-label">First Name</label>
-				<input type="text" class="form-control" id="next_of_kin-first_name" name="next_of_kin-first_name" required value="{{ med_user.next_of_kin.first_name if med_user.next_of_kin.first_name else '' }}" minlength="2" maxlength="50">
+				<input type="text" class="form-control" id="next_of_kin-first_name" name="next_of_kin.first_name" minlength="2" maxlength="50" value="{{ med_user.next_of_kin.first_name if med_user.next_of_kin and med_user.next_of_kin.first_name else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-middle_name" class="form-label">Middle Name</label>
-				<input type="text" class="form-control" id="next_of_kin-middle_name" name="next_of_kin-middle_name" maxlength="50" required value="{{ med_user.next_of_kin.middle_name if med_user.next_of_kin.middle_name else '' }}">
+				<input type="text" class="form-control" id="next_of_kin-middle_name" name="next_of_kin.middle_name" maxlength="50" value="{{ med_user.next_of_kin.middle_name if med_user.next_of_kin and med_user.next_of_kin.middle_name else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-last_name" class="form-label">Last Name</label>
-				<input type="text" class="form-control" id="next_of_kin-last_name" name="next_of_kin-last_name" required minlength="2" maxlength="50" required value="{{ med_user.next_of_kin.last_name if med_user.next_of_kin.last_name else '' }}">
+				<input type="text" class="form-control" id="next_of_kin-last_name" name="next_of_kin.last_name" minlength="2" maxlength="50" value="{{ med_user.next_of_kin.last_name if med_user.next_of_kin and med_user.next_of_kin.last_name else '' }}">
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-relationship" class="form-label">Relationship</label>
-				<input type="text" class="form-control" id="next_of_kin-relationship" name="next_of_kin-relationship" required value="{{ med_user.next_of_kin.relationship if med_user.next_of_kin.relationship else '' }}">
+				<input type="text" class="form-control" id="next_of_kin-relationship" name="next_of_kin.relationship" value="{{ med_user.next_of_kin.relationship if med_user.next_of_kin and med_user.next_of_kin.relationship else '' }}">
 			</div>
 			<div class="col-md-4">
-				<label for="next_of_kin-residential_address-country" class="form-label">Country</label>
-				<input type="text" class="form-control" id="next_of_kin-residential_address-country" name="next_of_kin-residential_address-country" required value="{{ med_user.next_of_kin.residential_address_country if med_user.next_of_kin.residential_address_country else '' }}">
+				<label for="next_of_kin-residential_address_country" class="form-label">Country</label>
+				<input type="text" class="form-control" id="next_of_kin-residential_address_country" name="next_of_kin.residential_address_country" value="{{ med_user.next_of_kin.residential_address_country if med_user.next_of_kin and med_user.next_of_kin.residential_address_country else '' }}">
 			</div>
 			<div class="col-md-4">
-				<label for="next_of_kin-residential_address-state" class="form-label">State</label>
-				<input type="text" class="form-control" id="next_of_kin-residential_address-state" name="next_of_kin-residential_address-state" required value="{{ med_user.next_of_kin.residential_address_state if med_user.next_of_kin.residential_address_state else '' }}">
+				<label for="next_of_kin-residential_address_state" class="form-label">State</label>
+				<input type="text" class="form-control" id="next_of_kin-residential_address_state" name="next_of_kin.residential_address_state" value="{{ med_user.next_of_kin.residential_address_state if med_user.next_of_kin and med_user.next_of_kin.residential_address_state else '' }}">
 			</div>
 			<div class="col-md-4">
-				<label for="next_of_kin-residential_address-city" class="form-label">City</label>
-				<input type="text" class="form-control" id="next_of_kin-residential_address-city" name="next_of_kin-residential_address-city" required value="{{ med_user.next_of_kin.residential_address_city if med_user.next_of_kin.residential_address_city else '' }}">
+				<label for="next_of_kin-residential_address_city" class="form-label">City</label>
+				<input type="text" class="form-control" id="next_of_kin-residential_address_city" name="next_of_kin.residential_address_city" value="{{ med_user.next_of_kin.residential_address_city if med_user.next_of_kin and med_user.next_of_kin.residential_address_city else '' }}">
 			</div>
 			<div class="col-md-4">
-				<label for="next_of_kin-residential_address-town" class="form-label">Town</label>
-				<input type="text" class="form-control" id="next_of_kin-residential_address-town" name="next_of_kin-residential_address-town" required value="{{ med_user.next_of_kin.residential_address_town if med_user.next_of_kin.residential_address_town else '' }}">
+				<label for="next_of_kin-residential_address_town" class="form-label">Town</label>
+				<input type="text" class="form-control" id="next_of_kin-residential_address_town" name="next_of_kin.residential_address_town" value="{{ med_user.next_of_kin.residential_address_town if med_user.next_of_kin and med_user.next_of_kin.residential_address_town else '' }}">
 			</div>
 			<div class="col-md-4">
-				<label for="next_of_kin-residential_address-email" class="form-label">Email</label>
-				<input type="email" class="form-control" id="next_of_kin-residential_address-email" name="next_of_kin-residential_address-email" required value="{{ med_user.next_of_kin.residential_address_email if med_user.next_of_kin.residential_address_email else '' }}">
+				<label for="next_of_kin-residential_address_email" class="form-label">Email</label>
+				<input type="email" class="form-control" id="next_of_kin-residential_address_email" name="next_of_kin.residential_address_email" value="{{ med_user.next_of_kin.residential_address_email if med_user.next_of_kin and med_user.next_of_kin.residential_address_email else '' }}">
 			</div>
 			<div class="col-md-4">
-				<label for="next_of_kin-residential_address-telephone_num" class="form-label">Telephone Number</label>
-				<input type="tel" class="form-control" id="next_of_kin-residential_address-telephone_num" name="next_of_kin-residential_address-telephone_num" required value="{{ med_user.next_of_kin.residential_address_telephone_num if med_user.next_of_kin.residential_address_telephone_num else '' }}">
+				<label for="next_of_kin-residential_address_telephone_num" class="form-label">Telephone Number</label>
+				<input type="tel" class="form-control" id="next_of_kin-residential_address_telephone_num" name="next_of_kin.residential_address_telephone_num" value="{{ med_user.next_of_kin.residential_address_telephone_num if med_user.next_of_kin and med_user.next_of_kin.residential_address_telephone_num else '' }}">
 			</div>
 		</div>
-		
 		<h2 class="mt-5 mb-4">Professional Data</h2>
 		<div class="row g-3">
-			<!-- ... previous fields ... -->
-
 			<div class="col-12">
 				<h5>Universities and Degrees</h5>
-				<!-- ... university and degree fields ... -->
 				<div id="university-degree-container">
+					{% for edu in med_user.education %}
 					<div class="row g-3 mb-3">
 						<div class="col-md-3">
-							<label for="education-country-0" class="form-label">Country of Education</label>
-							<select class="form-select" id="education-country-0" name="education-country-0" required>
+							<label for="education-country-{{ loop.index0 }}" class="form-label">Country of Education</label>
+							<select class="form-select" id="education-country-{{ loop.index0 }}" name="education-{{ loop.index0 }}-country">
 								<option value="">Choose...</option>
-								<option value="US">United States</option>
-								<option value="UK">United Kingdom</option>
-								<option value="CA">Canada</option>
-								<!-- Add more countries as needed -->
+								<option value="US" {% if edu.country == 'US' %}selected{% endif %}>United States</option>
+								<option value="UK" {% if edu.country == 'UK' %}selected{% endif %}>United Kingdom</option>
+								<option value="CA" {% if edu.country == 'CA' %}selected{% endif %}>Canada</option>
 							</select>
 						</div>
 						<div class="col-md-4">
-							<label for="professional_data-education-university-0" class="form-label">University</label>
-							<input type="text" class="form-control" id="professional_data-education-university-0" name="professional_data-education-university-0" list="university-list-0" required>
-							<datalist id="university-list-0">
-								<option value="Harvard University">
-								<option value="Oxford University">
-								<option value="Stanford University">
-								<!-- Add more universities as needed -->
-							</datalist>
+							<label for="education-university-{{ loop.index0 }}" class="form-label">University</label>
+							<input type="text" class="form-control" id="education-university-{{ loop.index0 }}" name="education-{{ loop.index0 }}-university" value="{{ edu.university }}">
 						</div>
 						<div class="col-md-3">
-							<label for="professional_data-education-degree-0" class="form-label">Degree</label>
-							<input type="text" class="form-control" id="professional_data-education-degree-0" name="professional_data-education-degree-0" required>
+							<label for="education-degree-{{ loop.index0 }}" class="form-label">Degree</label>
+							<input type="text" class="form-control" id="education-degree-{{ loop.index0 }}" name="education-{{ loop.index0 }}-degree" value="{{ edu.degree }}">
 						</div>
 						<div class="col-md-2 d-flex align-items-end">
 							<button type="button" class="btn btn-danger remove-university-degree">Remove</button>
 						</div>
 					</div>
+					{% endfor %}
 				</div>
 				<button type="button" class="btn btn-secondary mt-2" id="add-university-degree">Add Another University/Degree</button>
 			</div>
@@ -229,32 +215,34 @@
 			<div class="col-12">
 				<h5>Certificates</h5>
 				<div id="certificate-container">
+					{% for cert in med_user.certificates %}
 					<div class="row g-3 mb-3">
 						<div class="col-md-4">
-							<label for="certificate-type-0" class="form-label">Certificate Type</label>
-							<select class="form-select" id="certificate-type-0" name="certificate-type-0" required>
+							<label for="certificate-type-{{ loop.index0 }}" class="form-label">Certificate Type</label>
+							<select class="form-select" id="certificate-type-{{ loop.index0 }}" name="certificate-{{ loop.index0 }}-type">
 								<option value="">Choose...</option>
-								<option value="degree">Degree Certificate</option>
-								<option value="professional">Professional Certificate</option>
-								<option value="training">Training Certificate</option>
-								<option value="other">Other</option>
+								<option value="degree" {% if cert.certificate_type == 'degree' %}selected{% endif %}>Degree Certificate</option>
+								<option value="professional" {% if cert.certificate_type == 'professional' %}selected{% endif %}>Professional Certificate</option>
+								<option value="training" {% if cert.certificate_type == 'training' %}selected{% endif %}>Training Certificate</option>
+								<option value="other" {% if cert.certificate_type == 'other' %}selected{% endif %}>Other</option>
 							</select>
 						</div>
 						<div class="col-md-6">
-							<label for="certificate-file-0" class="form-label">Upload Certificate</label>
-							<input type="file" class="form-control" id="certificate-file-0" name="certificate-file-0" accept=".pdf,.jpg,.jpeg,.png" required>
+							<label for="certificate-file-{{ loop.index0 }}" class="form-label">Upload Certificate</label>
+							<input type="file" class="form-control" id="certificate-file-{{ loop.index0 }}" name="certificate-{{ loop.index0 }}-file" accept=".pdf,.jpg,.jpeg,.png">
 						</div>
 						<div class="col-md-2 d-flex align-items-end">
 							<button type="button" class="btn btn-danger remove-certificate">Remove</button>
 						</div>
 					</div>
+					{% endfor %}
 				</div>
 				<button type="button" class="btn btn-secondary mt-2" id="add-certificate">Add Another Certificate</button>
 			</div>
 
 			<div class="col-12">
 				<label for="description" class="form-label">Professional Description</label>
-				<textarea class="form-control" id="description" name="description" rows="5" placeholder="Describe yourself, your specialties, and previous work experience (if any)"></textarea>
+				<textarea class="form-control" id="description" name="description" rows="5" placeholder="Describe yourself, your specialties, and previous work experience (if any)">{{ med_user.description if med_user.description else '' }}</textarea>
 			</div>
 
 			<div class="col-12 mt-4">
@@ -263,144 +251,10 @@
 					<button type="button" class="btn btn-warning">Unverified</button>
 				</div>
 			</div>
-			<!-- ... remaining fields ... -->
 		</div>
 	</form>
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			// Profile picture preview
-			const profilePictureInput = document.getElementById('profile-picture');
-			const profilePicturePreview = document.getElementById('profile-picture-preview');
 
-			profilePictureInput.addEventListener('change', function(event) {
-				const file = event.target.files[0];
-				if (file) {
-					const reader = new FileReader();
-					reader.onload = function(e) {
-						profilePicturePreview.src = e.target.result;
-						profilePicturePreview.style.display = 'block';
-					}
-					reader.readAsDataURL(file);
-				}
-			});
-
-			// University and Degree fields
-			let universityDegreeCount = 1;
-			const universityContainer = document.getElementById('university-degree-container');
-			const addUniversityButton = document.getElementById('add-university-degree');
-
-			addUniversityButton.addEventListener('click', function() {
-				const newFields = document.createElement('div');
-				newFields.className = 'row g-3 mb-3';
-				newFields.innerHTML = `
-					<div class="col-md-3">
-						<label for="education-country-${universityDegreeCount}" class="form-label">Country of Education</label>
-						<select class="form-select" id="education-country-${universityDegreeCount}" name="education-country-${universityDegreeCount}" required>
-							<option value="">Choose...</option>
-							<option value="US">United States</option>
-							<option value="UK">United Kingdom</option>
-							<option value="CA">Canada</option>
-							<!-- Add more countries as needed -->
-						</select>
-					</div>
-					<div class="col-md-3">
-						<label for="professional_data-education-university-${universityDegreeCount}" class="form-label">University</label>
-						<input type="text" class="form-control" id="professional_data-education-university-${universityDegreeCount}" name="professional_data-education-university-${universityDegreeCount}" list="university-list-${universityDegreeCount}" required>
-						<datalist id="university-list-${universityDegreeCount}">
-							<option value="Harvard University">
-							<option value="Oxford University">
-							<option value="Stanford University">
-							<!-- Add more universities as needed -->
-						</datalist>
-					</div>
-					<div class="col-md-4">
-						<label for="professional_data-education-degree-${universityDegreeCount}" class="form-label">Degree</label>
-						<input type="text" class="form-control" id="professional_data-education-degree-${universityDegreeCount}" name="professional_data-education-degree-${universityDegreeCount}" required>
-					</div>
-					<div class="col-md-2 d-flex align-items-end">
-						<button type="button" class="btn btn-danger remove-university-degree">Remove</button>
-					</div>
-				`;
-				universityContainer.appendChild(newFields);
-				universityDegreeCount++;
-			});
-
-			// Event delegation for remove university/degree buttons
-			universityContainer.addEventListener('click', function(e) {
-				if (e.target && e.target.classList.contains('remove-university-degree')) {
-					e.target.closest('.row').remove();
-				}
-			});
-
-			// Certificate fields
-			let certificateCount = 1;
-			const certificateContainer = document.getElementById('certificate-container');
-			const addCertificateButton = document.getElementById('add-certificate');
-
-			addCertificateButton.addEventListener('click', function() {
-				const newFields = document.createElement('div');
-				newFields.className = 'row g-3 mb-3';
-				newFields.innerHTML = `
-					<div class="col-md-4">
-						<label for="certificate-type-${certificateCount}" class="form-label">Certificate Type</label>
-						<select class="form-select" id="certificate-type-${certificateCount}" name="certificate-type-${certificateCount}" required>
-							<option value="">Choose...</option>
-							<option value="degree">Degree Certificate</option>
-							<option value="professional">Professional Certificate</option>
-							<option value="training">Training Certificate</option>
-							<option value="other">Other</option>
-						</select>
-					</div>
-					<div class="col-md-6">
-						<label for="certificate-file-${certificateCount}" class="form-label">Upload Certificate</label>
-						<input type="file" class="form-control" id="certificate-file-${certificateCount}" name="certificate-file-${certificateCount}" accept=".pdf,.jpg,.jpeg,.png" required>
-					</div>
-					<div class="col-md-2 d-flex align-items-end">
-						<button type="button" class="btn btn-danger remove-certificate">Remove</button>
-					</div>
-				`;
-				certificateContainer.appendChild(newFields);
-				certificateCount++;
-			});
-
-			// Event delegation for remove certificate buttons
-			certificateContainer.addEventListener('click', function(e) {
-				if (e.target && e.target.classList.contains('remove-certificate')) {
-					e.target.closest('.row').remove();
-				}
-			});
-		});
-	</script>
-
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			// Profile picture preview
-			const profilePictureInput = document.getElementById('profile-picture');
-			const profilePicturePreview = document.getElementById('profile-picture-preview');
-			const profilePicturePlaceholder = document.getElementById('profile-picture-placeholder');
-			const profilePictureContainer = document.getElementById('profile-picture-container');
-		
-			profilePictureInput.addEventListener('change', function(event) {
-				const file = event.target.files[0];
-				if (file) {
-					const reader = new FileReader();
-					reader.onload = function(e) {
-						profilePicturePreview.src = e.target.result;
-						profilePicturePreview.style.display = 'block';
-						profilePicturePlaceholder.style.display = 'none';
-						profilePictureContainer.style.backgroundColor = 'transparent';
-					}
-					reader.readAsDataURL(file);
-				} else {
-					profilePicturePreview.style.display = 'none';
-					profilePicturePlaceholder.style.display = 'block';
-					profilePictureContainer.style.backgroundColor = '#f8f9fa';  // Light gray background
-				}
-			});
-		
-			// ... rest of your JavaScript code ...
-		});
-	</script>
+	<script src="{{ url_for('static', filename='js/med-expert-update.js') }}"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

@@ -17,21 +17,25 @@ from datetime import datetime
 # csrf = CSRFProtect(app)
 from dyno_med import csrf
 
+# display home page
 @app.route('/', methods=['GET'], strict_slashes=False)
 def home():
     """The home page"""
     return render_template('home.html')
 
+# get the calender page 
 @app.route('/calender', methods=['GET'], strict_slashes=False)
 def calender():
     """The home page"""
     return render_template('med-expert_calender_virtual.html')
 
+# retrive and display learn more page
 @app.route('/learn_more', methods=['GET'], strict_slashes=False)
 def learn_more():
     """return the learnmore page"""
     return render_template('learn_more.html')
 
+# not inised with this route yet
 @app.route('/registration', methods=['POST'], strict_slashes=False)
 def register_user():
     data = request.get_json()
@@ -54,14 +58,17 @@ def register_user():
 
 @app.route('/login', methods=['POST'], strict_slashes=False)
 def login():
+    """retirve the user credendials from the login form and save it in the database"""
     data = request.get_json()
     form = LoginForm(data=data, meta={'csrf': False})
 
+    # check if all parameters are entered in the form
     if form.validate():
         email = form.email.data
         password = form.password.data.encode('utf-8')
         user = database.users.find_one({'email': email})
         
+        # if user email and password exists in the database
         if user and bcrypt.checkpw(password, user['password'].encode('utf-8')):
             # setting up a session management
             user_id = str(user['_id'])
@@ -76,6 +83,7 @@ def login():
 
 @app.route('/logout', methods=['GET'])
 def logout():
+    """get the user cache and logout"""
     # Logout logic to setup clearing cookies, tokens, or other authentication data
     # when a session will be setting up
     user_id = session.get('user_id')
@@ -91,6 +99,7 @@ def logout():
 @app.route('/user_signup-login', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
 def login_signUp():
+    """login and signup for all users"""
     login_form = LoginForm()
     signup_form = RegistrationForm()
     if request.method == 'POST':
