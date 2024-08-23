@@ -38,6 +38,7 @@ class Expert(Document):
     profile_picture = FileField(required=False)
     
     # Personal Data
+    profile_picture = FileField(require=False)
     username = StringField(min_length=2, max_length=50)
     first_name = StringField(min_length=2, max_length=50)
     middle_name = StringField(max_length=50)
