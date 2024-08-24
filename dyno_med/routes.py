@@ -226,190 +226,38 @@ def medical_expert_page():
 
         return render_template('med-expert_profile.html', med_user=med_user)
 
-@app.route('/medical_practitioner/update', methods=['POST', 'GET'], strict_slashes= False)
+@app.route('/medical_practitioner/update', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
 def med_user_update():
-    """register medical experts"""
-    from werkzeuk.utils import secure_filename
-    import os
-
-
+    """Update medical experts"""
     user_id = session.get('user_id')
-
-    # if user id is not found
+    
     if not user_id:
-        return jsonify({'message': 'Unauthorized acess'}), 401
+        return jsonify({'message': 'Unauthorized access'}), 401
     
-    med_user_data = medical_practitioners.Expert.find_one({'_id': ObjectId(user_id)})
+    # Retrieve the medical user object from the database using the user_id
+    med_user = medical_practitioners.Expert.find_one({'_id': ObjectId(user_id)})
     if not med_user:
-        return jsonify({'meassage': 'Medical expert not found'}), 404
+        return jsonify({'message': 'Medical expert not found'}), 404
     
-    med_user = {
-        'profile_picture': med_user_data.get('profile_picture', ''),
-        'username': med_user_data.get('username', ''),
-        'first_name': med_user_data.get('first_name', ''),
-        'middle_name': med_user_data.get('middle_name', ''),
-        'last_name': med_user_data.get('last_name', ''),
-        'age': med_user_data.get('age', None),
-        'gender': med_user_data.get('gender', ''),
-        'date_of_birth': med_user_data.get('date_of_birth', None),
-        'country_of_origin': med_user.data.get('country_of_origin', ''),
-        'state_of_origin': med_user_data.get('state_of_origin', ''),
-        'local_government_area': med_user_data.get('local_government_area', ''),
-        'town_of_origin': med_user_data.get('town_of_origin', ''),
-        'email': med_user_data.get('email', ''),
-        'mobile_num': med_user_data.get('mobile_num', ''),
-        'linkedin': med_user_data.get('linkedin', ''),
-        'password': med_user_data.get('password', ''),
-        'residential_address': {
-            'country': med_user_data.get('residentiial_address', {}).get('country', ''),
-            'town': med_user_data.get('residential_address', {}).get('state', ''),
-        }
-
-        })
-        next_of_kin = next_of_kin,
-        education = education,
-        certificates = certificates
-    }
+    # Extract all data of the medical user from the med_user object
+    try:
+        med_user = Medical.retrive_med_user(med_user)
+    except Exception as e:
+        return jsonify({'message': str(e)}), 400
     
     if request.method == "POST":
         data = request.form
-        files = request.file
+        files = request.files
         try:
-            # find the user_id from the database
-            med_user = medical_practitioners.Expert.find_one({'_id': ObjectId(user_id)})
-            if not med_user:
-                return jsonify({'meassage': 'Medical expert not found'}), 404
-            
-            # Extract the medcal expert data from the form
-            profile_picture = files.get('profile_picture')
-            if profile_picture:
-                secure_pic = secure_filename(profile_picture.filename)
-                picture_path = os.path.join('/home/pc/DynoMed/dyno_med/med_user/pic', secure_filename)
-                profile_picture.save(picture_path)
-
-            username = data.get('username')
-            first_name = data.get('first_name')
-            middle_name = data.get('middle_name')
-            last_name = data.get('last_name')
-            age = int(data.get('age'))
-            gender = data.get('gender')
-            date_of_birth = datetime.strptime(data.get('data_of_birth'))
-            country_of_origin = data.get('country_of _origin')
-            state_of_origin = data.get('state_of_origin')
-            local_government_area = data.get('local_government_area')
-            town_of_origin = data.get('town_of_origin')
-            email = data.get('email')
-            mobile_num = data.get('mobile_num')
-            linkedin = data.get('linkedin')
-            password = data.get('password')
-
-            # Extract the residential adress of med_expert which is an embeded doc in dbs
-            residential_address = []
-            country = data.get('residential_address.country')
-            state = data.get('residential_address.state')
-            city = data.get('residential_address.city')
-            town = data.get('residential_address.town')
-            house_num = data.get('residential_address.house_num')
-            residential_address.append({
-                'country': country,
-                'state': state,
-                'city': city,
-                'town': town,
-                'house_num': house_num
-            })
-   
-            # Extract the next_of_kin data from the form
-            next_of_kin = []
-            next_of_kin_first_name = data.get('next_of_kin.first_name')
-            next_of_kin_middle_name = data.get('next_of_kin.middle_name')
-            next_of_kin_last_name = data.get('next_of_kin.last_name')
-            next_of_kin_relationship = data.get('next_of_kin.relationship')
-            next_of_kin_residential_address_country = data.get('next_of_kin.residential_address_country')
-            next_of_kin_residential_address_state = data.get('next_of_kin.residential_address_state')
-            next_of_kin_residential_address_city = data.get('next_of_kin.residential_address_city')
-            next_of_kin_residential_address_town = data.get('next_of_kin.residential_address_town')
-            next_of_kin_residential_address_email = data.get('next_of_kin.residential_address_email')
-            next_of_kin_residential_address_telephone_num = data.get('next_of_kin.residential_address_telephone_num')
-             # NexOfKin is an embeded doc in Expert
-            next_of_kin.append({
-                'first_name': next_of_kin_first_name,
-                'middle_name': next_of_kin_middle_name,
-                'last_name': next_of_kin_last_name,
-                'relationship': next_of_kin_relationship,
-                'residential_address_country': next_of_kin_residential_address_country,
-                'residential_address_state': next_of_kin_residential_address_state,
-                'residential_address_city': next_of_kin_residential_address_city,
-                'residential_address_town': next_of_kin_residential_address_town,
-                'residential_address_email': next_of_kin_residential_address_email,
-                'residential_address_telephone_num': next_of_kin_residential_address_telephone_num
-            })
-            
-            # Extract education data from the form(education is an ebeded doc in Expert)
-            education = []
-            index = 0
-            while True:
-                country_of_edu = data.get(f'education-{index}-country')
-                versity_of_edu = data.get(f'education-{index}-university')
-                degree_of_edu = data.get(f'education-{index}-degree')
-
-                if not country_of_edu and not versity_of_edu and not degree_of_edu:
-                    break
-
-                education.append({
-                    'country': country_of_edu,
-                    'university': versity_of_edu,
-                    'degree': degree_of_edu
-                })
-                index += 1
-            
-            # Extract the cert data fromthe form.(certificate is an embeded doc in Expert)
-            certificates = []
-            index = 0
-            while True:
-                certificate_type = data.get(f'certificate-{index}-type')
-                certificate_file = files.get(f'certificate-{index}-file')
-                if not certificate_type and not certificate_file:
-                    break
-                if certificate_file:
-                    # Generate a safe filename
-                    filename = secure_filename(certificate_file.filename)
-                    # Define the path where the file will be saved
-                    file_path = os.path.join('/home/pc/DynoMed/dyno_med', filename)
-                    certificate_file.save(file_path) 
-                certificates.append({
-                    'certificate_type': certificate_type,
-                    'certificate_file': certificate_file
-                })
-                index =+ 1
-
-            # create the med_user object with the informations available
-            med_user = Expert(
-                profile_picture = profile_picture,
-                username = username,
-                first_name = first_name,
-                middle_name = middle_name,
-                last_name = last_name,
-                age = age,
-                gender = gender,
-                date_of_birth = date_of_birth,
-                country_of_origin = country_of_origin,
-                state_of_origin = state_of_origin,
-                local_government_area = local_government_area,
-                town_of_origin = town_of_origin,
-                email = email,
-                mobile_num = mobile_num,
-                linkedin = linkedin,
-                password = password,
-                residential_address = residential_address,
-                next_of_kin = next_of_kin,
-                education = education,
-                certificates = certificates
-            )
-            med_user.save()
-
+            # Store the latest update from the medical user in the database
+            Medical.update_med_user(med_user, data, files)
+            return jsonify({'message': 'Update successful'}), 200
         except Exception as e:
-            return jsonify({'meassage': str(e)}), 400
+            return jsonify({'message': str(e)}), 400
+    
+    # If it's a GET request, render the template with the current user data
+    return render_template('med-expert-update.html', med_user=med_user)
 
 
 @app.route('/patient_new_record', methods=['POST', 'GET'])

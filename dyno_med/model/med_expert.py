@@ -32,13 +32,15 @@ class Education(EmbeddedDocument):
 
 class Certificate(EmbeddedDocument):
     certificate_type = StringField(required=False, choices=['degree', 'professional', 'training', 'other'])
-    certificate_file = FileField(required=False)
+    certificate_file_name = StringField(required=False)
+    certificate_file_path = StringField(required=False)
 
 class Expert(Document):
     profile_picture = FileField(required=False)
     
     # Personal Data
-    profile_picture = FileField(require=False)
+    profile_picture_name = StringField(required=False)
+    profile_picture_path = StringField(require=False)
     username = StringField(min_length=2, max_length=50)
     first_name = StringField(min_length=2, max_length=50)
     middle_name = StringField(max_length=50)
