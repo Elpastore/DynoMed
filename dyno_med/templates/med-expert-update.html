@@ -31,26 +31,26 @@
 		<div class="row g-3">
 			<div class="col-md-4">
 				<label for="username" class="form-label">User Name</label>
-				<input type="text" class="form-control" id="username" name="username" minlength="2" maxlength="50" value="{{ med_user.username if med_user.username else '' }}">
+				<input type="text" class="form-control" id="username" name="username" minlength="2" maxlength="50" value="{{ med_user.username }}">
 			</div>
 			<div class="col-md-4">
 				<label for="first_name" class="form-label">First Name</label>
-				<input type="text" class="form-control" id="first_name" name="first_name" minlength="2" maxlength="50" value="{{ med_user.first_name if med_user.first_name else '' }}">
+				<input type="text" class="form-control" id="first_name" name="first_name" minlength="2" maxlength="50" value="{{ med_user.first_name }}">
 			</div>
 			<div class="col-md-4">
 				<label for="middle_name" class="form-label">Middle Name</label>
-				<input type="text" class="form-control" id="middle_name" name="middle_name" maxlength="50" value="{{ med_user.middle_name if med_user.middle_name else '' }}">
+				<input type="text" class="form-control" id="middle_name" name="middle_name" maxlength="50" value="{{ med_user.middle_name }}">
 			</div>
 			<div class="col-md-4">
 				<label for="last_name" class="form-label">Last Name</label>
-				<input type="text" class="form-control" id="last_name" name="last_name" minlength="2" maxlength="50" value="{{ med_user.last_name if med_user.last_name else '' }}">
+				<input type="text" class="form-control" id="last_name" name="last_name" minlength="2" maxlength="50" value="{{ med_user.last_name }}">
 			</div>
 			<div class="col-md-4">
 				<label for="age" class="form-label">Age</label>
 				<select class="form-select" id="age" name="age">
 					<option value="">Choose...</option>
 					{% for i in range(18, 80) %}
-						<option value="{{ i }}" {% if med_user and med_user.age == i %}selected{% endif %}>{{ i }}</option>
+						<option value="{{ i }}" {% if med_user.age == i %}selected{% endif %}>{{ i }}</option>
 					{% endfor %}
 				</select>
 			</div>
@@ -58,31 +58,31 @@
 				<label for="gender" class="form-label">Gender</label>
 				<select class="form-select" id="gender" name="gender">
 					<option value="">Choose...</option>
-					<option value="male" {% if med_user and med_user.gender == 'male' %}selected{% endif %}>Male</option>
-					<option value="female" {% if med_user and med_user.gender == 'female' %}selected{% endif %}>Female</option>
-					<option value="other" {% if med_user and med_user.gender == 'other' %}selected{% endif %}>Other</option>
-					<option value="prefer_not_to_say" {% if med_user and med_user.gender == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
+					<option value="male" {% if med_user.gender == 'male' %}selected{% endif %}>Male</option>
+					<option value="female" {% if med_user.gender == 'female' %}selected{% endif %}>Female</option>
+					<option value="other" {% if med_user.gender == 'other' %}selected{% endif %}>Other</option>
+					<option value="prefer_not_to_say" {% if med_user.gender == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
 				</select>
 			</div>
 			<div class="col-md-4">
 				<label for="date_of_birth" class="form-label">Date of Birth</label>
-				<input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ med_user.date_of_birth.strftime('%Y-%m-%d') if med_user.date_of_birth else '' }}">
+				<input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ med_user.date_of_birth.strftime('%Y-%m-%d') }}">
 			</div>
 			<div class="col-md-4">
 				<label for="country_of_origin" class="form-label">Country of Origin</label>
-				<input type="text" class="form-control" id="country_of_origin" name="country_of_origin" value="{{ med_user.country_of_origin if med_user.country_of_origin else ''}}">
+				<input type="text" class="form-control" id="country_of_origin" name="country_of_origin" value="{{ med_user.country_of_origin }}">
 			</div>
 			<div class="col-md-4">
 				<label for="state_of_origin" class="form-label">State of Origin</label>
-				<input type="text" class="form-control" id="state_of_origin" name="state_of_origin" value="{{ med_user.state_of_origin if med_user.state_of_origin else '' }}">
+				<input type="text" class="form-control" id="state_of_origin" name="state_of_origin" value="{{ med_user.state_of_origin }}">
 			</div>
 			<div class="col-md-4">
 				<label for="local_government_area" class="form-label">Local Government Area</label>
-				<input type="text" class="form-control" id="local_government_area" name="local_government_area" value="{{ med_user.local_government_area if med_user.local_government_area else '' }}">
+				<input type="text" class="form-control" id="local_government_area" name="local_government_area" value="{{ med_user.local_government_area }}">
 			</div>
 			<div class="col-md-4">
 				<label for="town_of_origin" class="form-label">Town of Origin</label>
-				<input type="text" class="form-control" id="town_of_origin" name="town_of_origin" value="{{ med_user.town_of_origin if med_user.town_of_origin else '' }}">
+				<input type="text" class="form-control" id="town_of_origin" name="town_of_origin" value="{{ med_user.town_of_origin }}">
 			</div>
 			<div class="col-md-4">
 				<label for="email" class="form-label">Email</label>
@@ -90,19 +90,15 @@
 			</div>
 			<div class="col-md-4">
 				<label for="mobile_num" class="form-label">Mobile Number</label>
-				<input type="tel" class="form-control" id="mobile_num" name="mobile_num" value="{{ med_user.mobile_num if med_user.mobile_num else '' }}">
+				<input type="tel" class="form-control" id="mobile_num" name="mobile_num" value="{{ med_user.mobile_num }}">
 			</div>
 			<div class="col-md-4">
 				<label for="linkedin" class="form-label">LinkedIn</label>
-				<input type="text" class="form-control" id="linkedin" name="linkedin" value="{{ med_user.linkedin if med_user.linkedin else ''}}">
+				<input type="text" class="form-control" id="linkedin" name="linkedin" value="{{ med_user.linkedin }}">
 			</div>
 			<div class="col-md-6">
 				<label for="passWord" class="form-label">Password</label>
 				<input type="password" class="form-control" id="passWord" name="passWord">
-			</div>
-			<div class="col-md-6">
-				<label for="confirm_password" class="form-label">Confirm Password</label>
-				<input type="password" class="form-control" id="confirm_password" name="confirm_password">
 			</div>
 		</div>
 	
@@ -111,27 +107,27 @@
 		<div class="row g-3">
 			<div class="col-md-4">
 				<label for="residential_address-country" class="form-label">Country</label>
-				<input type="text" class="form-control" id="residential_address-country" name="residential_address.country" value="{{ med_user.residential_address.country if med_user.residential_address and med_user.residential_address.country else ''}}">
+				<input type="text" class="form-control" id="residential_address-country" name="residential_address.country" value="{{ med_user.residential_address.country }}">
 			</div>
 			<div class="col-md-4">
 				<label for="residential_address-state" class="form-label">State</label>
-				<input type="text" class="form-control" id="residential_address-state" name="residential_address.state" value="{{ med_user.residential_address.state if med_user.residential_address and med_user.residential_address.state else '' }}">
+				<input type="text" class="form-control" id="residential_address-state" name="residential_address.state" value="{{ med_user.residential_address.state }}">
 			</div>
 			<div class="col-md-4">
 				<label for="residential_address-city" class="form-label">City</label>
-				<input type="text" class="form-control" id="residential_address-city" name="residential_address.city" value="{{ med_user.residential_address.city if med_user.residential_address and med_user.residential_address.city else '' }}">
+				<input type="text" class="form-control" id="residential_address-city" name="residential_address.city" value="{{ med_user.residential_address.city }}">
 			</div>
 			<div class="col-md-4">
 				<label for="residential_address-town" class="form-label">Town</label>
-				<input type="text" class="form-control" id="residential_address-town" name="residential_address.town" value="{{ med_user.residential_address.town if med_user.residential_address and med_user.residential_address.town else '' }}">
+				<input type="text" class="form-control" id="residential_address-town" name="residential_address.town" value="{{ med_user.residential_address.town }}">
 			</div>
 			<div class="col-md-4">
 				<label for="residential_address-street" class="form-label">Street</label>
-				<input type="text" class="form-control" id="residential_address-street" name="residential_address.street" value="{{ med_user.residential_address.street if med_user.residential_address and med_user.residential_address.street else '' }}">
+				<input type="text" class="form-control" id="residential_address-street" name="residential_address.street" value="{{ med_user.residential_address.street }}">
 			</div>
 			<div class="col-md-4">
 				<label for="residential_address-house_num" class="form-label">House Number</label>
-				<input type="text" class="form-control" id="residential_address-house_num" name="residential_address.house_num" value="{{ med_user.residential_address.house_num if med_user.residential_address and med_user.residential_address.house_num else '' }}">
+				<input type="text" class="form-control" id="residential_address-house_num" name="residential_address.house_num" value="{{ med_user.residential_address.house_num }}">
 			</div>
 		</div>
 	
@@ -140,31 +136,31 @@
 		<div class="row g-3">
 			<div class="col-md-4">
 				<label for="next_of_kin-first_name" class="form-label">First Name</label>
-				<input type="text" class="form-control" id="next_of_kin-first_name" name="next_of_kin.first_name" minlength="2" maxlength="50" value="{{ med_user.next_of_kin.first_name if med_user.next_of_kin and med_user.next_of_kin.first_name else '' }}">
+				<input type="text" class="form-control" id="next_of_kin-first_name" name="next_of_kin.first_name" minlength="2" maxlength="50" value="{{ med_user.next_of_kin.first_name }}">
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-middle_name" class="form-label">Middle Name</label>
-				<input type="text" class="form-control" id="next_of_kin-middle_name" name="next_of_kin.middle_name" maxlength="50" value="{{ med_user.next_of_kin.middle_name if med_user.next_of_kin and med_user.next_of_kin.middle_name else '' }}">
+				<input type="text" class="form-control" id="next_of_kin-middle_name" name="next_of_kin.middle_name" maxlength="50" value="{{ med_user.next_of_kin.middle_name }}">
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-last_name" class="form-label">Last Name</label>
-				<input type="text" class="form-control" id="next_of_kin-last_name" name="next_of_kin.last_name" minlength="2" maxlength="50" value="{{ med_user.next_of_kin.last_name if med_user.next_of_kin and med_user.next_of_kin.last_name else '' }}">
+				<input type="text" class="form-control" id="next_of_kin-last_name" name="next_of_kin.last_name" minlength="2" maxlength="50" value="{{ med_user.next_of_kin.last_name }}">
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-relationship" class="form-label">Relationship</label>
-				<input type="text" class="form-control" id="next_of_kin-relationship" name="next_of_kin.relationship" value="{{ med_user.next_of_kin.relationship if med_user.next_of_kin and med_user.next_of_kin.relationship else '' }}">
+				<input type="text" class="form-control" id="next_of_kin-relationship" name="next_of_kin.relationship" value="{{ med_user.next_of_kin.relationship }}">
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-residential_address_country" class="form-label">Country</label>
-				<input type="text" class="form-control" id="next_of_kin-residential_address_country" name="next_of_kin.residential_address_country" value="{{ med_user.next_of_kin.residential_address_country if med_user.next_of_kin and med_user.next_of_kin.residential_address_country else '' }}">
+				<input type="text" class="form-control" id="next_of_kin-residential_address_country" name="next_of_kin.residential_address_country" value="{{ med_user.next_of_kin.residential_address_country  }}">
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-residential_address_state" class="form-label">State</label>
-				<input type="text" class="form-control" id="next_of_kin-residential_address_state" name="next_of_kin.residential_address_state" value="{{ med_user.next_of_kin.residential_address_state if med_user.next_of_kin and med_user.next_of_kin.residential_address_state else '' }}">
+				<input type="text" class="form-control" id="next_of_kin-residential_address_state" name="next_of_kin.residential_address_state" value="{{ med_user.next_of_kin.residential_address_state }}">
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-residential_address_city" class="form-label">City</label>
-				<input type="text" class="form-control" id="next_of_kin-residential_address_city" name="next_of_kin.residential_address_city" value="{{ med_user.next_of_kin.residential_address_city if med_user.next_of_kin and med_user.next_of_kin.residential_address_city else '' }}">
+				<input type="text" class="form-control" id="next_of_kin-residential_address_city" name="next_of_kin.residential_address_city" value="{{ med_user.next_of_kin.residential_address_city }}">
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-residential_address_town" class="form-label">Town</label>
@@ -176,7 +172,7 @@
 			</div>
 			<div class="col-md-4">
 				<label for="next_of_kin-residential_address_telephone_num" class="form-label">Telephone Number</label>
-				<input type="tel" class="form-control" id="next_of_kin-residential_address_telephone_num" name="next_of_kin.residential_address_telephone_num" value="{{ med_user.next_of_kin.residential_address_telephone_num if med_user.next_of_kin and med_user.next_of_kin.residential_address_telephone_num else '' }}">
+				<input type="tel" class="form-control" id="next_of_kin-residential_address_telephone_num" name="next_of_kin.residential_address_telephone_num" value="{{ med_user.next_of_kin.residential_address_telephone_num }}">
 			</div>
 		</div>
 		<h2 class="mt-5 mb-4">Professional Data</h2>
