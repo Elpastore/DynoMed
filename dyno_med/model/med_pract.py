@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 """Module for all medical practitioners"""
-from dyno_med import medical_practitioners
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from typing import List, Dict, Any, Optional
@@ -146,7 +145,7 @@ class Medical:
             Dict[str, str]: Updated residential address dictionary.
         """
         if not data:
-
+            raise TypeError('form Object not found!')
         self.residential_address = {
             'country': data.get('residential_address.country'),
             'state': data.get('residential_address.state'),
@@ -166,6 +165,8 @@ class Medical:
         Returns:
             Dict[str, str]: Updated next of kin dictionary.
         """
+        if not data:
+            raise ValueError('form object not found')
         self.next_of_kin = {
             'first_name': data.get('next_of_kin.first_name'),
             'middle_name': data.get('next_of_kin.middle_name'),
@@ -190,6 +191,8 @@ class Medical:
         Returns:
             List[Dict[str, str]]: Updated list of education dictionaries.
         """
+        if not data:
+            raise TypeError('form object not found!')
         self.education = []
         index = 0
         while True:
@@ -221,10 +224,6 @@ class Medical:
             ValueError: If the email format is invalid.
             Exception: If there's an error updating the medical user.
         """
-        if 'profile_picture' in files:
-            profile_pictures = files.get('profile_picture')
-            if profile_pictures.filename != '':
-
         try:
             # Update attributes from provided data
             self.username = data.get('username')
@@ -333,8 +332,8 @@ class Medical:
         
             # create the med_user object with the informations available
             med_user = medical_practitioners.Expert(
-                profile_picture_name=self.handle_profile_picture.filename
-                profile_picture_path=selfhan
+                profile_picture_name=self.handle_profile_picture.filename,
+                profile_picture_path=self.handle_profile_picture.picture_path,
                 username=self.username,
                 first_name=self.first_name,
                 middle_name=self.middle_name,
@@ -354,7 +353,7 @@ class Medical:
                 next_of_kin=self.next_of_kin,
                 education=self.education,
                 certificates=self.certificates
-            )
+                )
             med_user.save()
         except Exception as e:
             raise Exception(f'Error updating medical user: {str(e)}')

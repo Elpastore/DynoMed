@@ -36,8 +36,6 @@ class Certificate(EmbeddedDocument):
     certificate_file_path = StringField(required=False)
 
 class Expert(Document):
-    profile_picture = FileField(required=False)
-    
     # Personal Data
     profile_picture_name = StringField(required=False)
     profile_picture_path = StringField(require=False)
@@ -73,7 +71,8 @@ class Expert(Document):
     updated_at = DateTimeField(default=datetime.utcnow)
 
     meta = {
-        'collection': 'experts',
+        'collection': 'medical_practitioners',
+        'db_alias': 'default',
         'indexes': ['username', 'email']
     }
 
