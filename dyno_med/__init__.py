@@ -9,23 +9,17 @@ app = Flask(__name__)
 print(f'Template folder: {app.template_folder}')
 
 app.config['SECRET_KEY'] = 'dyno_med'
-# database  connection using mongoclient
-# This will be for registration
 
 # connect using pymongodb
 client = MongoClient('mongodb://127.0.0.1:27017')
-
-# database = client.medical_system
 database = client.dynoMed
 patient_record = client.Record
 
-# Added by wizy
-medical_practitioners = client.dynoMed.medical_practitioners
 
 
 # connection to the database using mongoengine
+connect('dynoMed', host='mongodb://127.0.0.1:27017/dynoMed', alias='default')
 record = connect('Record', alias="record", host='mongodb://127.0.0.1:27017/Record')
-# expert = connect('Expert', alias="expert", host='mongodb://127.0.0.1:27017/Expert')
 
 
 # Initialize CSRF protection

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from flask import jsonify, request, session, render_template, redirect, url_for, flash
-from dyno_med import app, database, patient_record, medical_practitioners
+from dyno_med import app, database, patient_record
 from . import forms
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
@@ -236,7 +236,7 @@ def med_user_update():
         return jsonify({'message': 'Unauthorized access'}), 401
     
     # Retrieve the medical user object from the database using the user_id
-    med_user = medical_practitioners.Expert.find_one({'_id': ObjectId(user_id)})
+    med_user = Expert.objects.get(id=user_id)
     if not med_user:
         return jsonify({'message': 'Medical expert not found'}), 404
     
