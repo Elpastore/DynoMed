@@ -51,9 +51,9 @@ class Expert(Document):
     local_government_area = StringField(required=False)
     town_of_origin = StringField(required=False)
     email = EmailField(required=False)
-    mobile_num = StringField(required=False)
-    linkedin = StringField()
-    passWord = StringField()
+    mobile_num = IntField(required=False)
+    linkedin = StringField(required=False)
+    password = StringField(required=False)
 
     # Residential Address
     residential_address = EmbeddedDocumentField(ResidentialAddress, required=False)
@@ -64,7 +64,7 @@ class Expert(Document):
     # Professional Data
     education = ListField(EmbeddedDocumentField(Education), required=False)
     certificates = ListField(EmbeddedDocumentField(Certificate), required=False)
-    description = StringField()
+    description = StringField(required=False)
 
     # Metadata
     created_at = DateTimeField(default=datetime.utcnow)

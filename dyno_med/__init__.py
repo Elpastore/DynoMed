@@ -49,4 +49,5 @@ from . import routes
 
 # Import from med_pract.py in the model directory
 from .model.med_pract import Medical
+from mongoengine import DoesNotExist
 
