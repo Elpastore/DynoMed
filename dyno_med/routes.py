@@ -16,6 +16,7 @@ from datetime import datetime
 # csrf = CSRFProtect(app)
 from dyno_med import csrf
 
+
 # display home page
 @app.route('/', methods=['GET'], strict_slashes=False)
 def home():
@@ -122,7 +123,7 @@ def login_signUp():
                         return redirect(url_for('patient_profile'))
                     
                     elif user.get('user_type') == 'medical':
-                        return redirect(url_for('medical_expert_page'))
+                        return redirect(url_for('medical_expert_page', password=password))
                 else:
                     #return jsonify({'message': 'Login Unsuccessful. Please check your email and password'}), 401
                     print('Please check your email and password')
@@ -148,8 +149,9 @@ def login_signUp():
                     if user_type == 'patient':
                         Patient(id=ObjectId(new_user['_id']), full_name=username, email=email).save()
                     if user_type == 'medical':
-                        Expert(id=ObjectId(new_user['_id']), username=username, email=email).save()
-                    print(new_user['user_type'])
+                        hashed_password_str = hashed_password.decode('UTF-8')
+                        user = Expert(id=ObjectId(new_user['_id']), username=username,
+                                      email=email, password=hashed_password_str).save()
 
                     flash('Registration successful. Please login.', 'success')
                     return redirect(url_for('login_signUp'))
@@ -219,7 +221,17 @@ def medical_expert_page():
 
     if request.method == 'GET':
         try:
+             password = request.args.get('password')
              med_user = Expert.objects.get(id=ObjectId(user_id))
+             if password:
+                if med_user.password == '':
+                    hashed_password = bcrypt.hashpw(password.encode('UTF-8'), bcrypt.gensalt())
+                    # store encryted password in db
+                    med_user.password = hashed_password.decode('UTF-8')
+                    med_user.save()
+        
+                    print(f"stored str form of hased psswd: {med_user.password}")
+                   
         except Exception as e:
              return jsonify({'message': f'Invalid user ID: {e}'}), 400
 
@@ -230,13 +242,11 @@ def medical_expert_page():
 def med_user_update():
     """Update medical experts"""
     user_id = session.get('user_id')
-    print(str(user_id))
     
     if not user_id:
         return jsonify({'message': 'Unauthorized access'}), 401
     
     # Retrieve the medical user object from the database using the user_id
-    print('before med_user')
     med_user = Expert.objects.get(id=user_id)
     med_user_dict = med_user.to_mongo().to_dict()
     print(med_user_dict)
@@ -245,9 +255,10 @@ def med_user_update():
     
     # Extract all data of the medical user from the med_user object
     try:
-        print('before retrieve')
         medical = Medical()
         med_user = medical.retrive_med_user(med_user_dict)
+        print(med_user)
+        print()
         print('after retrive')
     except Exception as e:
         return jsonify({'message': str(e)}), 400
