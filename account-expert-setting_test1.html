@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings | MySite</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f3f2ef;
+            margin-top: 70px;
+        }
+
+        .sidebar-section {
+            position: sticky;
+            top: 80px;
+			margin-top: 50px;
+        }
+
+        .content-section {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+			margin-top: 50px;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .remove-btn {
+            cursor: pointer;
+            color: red;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Include Navbar -->
+    <?php include 'navbar.html'; ?>
+	<!-- navbar.html -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
+    	<div class="container-fluid">
+        	<a class="navbar-brand text-primary fw-bold" href="#">MySite</a>
+        	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            	aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            	<span class="navbar-toggler-icon"></span>
+        	</button>
+        	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+            	<form class="d-flex me-auto ms-3">
+                	<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            	</form>
+            	<ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="home.html">
+                        	<i class="bi bi-house-door-fill fs-4"></i>
+                        	<div class="small">Home</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="network.html">
+                        	<i class="bi bi-people-fill fs-4"></i>
+                        	<div class="small">My Network</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="jobs.html">
+                        	<i class="bi bi-briefcase-fill fs-4"></i>
+                        	<div class="small">Jobs</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center position-relative" href="messaging.html">
+                        	<i class="bi bi-chat-dots-fill fs-4"></i>
+                        	<div class="small">Messaging</div>
+                        	<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            5
+                            	<span class="visually-hidden">unread messages</span>
+                        	</span>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center position-relative" href="notifications.html">
+                        	<i class="bi bi-bell-fill fs-4"></i>
+                        	<div class="small">Notifications</div>
+                        	<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            	3
+                            	<span class="visually-hidden">unread notifications</span>
+                        	</span>
+                    	</a>
+                	</li>
+                	<li class="nav-item dropdown">
+                    	<a class="nav-link dropdown-toggle text-center" href="#" id="navbarDropdown" role="button"
+                        	data-bs-toggle="dropdown" aria-expanded="false">
+                        	<img src="https://via.placeholder.com/30" alt="Profile" class="rounded-circle">
+                        	<div class="small">Me</div>
+                    	</a>
+                    	<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        	<li><a class="dropdown-item" href="#">View Profile</a></li>
+                        	<li><a class="dropdown-item" href="#">Account Settings</a></li>
+                        	<li><hr class="dropdown-divider"></li>
+                        	<li><a class="dropdown-item" href="#">Sign Out</a></li>
+                    	</ul>
+                	</li>
+            	</ul>
+        	</div>
+    	</div>
+	</nav>
+
+
+    <div class="container">
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-md-3 d-none d-md-block">
+                <div class="sidebar-section">
+                    <div class="bg-white p-3 rounded mb-3">
+                        <div class="text-center">
+                            <img src="https://via.placeholder.com/100" alt="Profile" class="rounded-circle mb-2">
+                            <h5>Jane Doe</h5>
+                            <p class="text-muted">Software Developer at XYZ Corp</p>
+                            <a href="profile.html" class="btn btn-primary btn-sm">View Profile</a>
+                        </div>
+                        <hr>
+                        <div>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="#profile" class="text-decoration-none text-primary"><i class="bi bi-person-fill me-2"></i>Profile Information</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#education" class="text-decoration-none text-muted"><i class="bi bi-mortarboard-fill me-2"></i>Education</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#certifications" class="text-decoration-none text-muted"><i class="bi bi-award-fill me-2"></i>Licenses & Certifications</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#next-of-kin" class="text-decoration-none text-muted"><i class="bi bi-people-fill me-2"></i>Next of Kin</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#security" class="text-decoration-none text-muted"><i class="bi bi-shield-lock-fill me-2"></i>Security</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#notifications" class="text-decoration-none text-muted"><i class="bi bi-bell-fill me-2"></i>Notifications</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <!-- Profile Information -->
+                <div class="content-section" id="profile">
+                    <h4>Profile Information</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="profileImage" class="form-label">Profile Image</label>
+                            <input type="file" class="form-control" id="profileImage">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullName" value="Jane Doe">
+                        </div>
+                        <div class="mb-3">
+                            <label for="headline" class="form-label">Headline</label>
+                            <input type="text" class="form-control" id="headline" value="Software Developer at XYZ Corp">
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location" value="San Francisco, CA">
+                        </div>
+                        <div class="mb-3">
+                            <label for="about" class="form-label">About</label>
+                            <textarea class="form-control" id="about" rows="3">Experienced Software Developer with a demonstrated history of working in the tech industry.</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+
+                <!-- Education -->
+                <div class="content-section" id="education">
+                    <h4>Education</h4>
+                    <form>
+                        <!-- Education Entry 1 -->
+                        <div class="form-section">
+                            <h5>Education 1</h5>
+                            <div class="mb-3">
+                                <label for="university1" class="form-label">University</label>
+                                <input type="text" class="form-control" id="university1" value="Stanford University" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="course1" class="form-label">Course</label>
+                                <input type="text" class="form-control" id="course1" value="Master of Science in Computer Science" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="entryYear1" class="form-label">Year of Entry</label>
+                                <input type="text" class="form-control" id="entryYear1" value="Sep 2013" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="endYear1" class="form-label">Year of Completion</label>
+                                <input type="text" class="form-control" id="endYear1" value="Jun 2015" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="degree1" class="form-label">Degree</label>
+                                <input type="text" class="form-control" id="degree1" value="Master of Science in Computer Science" required>
+                            </div>
+                        </div>
+
+                        <!-- Education Entry 2 -->
+                        <div class="form-section">
+                            <h5>Education 2</h5>
+                            <div class="mb-3">
+                                <label for="university2" class="form-label">University</label>
+                                <input type="text" class="form-control" id="university2" value="University of California, Berkeley" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="course2" class="form-label">Course</label>
+                                <input type="text" class="form-control" id="course2" value="Bachelor of Science in Computer Science" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="entryYear2" class="form-label">Year of Entry</label>
+                                <input type="text" class="form-control" id="entryYear2" value="Sep 2009" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="endYear2" class="form-label">Year of Completion</label>
+                                <input type="text" class="form-control" id="endYear2" value="Jun 2013" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="degree2" class="form-label">Degree</label>
+                                <input type="text" class="form-control" id="degree2" value="Bachelor of Science in Computer Science" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Education</button>
+                    </form>
+                </div>
+
+                <!-- Licenses & Certifications -->
+                <div class="content-section" id="certifications">
+                    <h4>Licenses & Certifications</h4>
+                    <form>
+                        <!-- Certification Entry 1 -->
+                        <div class="form-section">
+                            <h5>Certification 1</h5>
+                            <div class="mb-3">
+                                <label for="certificationName1" class="form-label">Certification Name</label>
+                                <input type="text" class="form-control" id="certificationName1" value="Certified Kubernetes Administrator (CKA)" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="certificationFile1" class="form-label">Upload Certificate</label>
+                                <input type="file" class="form-control" id="certificationFile1" accept=".pdf,.jpg,.png" required>
+                            </div>
+                        </div>
+
+                        <!-- Certification Entry 2 -->
+                        <div class="form-section">
+                            <h5>Certification 2</h5>
+                            <div class="mb-3">
+                                <label for="certificationName2" class="form-label">Certification Name</label>
+                                <input type="text" class="form-control" id="certificationName2" value="Certified ScrumMaster (CSM)" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="certificationFile2" class="form-label">Upload Certificate</label>
+                                <input type="file" class="form-control" id="certificationFile2" accept=".pdf,.jpg,.png" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Certifications</button>
+                    </form>
+                </div>
+
+                <!-- Next of Kin -->
+                <div class="content-section" id="next-of-kin">
+                    <h4>Next of Kin</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="kinName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="kinName" value="Jane Doe" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kinRelationship" class="form-label">Relationship</label>
+                            <input type="text" class="form-control" id="kinRelationship" value="Sister" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kinPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="kinPhone" value="(555) 123-4567" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kinEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="kinEmail" value="jane.doe@example.com" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Next of Kin</button>
+                    </form>
+                </div>
+
+                <!-- Security Settings -->
+                <div class="content-section" id="security">
+                    <h4>Security</h4>
+                    <form>
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="currentPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Change Password</button>
+                    </form>
+                </div>
+
+                <!-- Notifications -->
+                <div class="content-section" id="notifications">
+                    <h4>Notifications</h4>
+                    <form>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="" id="emailNotifications" checked>
+                            <label class="form-check-label" for="emailNotifications">
+                                Email Notifications
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="" id="smsNotifications">
+                            <label class="form-check-label" for="smsNotifications">
+                                SMS Notifications
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="" id="pushNotifications" checked>
+                            <label class="form-check-label" for="pushNotifications">
+                                Push Notifications
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Notification Settings</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <?php include 'footer.html'; ?>
+	<footer class="bg-white border-top mt-5">
+    	<div class="container py-4">
+        	<div class="row">
+            	<div class="col-md-6">
+                	<p class="text-muted">&copy; 2023 MySite. All rights reserved.</p>
+            	</div>
+            	<div class="col-md-6 text-md-end">
+                	<a href="#" class="text-muted me-3">About</a>
+                	<a href="#" class="text-muted me-3">Accessibility</a>
+                	<a href="#" class="text-muted me-3">Help Center</a>
+                	<a href="#" class="text-muted">Privacy & Terms</a>
+            	</div>
+        	</div>
+    	</div>
+	</footer>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+

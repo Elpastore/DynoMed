@@ -1,0 +1,37 @@
+body {
+    background-color: #f5f8fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    max-width: 600px;
+}
+
+h2 {
+    font-weight: bold;
+    text-align: center;
+}
+
+img.rounded-circle {
+    border: 2px solid #1DA1F2;
+}
+
+.form-control-file {
+    max-width: 200px;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background-color: #1DA1F2;
+    border-color: #1DA1F2;
+}
+
+.btn-primary:hover {
+    background-color: #0d95e8;
+    border-color: #0d95e8;
+}
+

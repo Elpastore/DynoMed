@@ -1,0 +1,72 @@
+body {
+    background-color: #f5f8fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    border-radius: 15px;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-text {
+    margin-bottom: 1rem;
+}
+
+.accordion-button {
+    background-color: #1DA1F2;
+    color: white;
+}
+
+.accordion-button:not(.collapsed) {
+    color: white;
+    background-color: #1DA1F2;
+}
+
+.accordion-button.collapsed {
+    color: #1DA1F2;
+    background-color: #fff;
+    border-color: #1DA1F2;
+}
+
+.accordion-body {
+    padding: 0.75rem 1.25rem;
+}
+
+.list-group-item a {
+    color: #1DA1F2;
+    text-decoration: none;
+}
+
+.list-group-item a:hover {
+    text-decoration: underline;
+}
+
+#sidebarMenu .accordion-item {
+    border: none;
+}
+
+#sidebarMenu .accordion-body ul {
+    padding-left: 0;
+}
+
+#sidebarMenu .accordion-body ul li {
+    border: none;
+    padding-left: 0.5rem;
+}
+
+#sidebarMenu .accordion-body ul li a {
+    padding-left: 0.5rem;
+}
+
+
