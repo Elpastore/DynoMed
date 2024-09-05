@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 from flask import jsonify, request, session, render_template, redirect, url_for, flash
-from dyno_med import app, database, patient_record
 from . import forms
 from dyno_med.forms import RegistrationForm, LoginForm
 import bcrypt
@@ -11,11 +10,12 @@ from .model.patient import *
 from bson import ObjectId
 #from bson.objectid import ObjectId
 from flask_wtf.csrf import CSRFProtect
-from dyno_med import Medical, Expert
+from dyno_med import (Medical, Expert, app, database, patient_record)
 from datetime import datetime
 
 # csrf = CSRFProtect(app)
 from dyno_med import csrf
+
 
 # display home page
 @app.route('/', methods=['GET'], strict_slashes=False)
@@ -123,7 +123,7 @@ def login_signUp():
                         return redirect(url_for('patient_profile'))
                     
                     elif user.get('user_type') == 'medical':
-                        return redirect(url_for('medical_expert_page'))
+                        return redirect(url_for('medical_expert_page', password=password))
                 else:
                     #return jsonify({'message': 'Login Unsuccessful. Please check your email and password'}), 401
                     print('Please check your email and password')
@@ -149,8 +149,9 @@ def login_signUp():
                     if user_type == 'patient':
                         Patient(id=ObjectId(new_user['_id']), full_name=username, email=email).save()
                     if user_type == 'medical':
-                        Expert(id=ObjectId(new_user['_id']), username=username, email=email).save()
-                    print(new_user['user_type'])
+                        hashed_password_str = hashed_password.decode('UTF-8')
+                        user = Expert(id=ObjectId(new_user['_id']), username=username,
+                                      email=email, password=hashed_password_str).save()
 
                     flash('Registration successful. Please login.', 'success')
                     return redirect(url_for('login_signUp'))
@@ -220,7 +221,17 @@ def medical_expert_page():
 
     if request.method == 'GET':
         try:
-            med_user = medical_practitioners.Expert.find_one({'_id': ObjectId(user_id)})
+             password = request.args.get('password')
+             med_user = Expert.objects.get(id=ObjectId(user_id))
+             if password:
+                if med_user.password == '':
+                    hashed_password = bcrypt.hashpw(password.encode('UTF-8'), bcrypt.gensalt())
+                    # store encryted password in db
+                    med_user.password = hashed_password.decode('UTF-8')
+                    med_user.save()
+        
+                    print(f"stored str form of hased psswd: {med_user.password}")
+                   
         except Exception as e:
              return jsonify({'message': f'Invalid user ID: {e}'}), 400
 
@@ -237,21 +248,30 @@ def med_user_update():
     
     # Retrieve the medical user object from the database using the user_id
     med_user = Expert.objects.get(id=user_id)
-    if not med_user:
+    med_user_dict = med_user.to_mongo().to_dict()
+    print(med_user_dict)
+    if not med_user_dict or not med_user:
         return jsonify({'message': 'Medical expert not found'}), 404
     
     # Extract all data of the medical user from the med_user object
     try:
-        med_user = Medical.retrive_med_user(med_user)
+        medical = Medical()
+        med_user = medical.retrive_med_user(med_user_dict)
+        print(med_user)
+        print()
+        print('after retrive')
     except Exception as e:
         return jsonify({'message': str(e)}), 400
     
     if request.method == "POST":
         data = request.form
         files = request.files
+        if not files:
+            files = None
         try:
             # Store the latest update from the medical user in the database
-            Medical.update_med_user(med_user, data, files)
+            medical = Medical()
+            medical.update_med_user(med_user_dict, data, files, user_id)
             return jsonify({'message': 'Update successful'}), 200
         except Exception as e:
             return jsonify({'message': str(e)}), 400

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Twitter Clone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Twitter Logo" width="30" height="30">
+                Twitter
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="explore.html">Explore</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="notifications.html">Notifications</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="messages.html">Messages</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search Twitter" aria-label="Search">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Header -->
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <img src="https://via.placeholder.com/150" alt="Profile Picture" class="rounded-circle me-3" style="width: 150px; height: 150px;">
+                            <div>
+                                <h2 class="card-title mb-0">John Doe</h2>
+                                <p class="text-muted">@johndoe</p>
+                                <p class="card-text">Web Developer | Tech Enthusiast | Coffee Lover</p>
+                                <button class="btn btn-outline-primary">Edit Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Navigation -->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Tweets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tweets & Replies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Media</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Likes</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tweets -->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <img src="https://via.placeholder.com/50" alt="User Avatar" class="rounded-circle me-3">
+                            <div>
+                                <h5 class="card-title mb-1">John Doe <small class="text-muted">@johndoe</small></h5>
+                                <p class="card-text">Loving this Twitter clone! #WebDevelopment</p>
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="text-muted"><i class="bi bi-chat"></i> 5</a>
+                                    <a href="#" class="text-muted"><i class="bi bi-repeat"></i> 10</a>
+                                    <a href="#" class="text-muted"><i class="bi bi-heart"></i> 50</a>
+                                    <a href="#" class="text-muted"><i class="bi bi-share"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <img src="https://via.placeholder.com/50" alt="User Avatar" class="rounded-circle me-3">
+                            <div>
+                                <h5 class="card-title mb-1">John Doe <small class="text-muted">@johndoe</small></h5>
+                                <p class="card-text">Check out my new blog post! #Coding</p>
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="text-muted"><i class="bi bi-chat"></i> 3</a>
+                                    <a href="#" class="text-muted"><i class="bi bi-repeat"></i> 7</a>
+                                    <a href="#" class="text-muted"><i class="bi bi-heart"></i> 30</a>
+                                    <a href="#" class="text-muted"><i class="bi bi-share"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <img src="https://via.placeholder.com/50" alt="User Avatar" class="rounded-circle me-3">
+                            <div>
+                                <h5 class="card-title mb-1">John Doe <small class="text-muted">@johndoe</small></h5>
+                                <p class="card-text">Had an amazing time at the tech conference today! #TechNews</p>
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="text-muted"><i class="bi bi-chat"></i> 8</a>
+                                    <a href="#" class="text-muted"><i class="bi bi-repeat"></i> 12</a>
+                                    <a href="#" class="text-muted"><i class="bi bi-heart"></i> 40</a>
+                                    <a href="#" class="text-muted"><i class="bi bi-share"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

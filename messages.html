@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - Twitter Clone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="messages.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Twitter Logo" width="30" height="30">
+                Twitter
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="explore.html">Explore</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="notifications.html">Notifications</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="messages.html">Messages</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search Twitter" aria-label="Search">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    <div class="container mt-5">
+        <h2 class="my-4">Messages</h2>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <img src="https://via.placeholder.com/50" alt="User Avatar" class="rounded-circle me-3">
+                    <div>
+                        <h5 class="card-title mb-1"><strong>John Doe</strong></h5>
+                        <p class="card-text text-muted">Hey, are you coming to the meeting later?</p>
+                        <p class="text-muted">2 hours ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <img src="https://via.placeholder.com/50" alt="User Avatar" class="rounded-circle me-3">
+                    <div>
+                        <h5 class="card-title mb-1"><strong>Jane Smith</strong></h5>
+                        <p class="card-text text-muted">Looking forward to collaborating on the project!</p>
+                        <p class="text-muted">4 hours ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <img src="https://via.placeholder.com/50" alt="User Avatar" class="rounded-circle me-3">
+                    <div>
+                        <h5 class="card-title mb-1"><strong>Developer Dan</strong></h5>
+                        <p class="card-text text-muted">Thanks for sharing that link, it was super helpful!</p>
+                        <p class="text-muted">5 hours ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <img src="https://via.placeholder.com/50" alt="User Avatar" class="rounded-circle me-3">
+                    <div>
+                        <h5 class="card-title mb-1"><strong>Sarah Connor</strong></h5>
+                        <p class="card-text text-muted">Can't wait for the next meetup, see you there!</p>
+                        <p class="text-muted">1 day ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

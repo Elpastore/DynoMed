@@ -1,0 +1,44 @@
+body {
+    background-color: #f5f8fa;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.navbar {
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.list-group-item a {
+    color: #1da1f2;
+    text-decoration: none;
+}
+
+.list-group-item a:hover {
+    text-decoration: underline;
+}
+
+.card {
+    border: 1px solid #e1e8ed;
+    border-radius: 10px;
+}
+
+.card-body img {
+    max-width: 100%;
+    border-radius: 50%;
+}
+
+.card-title {
+    font-size: 1.1rem;
+}
+
+.card-text {
+    font-size: 0.9rem;
+}
+
+.card-body .d-flex a {
+    font-size: 0.85rem;
+}
+
+#engagementChart {
+    max-height: 200px;
+}
+

@@ -3,6 +3,8 @@
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from typing import List, Dict, Any, Optional
+from dyno_med import Expert
+from bson import ObjectId
 import os
 import re
 
@@ -21,8 +23,8 @@ class Medical:
             data (Optional[Dict[str, Any]]): Dictionary containing user data.
             files (Optional[Dict[str, Any]]): Dictionary containing file objects.
         """
-        self.UPLOAD_FOLDER: str = '/home/pc/DynoMed/dyno_med/file_DataBase'
-        self.UPLOAD_PIC: str = '/home/pc/DynoMed/dyno_med/med_user/pic'
+        self.UPLOAD_FOLDER: str = '/home/pc/DynoMed/dyno_med/file_DataBase/certificate'
+        self.UPLOAD_PIC: str = '/home/pc/DynoMed/dyno_med/file_DataBase/Picture'
         self.ALLOWED_EXTENSIONS: List[str] = ['jpg', 'jpeg', 'png']
 
         self.profile_picture: Optional[str] = None
@@ -78,7 +80,7 @@ class Medical:
         return '.' in filename and \
             filename.rsplit('.', 1)[1].lower() in self.ALLOWED_EXTENSIONS
 
-    def handle_certificates(self, files: Dict[str, Any], data: Dict[
+    def handle_certificates(self, files: Optional[Dict[str, Any]], data: Dict[
         str, Any]) -> List[Dict[str, str]]:
         """
         Handle certificate uploads.
@@ -112,7 +114,7 @@ class Medical:
                         raise ValueError(f"Invalid file type for certificate: {file.filename}")
         return self.certificates
 
-    def handle_profile_picture(self, profile_picture: Any, files: Dict[str, Any]) -> None:
+    def handle_profile_picture(self, files: Optional[Dict[str, Any]]) -> None:
         """
         Handle profile picture upload.
 
@@ -209,155 +211,136 @@ class Medical:
             index += 1
         return self.education
 
-    def update_med_user(self, med_user: Any, data: Dict[
-        str, Any], files: Dict[str, Any]) -> None:
+    def update_med_user(self, med_user: Dict[str, Any], data: Dict[str, Any], files: Optional[Dict[str, Any]], user_id) -> None:
         """
         Update the medical user data in the database from the form data.
 
         Args:
-            med_user (Any): The medical user object.
+            med_user (Dict[str, Any]): The medical user dictionary.
             data (Dict[str, Any]): Dictionary containing form data.
-            files (Dict[str, Any]): Dictionary containing file objects.
+            files (Optional[Dict[str, Any]]): Dictionary containing file objects.
 
         Raises:
             TypeError: If the data types are incorrect.
             ValueError: If the email format is invalid.
             Exception: If there's an error updating the medical user.
         """
+        if not med_user:
+            raise ValueError('No user found')
+        if not data:
+            raise ValueError('No form data found')
+
         try:
             # Update attributes from provided data
-            self.username = data.get('username')
-            if not self.username:
-                self.username = ''
-            if not isinstance(self.username, str):
-                raise TypeError('Username must be String')
+            #med_user['_id'] = data.get('_id', med_user.get('_id', ''))
+            #if isinstance(med_user['_id'], ObjectId):
+            #    med_user['_id'] = str(med_user['_id'])
+            #elif "'" in med_user['_id']:
+            #    med_user['_id'] = med_user['_id'].split("'")[1]
+            # med_user['_id'] = user_id
+            user_id = ObjectId(user_id) 
+            med_user['username'] = data.get('username', med_user.get('username', ''))
+            print(str(med_user['username']))
+            med_user['first_name'] = data.get('first_name', med_user.get('first_name', ''))
+            med_user['middle_name'] = data.get('middle_name', med_user.get('middle_name', ''))
+            med_user['last_name'] = data.get('last_name', med_user.get('last_name', ''))
+            med_user['description'] = data.get('description', med_user.get('description', ''))
+            print(str(med_user['last_name']))
             
-            self.first_name = data.get('first_name')
-            if not self.first_name:
-                self.first_name = ''
-            if not isinstance(self.first_name, str):
-                raise TypeError('First Name must be string')
-            
-            self.middle_name = data.get('middle_name')
-            if not self.middle_name:
-                self.middle_name = ''
-            if not isinstance(self.middle_name, str):
-                raise TypeError('Middle Name must be string')
-            
-            self.last_name = data.get('last_name')
-            if not self.last_name:
-                self.last_name = ''
-            if not isinstance(self.last_name, str):
-                raise TypeError('Last Name must be string')
-            
-            self.age = data.get('age')
-            if self.age:
+            # Update age with type checking
+            age = data.get('age')
+            if age:
                 try:
-                    self.age = int(self.age)
+                    med_user['age'] = int(age)
                 except ValueError:
                     raise TypeError('Age must be an Integer')
-            else:
-                self.age = None
-
-            self.gender = data.get('gender')
-            if not self.gender:
-                self.gender = ''
-            if not isinstance(self.gender, str):
-                raise TypeError('Gender must be string')
-        
-            self.date_of_birth = data.get('date_of_birth')
-            if self.date_of_birth:
-                try:
-                    self.date_of_birth = datetime.strptime(self.date_of_birth, '%Y-%m-%d') 
-                except ValueError:
-                    raise TypeError('Date of birth must be in YYYY-MM-DD format')
-            else:
-                self.date_of_birth = None
-
-            self.country_of_origin = data.get('country_of_origin')
-            if not self.country_of_origin:
-                self.country_of_origin = ''
-            if not isinstance(self.country_of_origin, str):
-                raise TypeError('Country of origin must be string')
-
-            self.state_of_origin = data.get('state_of_origin')
-            if not self.state_of_origin:
-                self.state_of_origin = ''
-            if not isinstance(self.state_of_origin, str):
-                raise TypeError('State of origin must be string')
             
-            self.local_government_area = data.get('local_government_area')
-            if not self.local_government_area:
-                self.local_government_area = ''
-            if not isinstance(self.local_government_area, str):
-                raise TypeError('Local government area must be string')
+            med_user['gender'] = data.get('gender', med_user.get('gender', ''))
             
-            self.town_of_origin = data.get('town_of_origin')
-            if not self.town_of_origin:
-                self.town_of_origin = ''
-            if not isinstance(self.town_of_origin, str):
-                raise TypeError('Town of origin must be string')
+            # Update date of birth with format checking
+            date_of_birth = data.get('date_of_birth')
+            # Update date of birth with format checking
+            date_of_birth = data.get('date_of_birth')
+            if date_of_birth:
+                if isinstance(date_of_birth, str):
+                    try:
+                        med_user['date_of_birth'] = datetime.strptime(date_of_birth, '%Y-%m-%d')
+                    except ValueError:
+                        raise TypeError('Date of birth must be in YYYY-MM-DD format')
+                elif isinstance(date_of_birth, datetime):
+                    med_user['date_of_birth'] = date_of_birth
+                else:
+                    raise TypeError('Date of birth must be a string or datetime object')
+            print(date_of_birth)
             
-            self.email = data.get('email')
-            if self.email:
-                email_pattern = re.compile(r"[^@]+@[^@]+\.[^@]+")
-                if not email_pattern.match(self.email):
+            med_user['country_of_origin'] = data.get('country_of_origin', med_user.get('country_of_origin', ''))
+            med_user['state_of_origin'] = data.get('state_of_origin', med_user.get('state_of_origin', ''))
+            med_user['local_government_area'] = data.get('local_government_area', med_user.get('local_government_area', ''))
+            med_user['town_of_origin'] = data.get('town_of_origin', med_user.get('town_of_origin', ''))
+            
+            # Update email with format validation
+            email = data.get('email')
+            if email:
+                if not self.is_valid_email(email):
                     raise ValueError("Invalid email format")
-            else:
-                self.email = ''
+                med_user['email'] = email
+            print(email)
+            
+            # Update mobile number with type checking
+            mobile_num = data.get('mobile_num')
+            if mobile_num:
+                if isinstance(mobile_num, str):
+                    try:
+                        med_user['mobile_num'] = int(mobile_num)
+                    except ValueError:
+                        raise TypeError('Mobile Number must be an Integer')
+                else:
+                     med_user['mobile_num'] = mobile_num
+            
+            med_user['linkedin'] = data.get('linkedin', med_user.get('linkedin', ''))
+            med_user['password'] = data.get('password', med_user.get('password', ''))
 
-            self.mobile_num = data.get('mobile_num')
-            if self.mobile_num:
-                try:
-                    self.mobile_num = int(self.mobile_num)
-                except ValueError:
-                    raise TypeError('Mobile Number must be an Integer')
+            # Update complex fields
+            print('before residential adress')
+            med_user['residential_address'] = self.update_residential_address(data)
+            print(str(med_user['residential_address']))
+            med_user['next_of_kin'] = self.update_next_of_kin(data)
+            med_user['education'] = self.update_education(data)
+
+            # Handle file uploads
+            if files:
+                med_user['certificates'] = self.handle_certificates(files, data)
+                self.handle_profile_picture(files)
+            print('before saved data')
+            print(med_user)
+            print()
+            print()
+
+            # Create an update dictionary with only the fields that need to be updated
+            update_dict = {}
+            for key, value in med_user.items():
+                if key != '_id' and value is not None:
+                    if key == 'date_of_birth':
+                        if isinstance(value, datetime):
+                            update_dict[key] = value
+                        elif isinstance(value, str):
+                            update_dict[key] = datetime.strptime(value, '%Y-%m-%d')
+                        else:
+                            raise TypeError('Date of birth must be a string or datetime object')
+                    elif key in ['age', 'mobile_num']:  # Fields that should be integers
+                        update_dict[key] = int(value) if value != '' else None
+                    else:  # String fields and other types
+                        update_dict[key] = value
             
-            self.linkedin = data.get('linkedin')
-            if not self.linkedin:
-                self.linkedin = ''
-            if not isinstance(self.linkedin, str):
-                raise TypeError('Linkedin Username must be a String')
-            
-            self.password = data.get('password')
-            if not self.password:
-                self.password = ''
-            if not isinstance(self.password, str):
-                raise TypeError('Password must be string')
-            
-            self.residential_address  = self.update_residential_address(data)
-            self.next_of_kin = self.update_next_of_kin(data)
-            self.education = self.update_education(data)
-            self.certificates = self.handle_certificates(files)
-        
-            # create the med_user object with the informations available
-            med_user = medical_practitioners.Expert(
-                profile_picture_name=self.handle_profile_picture.filename,
-                profile_picture_path=self.handle_profile_picture.picture_path,
-                username=self.username,
-                first_name=self.first_name,
-                middle_name=self.middle_name,
-                last_name=self.last_name,
-                age=self.age,
-                gender=self.gender,
-                date_of_birth=self.date_of_birth,
-                country_of_origin=self.country_of_origin,
-                state_of_origin=self.state_of_origin,
-                local_government_area=self.local_government_area,
-                town_of_origin=self.town_of_origin,
-                email=self.email,
-                mobile_num=self.mobile_num,
-                linkedin=self.linkedin,
-                password=self.password,
-                residential_address=self.residential_address,
-                next_of_kin=self.next_of_kin,
-                education=self.education,
-                certificates=self.certificates
-                )
-            med_user.save()
+            print("Update dictionary:", update_dict)
+            saved_data = Expert.objects(id=user_id).update_one(**update_dict)
+            if saved_data:
+                print("Document updated successfully")
+            else:
+                print("No document was updated")
+
         except Exception as e:
             raise Exception(f'Error updating medical user: {str(e)}')
-
 
     @staticmethod
     def retrive_med_user(med_user_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -371,6 +354,7 @@ class Medical:
             Dict[str, Any]: Formatted medical user data.
         """
         med_user = {
+
             'profile_picture_name': med_user_data.get('profile_picture_name') or '',
             'profile_picture_path': med_user_data.get('profile_picture_path') or '',
             'username': med_user_data.get('username') or '',
@@ -417,6 +401,8 @@ class Medical:
                 'certificate_file_name': cert.get('certificate_file_name') if cert.get('certificate_file_name') else '',
                 'certificate_type': cert.get('certificate_type') if cert.get('certificate_type') else '',
                 'certificate_file_path': cert.get('certificate_file_path') if cert.get('certificate_file_path') else '',
-            } for cert in med_user_data.get('certificates', [])]
+            } for cert in med_user_data.get('certificates', [])],
+            'description': med_user_data.get('description') or '',
         }
+        print(med_user)
         return med_user

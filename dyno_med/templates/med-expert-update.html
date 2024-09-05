@@ -66,7 +66,8 @@
 			</div>
 			<div class="col-md-4">
 				<label for="date_of_birth" class="form-label">Date of Birth</label>
-				<input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ med_user.date_of_birth.strftime('%Y-%m-%d') }}">
+				<input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ med_user.date_of_birth.strftime('%Y-%m-%d') if med_user.date_of_birth is not string
+				else med_user.date_of_birth }}">
 			</div>
 			<div class="col-md-4">
 				<label for="country_of_origin" class="form-label">Country of Origin</label>
@@ -98,7 +99,7 @@
 			</div>
 			<div class="col-md-6">
 				<label for="passWord" class="form-label">Password</label>
-				<input type="password" class="form-control" id="passWord" name="passWord">
+				<input type="password" class="form-control" id="passWord" name="passWord" value="{{ med_user.password }}">
 			</div>
 		</div>
 	
@@ -240,7 +241,6 @@
 				<label for="description" class="form-label">Professional Description</label>
 				<textarea class="form-control" id="description" name="description" rows="5" placeholder="Describe yourself, your specialties, and previous work experience (if any)">{{ med_user.description if med_user.description else '' }}</textarea>
 			</div>
-
 			<div class="col-12 mt-4">
 				<div class="d-flex justify-content-center gap-3">
 					<button type="submit" class="btn btn-primary">Update Profile</button>
