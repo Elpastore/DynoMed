@@ -141,17 +141,17 @@ def login_signUp():
                 user_type = request.form.get('user_type')
 
                 hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
+                print('after encrytion')
                 # new_user = {'username': username, 'email': email, 'password': hashed_password}
                 try:
                     new_user = {'username': username, 'email': email, 'password': hashed_password, 'user_type': user_type}
                     database.users.insert_one(new_user)
+                    print('after insrting in user db' )
                     if user_type == 'patient':
                         Patient(id=ObjectId(new_user['_id']), full_name=username, email=email).save()
                     if user_type == 'medical':
-                        hashed_password_str = hashed_password.decode('UTF-8')
-                        user = Expert(id=ObjectId(new_user['_id']), username=username,
-                                      email=email, password=hashed_password_str).save()
+                        print('after hashed psswd')
+                        user = Expert(id=ObjectId(new_user['_id']), username=username, email=email, password=hashed_password).save()
 
                     flash('Registration successful. Please login.', 'success')
                     return redirect(url_for('login_signUp'))

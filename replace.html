@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings | MySite</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f3f2ef;
+            margin-top: 70px;
+        }
+
+        .settings-section {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            margin-top: 50px;
+        }
+
+        .settings-header {
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+
+        .settings-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .form-check-label {
+            margin-left: 10px;
+        }
+
+        .sidebar-section {
+            position: sticky;
+            top: 80px;
+            margin-top: 50px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .save-button {
+            background-color: #0073b1;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .save-button:hover {
+            background-color: #005082;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Include Navbar -->
+    <?php include 'navbar.html'; ?>
+
+    <div class="container">
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-md-3 d-none d-md-block">
+                <div class="sidebar-section mb-3">
+                    <div class="bg-white p-3 rounded">
+                        <div class="text-center">
+                            <img src="https://via.placeholder.com/100" alt="Profile" class="rounded-circle mb-2">
+                            <h5>Jane Doe</h5>
+                            <p class="text-muted">Software Developer at XYZ Corp</p>
+                            <a href="profile.html" class="btn btn-primary btn-sm">View Profile</a>
+                        </div>
+                        <hr>
+                        <div>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="account-settings.html" class="text-decoration-none text-primary"><i class="bi bi-gear-fill me-2"></i>Account Settings</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="privacy-settings.html" class="text-decoration-none text-muted"><i class="bi bi-shield-lock-fill me-2"></i>Privacy Settings</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="notifications.html" class="text-decoration-none text-muted"><i class="bi bi-bell-fill me-2"></i>Notifications</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="security.html" class="text-decoration-none text-muted"><i class="bi bi-lock-fill me-2"></i>Security</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="billing.html" class="text-decoration-none text-muted"><i class="bi bi-credit-card-2-front-fill me-2"></i>Billing</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <!-- Account Settings -->
+                <div class="settings-section">
+                    <h4 class="settings-header">Account Settings</h4>
+
+                    <!-- Basic Information Section -->
+                    <div class="section-title">Basic Information</div>
+                    <form>
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="John Doe">
+                        </div>
+                        <div class="mb-3">
+                            <label for="headline" class="form-label">Professional Title</label>
+                            <input type="text" class="form-control" id="headline" placeholder="Software Developer">
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location" placeholder="New York, USA">
+                        </div>
+                        <div class="mb-3">
+                            <label for="hourlyRate" class="form-label">Hourly Rate (USD)</label>
+                            <input type="number" class="form-control" id="hourlyRate" placeholder="$40">
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button class="btn save-button btn-lg">Save Changes</button>
+                        </div>
+                    </form>
+
+
+					<div class="section-title">Basic Information</div>
+                    <form>
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="John Doe">
+                        </div>
+                        <div class="mb-3">
+                            <label for="headline" class="form-label">Professional Title</label>
+                            <input type="text" class="form-control" id="headline" placeholder="Software Developer">
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location" placeholder="New York, USA">
+                        </div>
+                        <div class="mb-3">
+                            <label for="hourlyRate" class="form-label">Hourly Rate (USD)</label>
+                            <input type="number" class="form-control" id="hourlyRate" placeholder="$40">
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button class="btn save-button btn-lg">Save Changes</button>
+                        </div>
+
+					</form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <?php include 'footer.html'; ?>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

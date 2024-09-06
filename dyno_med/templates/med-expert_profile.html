@@ -3,133 +3,269 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Expert </title>
-    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/med-expert_profile.css') }}">
+    <title>Home | MySite</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f3f2ef;
+            margin-top: 70px;
+        }
+
+        .post {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .create-post {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-section {
+            position: sticky;
+            top: 80px;
+            margin-top: 50px; /* Added margin-top to create spacing */
+        }
+        .create-post {
+            margin-top: 50px;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="wrapper">
-        <aside id="sidebar">
-            <div class="d-flex">
-                <button class="toggle-btn" type="button">
-                    <i class="lni lni-grid-alt"></i>
-                </button>
-                <div class="sidebar-logo">
-                    <a href="#">Dynomed</a>
+    <!-- Include Navbar -->
+    <?php include 'navbar.html'; ?>
+	<!-- navbar.html -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
+    	<div class="container-fluid">
+        	<a class="navbar-brand text-primary fw-bold" href="#">MySite</a>
+        	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            	aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            	<span class="navbar-toggler-icon"></span>
+        	</button>
+        	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+            	<form class="d-flex me-auto ms-3">
+                	<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            	</form>
+            	<ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="home.html">
+                        	<i class="bi bi-house-door-fill fs-4"></i>
+                        	<div class="small">Home</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="network.html">
+                        	<i class="bi bi-people-fill fs-4"></i>
+                        	<div class="small">My Network</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="jobs.html">
+                        	<i class="bi bi-briefcase-fill fs-4"></i>
+                        	<div class="small">Jobs</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center position-relative" href="messaging.html">
+                        	<i class="bi bi-chat-dots-fill fs-4"></i>
+                        	<div class="small">Messaging</div>
+                        	<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            5
+                            	<span class="visually-hidden">unread messages</span>
+                        	</span>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center position-relative" href="notifications.html">
+                        	<i class="bi bi-bell-fill fs-4"></i>
+                        	<div class="small">Notifications</div>
+                        	<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            	3
+                            	<span class="visually-hidden">unread notifications</span>
+                        	</span>
+                    	</a>
+                	</li>
+                	<li class="nav-item dropdown">
+                    	<a class="nav-link dropdown-toggle text-center" href="#" id="navbarDropdown" role="button"
+                        	data-bs-toggle="dropdown" aria-expanded="false">
+                        	<img src="https://via.placeholder.com/30" alt="Profile" class="rounded-circle">
+                        	<div class="small">Me</div>
+                    	</a>
+                    	<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        	<li><a class="dropdown-item" href="#">View Profile</a></li>
+                        	<li><a class="dropdown-item" href="{{ url_for('med_user_update') }}">Settings</a></li>
+                        	<li><a class="dropdown-item" href="#">Sign Out</a></li>
+                    	</ul>
+                	</li>
+            	</ul>
+        	</div>
+    	</div>
+	</nav>
+
+
+    <div class="container">
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-md-3 d-none d-md-block">
+                <div class="sidebar-section mb-3">
+                    <div class="bg-white p-3 rounded">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Sidebar</h5>
+                            <button class="btn btn-light btn-sm" data-bs-toggle="collapse" data-bs-target="#sidebarContent" aria-expanded="true" aria-controls="sidebarContent">
+                                <i class="bi bi-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="collapse show" id="sidebarContent">
+                            <!-- Sidebar content -->
+                            <div class="text-center">
+                                <img src="https://via.placeholder.com/80" alt="Profile" class="rounded-circle mb-2">
+                                <h5>John Doe</h5>
+                                <p class="text-muted">Software Engineer at ABC Corp</p>
+                            </div>
+                            <hr>
+                            <div>
+                                <p class="mb-1"><strong>Connections</strong></p>
+                                <p class="text-primary">Grow your network</p>
+                            </div>
+                            <hr>
+                            <div>
+                                <p class="mb-1"><strong>Who viewed your profile</strong></p>
+                                <p class="text-primary">See who's interested</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <ul class="sidebar-nav">
-                <li class="sidebar-item">
-                    <a href="{{ url_for('med_user_update') }}" class="sidebar-link">
-                        <i class="lni lni-user"></i>
-                        <span>Profile</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
-                        <i class="lni lni-agenda"></i>
-                        <span>Home</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
-                        <i class="lni lni-protection"></i>
-                        <span>Personalized Home Care</span>
-                    </a>
-                    <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Calender</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Patients</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
-                        <i class="lni lni-layout"></i>
-                        <span>On-line consultation</span>
-                    </a>
-                    <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link collapsed" data-bs-toggle="collapse"
-                                data-bs-target="#multi-two" aria-expanded="false" aria-controls="multi-two">
-                                Appointments
-                            </a>
-                            <ul id="multi-two" class="sidebar-dropdown list-unstyled collapse">
-                                <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">Calender</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">Patients</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
-                        <i class="lni lni-popup"></i>
-                        <span>Notification</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="{{ url_for('medical_expert_calender') }}" class="sidebar-link">
-                        <i class="lni lni-cog"></i>
-                        <span>Calender</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="sidebar-footer">
-                <a href="#" class="sidebar-link">
-                    <i class="lni lni-exit"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
-        </aside>
-        <div class="main p-3">
-            <div class="text-center">
-                <h1>
-                    Sidebar Bootstrap 5
-                </h1>
-            </div>
-             <!-- Card Container -->
-            <div class="container-fluid">
-                <div class="card-container">
-                    <!-- Example Profile Card -->
-                    <div class="profile-card">
-                        <img src="{{ url_for('static', filename='images/profile1.jpg') }}" alt="Profile Picture">
-                        <h2>Dr. John Doe</h2>
-                        <p>Expert in Cardiology with over 20 years of experience in the field.</p>
-                        <p>Email: johndoe@example.com</p>
-                        <p>Phone: +1234567890</p>
-                    </div>
 
-                    <!-- Repeat profile-card divs as needed -->
-                    <div class="profile-card">
-                        <img src="{{ url_for('static', filename='images/profile2.jpg') }}" alt="Profile Picture">
-                        <h2>Dr. Jane Smith</h2>
-                        <p>Specialist in Neurology, focusing on brain disorders and treatment.</p>
-                        <p>Email: janesmith@example.com</p>
-                        <p>Phone: +0987654321</p>
+            <!-- Main Content -->
+            <div class="col-md-6">
+                <!-- Create Post -->
+                <div class="create-post">
+                    <div class="d-flex mb-3">
+                        <img src="https://via.placeholder.com/50" alt="Profile" class="rounded-circle me-2">
+                        <button class="form-control btn btn-light text-start" data-bs-toggle="modal" data-bs-target="#createPostModal">Start a post</button>
                     </div>
-                    <!-- Add more cards here -->
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-light text-muted"><i class="bi bi-image-fill text-success me-1"></i>Photo</button>
+                        <button class="btn btn-light text-muted"><i class="bi bi-play-btn-fill text-danger me-1"></i>Video</button>
+                        <button class="btn btn-light text-muted"><i class="bi bi-calendar-event-fill text-warning me-1"></i>Event</button>
+                        <button class="btn btn-light text-muted"><i class="bi bi-pencil-square text-primary me-1"></i>Write Article</button>
+                    </div>
+                </div>
 
+                <!-- Posts Feed -->
+                <div class="post">
+                    <div class="d-flex mb-3">
+                        <img src="https://via.placeholder.com/50" alt="Profile" class="rounded-circle me-2">
+                        <div>
+                            <h6 class="mb-0">Jane Smith</h6>
+                            <small class="text-muted">Marketing Manager at XYZ Ltd • 2h</small>
+                        </div>
+                    </div>
+                    <p>Excited to share that our team has achieved a major milestone in our latest project! Kudos to everyone involved.</p>
+                    <img src="https://via.placeholder.com/500x250" alt="Post Image" class="img-fluid rounded mb-3">
+                    <div class="d-flex justify-content-between text-muted">
+                        <span><i class="bi bi-hand-thumbs-up me-1"></i>120 • <i class="bi bi-chat-left-text me-1"></i>45</span>
+                        <span><i class="bi bi-share me-1"></i>Share</span>
+                    </div>
+                </div>
+
+                <!-- Additional Posts -->
+                <!-- Repeat the .post div for more posts -->
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="col-md-3 d-none d-md-block">
+                <div class="sidebar-section">
+                    <div class="bg-white p-3 rounded mb-3">
+                        <h5 class="mb-3">Add to your feed</h5>
+                        <div class="d-flex align-items-center mb-2">
+                            <img src="https://via.placeholder.com/50" alt="Company" class="rounded-circle me-2">
+                            <div>
+                                <h6 class="mb-0">TechCrunch</h6>
+                                <small class="text-muted">Company • Technology</small>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm ms-auto">+ Follow</button>
+                        </div>
+                        <!-- Repeat for more suggestions -->
+                    </div>
+                    <div class="bg-white p-3 rounded">
+                        <h6 class="text-muted">Trending Articles</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="#" class="text-decoration-none">• How AI is transforming healthcare</a>
+                            </li>
+                            <!-- Repeat for more articles -->
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='js/med-expert_profile.js') }}"></script>
+
+    <!-- Create Post Modal -->
+    <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create a post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex mb-3">
+                        <img src="https://via.placeholder.com/50" alt="Profile" class="rounded-circle me-2">
+                        <div>
+                            <h6 class="mb-0">John Doe</h6>
+                            <button class="btn btn-light btn-sm"><i class="bi bi-globe me-1"></i>Anyone</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="5" placeholder="What do you want to talk about?"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-light"><i class="bi bi-image-fill text-success me-1"></i></button>
+                    <button class="btn btn-light"><i class="bi bi-play-btn-fill text-danger me-1"></i></button>
+                    <button class="btn btn-light"><i class="bi bi-card-list text-primary me-1"></i></button>
+                    <button class="btn btn-primary ms-auto">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <?php include 'footer.html'; ?>
+	<!-- footer.html -->
+	<footer class="bg-white border-top mt-5">
+    	<div class="container py-4">
+        	<div class="row">
+            	<div class="col-md-6">
+                	<p class="text-muted">&copy; 2023 MySite. All rights reserved.</p>
+            	</div>
+            	<div class="col-md-6 text-md-end">
+                	<a href="#" class="text-muted me-3">About</a>
+                	<a href="#" class="text-muted me-3">Accessibility</a>
+                	<a href="#" class="text-muted me-3">Help Center</a>
+                	<a href="#" class="text-muted">Privacy & Terms</a>
+            	</div>
+        	</div>
+    	</div>
+	</footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+

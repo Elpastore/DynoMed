@@ -10,18 +10,13 @@ class ResidentialAddress(EmbeddedDocument):
     state = StringField(required=False)
     city = StringField(required=False)
     town = StringField(required=False)
-    street = StringField(required=False)
-    house_num = StringField(required=False)
 
 class NextOfKin(EmbeddedDocument):
     first_name = StringField(required=False, min_length=2, max_length=50)
     middle_name = StringField(max_length=50)
     last_name = StringField(required=False, min_length=2, max_length=50)
     relationship = StringField(required=False)
-    residential_address_country = StringField(required=False)
-    residential_address_state = StringField(required=False)
-    residential_address_city = StringField(required=False)
-    residential_address_town = StringField(required=False)
+    gender = StringField(required=False)
     residential_address_email = EmailField(required=False)
     residential_address_telephone_num = StringField(required=False)
 
@@ -43,7 +38,6 @@ class Expert(Document):
     first_name = StringField(min_length=2, max_length=50)
     middle_name = StringField(max_length=50)
     last_name = StringField(min_length=2, max_length=50)
-    age = IntField(min_value=18, max_value=79)
     gender = StringField(choices=['male', 'female', 'other', 'prefer_not_to_say'])
     date_of_birth = DateField(required=False)
     country_of_origin = StringField(required=False)
@@ -52,7 +46,6 @@ class Expert(Document):
     town_of_origin = StringField(required=False)
     email = EmailField(required=False)
     mobile_num = IntField(required=False)
-    linkedin = StringField(required=False)
     password = StringField(required=False)
 
     # Residential Address
@@ -64,7 +57,6 @@ class Expert(Document):
     # Professional Data
     education = ListField(EmbeddedDocumentField(Education), required=False)
     certificates = ListField(EmbeddedDocumentField(Certificate), required=False)
-    description = StringField(required=False)
 
     # Metadata
     created_at = DateTimeField(default=datetime.utcnow)

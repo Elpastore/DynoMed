@@ -1,111 +1,88 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Profile picture preview
-    const profilePictureInput = document.getElementById('profile-picture');
-    const profilePicturePreview = document.getElementById('profile-picture-preview');
-    const profilePicturePlaceholder = document.getElementById('profile-picture-placeholder');
-    const profilePictureContainer = document.getElementById('profile-picture-container');
-
-    profilePictureInput.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                profilePicturePreview.src = e.target.result;
-                profilePicturePreview.style.display = 'block';
-                profilePicturePlaceholder.style.display = 'none';
-                profilePictureContainer.style.backgroundColor = 'transparent';
-            }
-            reader.readAsDataURL(file);
-        } else {
-            profilePicturePreview.style.display = 'none';
-            profilePicturePlaceholder.style.display = 'block';
-            profilePictureContainer.style.backgroundColor = '#f8f9fa';  // Light gray background
-        }
-    });
-
-    // University and Degree fields
-    let universityDegreeCount = 1;
-    const universityContainer = document.getElementById('university-degree-container');
-    const addUniversityButton = document.getElementById('add-university-degree');
-
-    addUniversityButton.addEventListener('click', function() {
-        const newFields = document.createElement('div');
-        newFields.className = 'row g-3 mb-3';
-        newFields.innerHTML = `
-            <div class="col-md-3">
-                <label for="education-country-${universityDegreeCount}" class="form-label">Country of Education</label>
-                <select class="form-select" id="education-country-${universityDegreeCount}" name="education-country-${universityDegreeCount}" required>
-                    <option value="">Choose...</option>
-                    <option value="US">United States</option>
-                    <option value="UK">United Kingdom</option>
-                    <option value="CA">Canada</option>
-                    <!-- Add more countries as needed -->
+// Function to add more education fields
+function addEducation() {
+    let educationCount = $('.form-section[id^="education"]').length + 1;
+    $('#educationContainer').append(`
+        <div class="form-section" id="education${educationCount}">
+            <h5>Education ${educationCount}</h5>
+            <div class="mb-3">
+                <label for="university${educationCount}" class="form-label">University</label>
+                <input type="text" class="form-control" id="university${educationCount}" name="university[]" placeholder="University Name" required>
+            </div>
+            <div class="mb-3">
+                <label for="course${educationCount}" class="form-label">Course</label>
+                <input type="text" class="form-control" id="course${educationCount}" name="course[]" placeholder="Course Name" required>
+            </div>
+            <div class="mb-3">
+                <label for="entryYear${educationCount}" class="form-label">Year of Entry</label>
+                <input type="month" class="form-control" id="entryYear${educationCount}" name="entryYear[]" min="1980-01" max="2024-12" required>
+            </div>
+            <div class="mb-3">
+                <label for="endYear${educationCount}" class="form-label">Year of Completion</label>
+                <input type="month" class="form-control" id="endYear${educationCount}" name="endYear[]" min="1980-01" max="2024-12" required>
+            </div>
+            <div class="mb-3">
+                <label for="degree${educationCount}" class="form-label">Degree</label>
+                <select class="form-control" id="degree${educationCount}" name="degree[]" required>
+                    <option value="" disabled selected>Select Degree</option>
+                    <option value="Bachelor of Medicine, Bachelor of Surgery (MBBS)">Bachelor of Medicine, Bachelor of Surgery (MBBS)</option>
+                    <option value="Doctor of Medicine (MD)">Doctor of Medicine (MD)</option>
+                    <option value="Bachelor of Science in Nursing (BSN)">Bachelor of Science in Nursing (BSN)</option>
+                    <option value="Master of Science in Nursing (MSN)">Master of Science in Nursing (MSN)</option>
+                    <option value="Diploma in Nursing">Diploma in Nursing</option>
+                    <option value="PhD in Medicine">PhD in Medicine</option>
+                    <option value="Master of Surgery (MS)">Master of Surgery (MS)</option>
                 </select>
             </div>
-            <div class="col-md-3">
-                <label for="professional_data-education-university-${universityDegreeCount}" class="form-label">University</label>
-                <input type="text" class="form-control" id="professional_data-education-university-${universityDegreeCount}" name="professional_data-education-university-${universityDegreeCount}" list="university-list-${universityDegreeCount}" required>
-                <datalist id="university-list-${universityDegreeCount}">
-                    <option value="Harvard University">
-                    <option value="Oxford University">
-                    <option value="Stanford University">
-                    <!-- Add more universities as needed -->
-                </datalist>
+            <button type="button" class="btn btn-danger remove-education" data-id="${educationCount}">Remove</button>
+        </div>
+    `);
+}
+
+// Function to add more certification fields
+function addCertification() {
+    let certificationCount = $('.form-section[id^="certification"]').length + 1;
+    $('#certificationContainer').append(`
+        <div class="form-section" id="certification${certificationCount}">
+            <h5>Certification ${certificationCount}</h5>
+            <div class="mb-3">
+                <label for="certificationName${certificationCount}" class="form-label">Certification Name</label>
+                <input type="text" class="form-control" id="certificationName${certificationCount}" name="certificationName[]" placeholder="Certification Name" required>
             </div>
-            <div class="col-md-4">
-                <label for="professional_data-education-degree-${universityDegreeCount}" class="form-label">Degree</label>
-                <input type="text" class="form-control" id="professional_data-education-degree-${universityDegreeCount}" name="professional_data-education-degree-${universityDegreeCount}" required>
+            <div class="mb-3">
+                <label for="certificationFile${certificationCount}" class="form-label">Upload Certificate</label>
+                <input type="file" class="form-control" id="certificationFile${certificationCount}" name="certificationFile[]" accept=".pdf,.jpg,.png" required>
             </div>
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="button" class="btn btn-danger remove-university-degree">Remove</button>
-            </div>
-        `;
-        universityContainer.appendChild(newFields);
-        universityDegreeCount++;
+            <button type="button" class="btn btn-danger remove-certification" data-id="${certificationCount}">Remove</button>
+        </div>
+    `);
+}
+
+$(document).ready(function() {
+    // Add more education details
+
+    // Initialize datepicker for date of birth
+    $('#datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayHighlight: true,
+        endDate: new Date(),  // Restricts selection to dates up to today
+        yearRange: '1900:' + new Date().getFullYear()  // Allows selection from year 1900 to current year
     });
 
-    // Event delegation for remove university/degree buttons
-    universityContainer.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('remove-university-degree')) {
-            e.target.closest('.row').remove();
-        }
+    $('#addEducation').click(addEducation);
+
+    // Remove education entry
+    $(document).on('click', '.remove-education', function() {
+        let id = $(this).data('id');
+        $('#education' + id).remove();
     });
 
-    // Certificate fields
-    let certificateCount = 1;
-    const certificateContainer = document.getElementById('certificate-container');
-    const addCertificateButton = document.getElementById('add-certificate');
+    // Add more certifications
+    $('#addCertification').click(addCertification);
 
-    addCertificateButton.addEventListener('click', function() {
-        const newFields = document.createElement('div');
-        newFields.className = 'row g-3 mb-3';
-        newFields.innerHTML = `
-            <div class="col-md-4">
-                <label for="certificate-type-${certificateCount}" class="form-label">Certificate Type</label>
-                <select class="form-select" id="certificate-type-${certificateCount}" name="certificate-type-${certificateCount}" required>
-                    <option value="">Choose...</option>
-                    <option value="degree">Degree Certificate</option>
-                    <option value="professional">Professional Certificate</option>
-                    <option value="training">Training Certificate</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="certificate-file-${certificateCount}" class="form-label">Upload Certificate</label>
-                <input type="file" class="form-control" id="certificate-file-${certificateCount}" name="certificate-file-${certificateCount}" accept=".pdf,.jpg,.jpeg,.png" required>
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="button" class="btn btn-danger remove-certificate">Remove</button>
-            </div>
-        `;
-        certificateContainer.appendChild(newFields);
-        certificateCount++;
-    });
-
-    // Event delegation for remove certificate buttons
-    certificateContainer.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('remove-certificate')) {
-            e.target.closest('.row').remove();
-        }
+    // Remove a specific certification section
+    $(document).on('click', '.remove-certification', function() {
+        let id = $(this).data('id');
+        $('#certification' + id).remove();
     });
 });
