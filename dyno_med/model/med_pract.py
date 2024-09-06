@@ -174,10 +174,6 @@ class Medical:
             'middle_name': data.get('next_of_kin.middle_name'),
             'last_name': data.get('next_of_kin.last_name'),
             'relationship': data.get('next_of_kin.relationship'),
-            'residential_address_country': data.get('next_of_kin.residential_address_country'),
-            'residential_address_state': data.get('next_of_kin.residential_address_state'),
-            'residential_address_city': data.get('next_of_kin.residential_address_city'),
-            'residential_address_town': data.get('next_of_kin.residential_address_town'),
             'residential_address_email': data.get('next_of_kin.residential_address_email'),
             'residential_address_telephone_num': data.get('next_of_kin.residential_address_telephone_num')
         }
@@ -244,7 +240,6 @@ class Medical:
             med_user['first_name'] = data.get('first_name', med_user.get('first_name', ''))
             med_user['middle_name'] = data.get('middle_name', med_user.get('middle_name', ''))
             med_user['last_name'] = data.get('last_name', med_user.get('last_name', ''))
-            med_user['description'] = data.get('description', med_user.get('description', ''))
             print(str(med_user['last_name']))
             
             # Update age with type checking
@@ -385,10 +380,6 @@ class Medical:
                 'middle_name': med_user_data.get('next_of_kin', {}).get('middle_name') or '',
                 'last_name': med_user_data.get('next_of_kin', {}).get('last_name') or '',
                 'relationship': med_user_data.get('next_of_kin', {}).get('relationship') or '',
-                'residential_address_country': med_user_data.get('next_of_kin',{}).get('residential_address_country') or '',
-                'residential_address_state': med_user_data.get('next_of_kin', {}).get('residential_address_state') or '',
-                'residential_address_city': med_user_data.get('next_of_kin', {}).get('residential_address_city') or '',
-                'residential_address_town': med_user_data.get('next_of_kin', {}).get('residential_address_town') or '',
                 'residential_address_email': med_user_data.get('next_of_kin', {}).get('residential_address_email') or '',
                 'residential_address_telephone_num': med_user_data.get('next_of_kin', {}).get('residential_address_telephone_num') or '',
                 },
