@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings | MySite</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body {
+            background-color: #f3f2ef;
+            margin-top: 70px;
+        }
+
+        .sidebar-section {
+            position: sticky;
+            top: 80px;
+            margin-top: 50px;
+        }
+
+        .content-section {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            margin-top: 50px;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Include Navbar -->
+    <?php include 'navbar.html'; ?>
+    <!-- navbar.html -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
+    	<div class="container-fluid">
+        	<a class="navbar-brand text-primary fw-bold" href="#">MySite</a>
+        	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            	aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            	<span class="navbar-toggler-icon"></span>
+        	</button>
+        	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+            	<form class="d-flex me-auto ms-3">
+                	<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            	</form>
+            	<ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="home.html">
+                        	<i class="bi bi-house-door-fill fs-4"></i>
+                        	<div class="small">Home</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="Connections.html">
+                        	<i class="bi bi-people-fill fs-4"></i>
+                        	<div class="small">Connections</div>
+                    	</a>
+                	</li>
+                    <li class="nav-item">
+                    	<a class="nav-link text-center" href="Patients.html">
+                        	<i class="bi bi-person-plus-fill fs-4"></i>
+                        	<div class="small">Patients</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="jobs.html">
+                        	<i class="bi bi-briefcase-fill fs-4"></i>
+                        	<div class="small">Jobs</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center position-relative" href="messaging.html">
+                        	<i class="bi bi-chat-dots-fill fs-4"></i>
+                        	<div class="small">Messaging</div>
+                        	<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            5
+                            	<span class="visually-hidden">unread messages</span>
+                        	</span>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center position-relative" href="notifications.html">
+                        	<i class="bi bi-bell-fill fs-4"></i>
+                        	<div class="small">Notifications</div>
+                        	<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            	3
+                            	<span class="visually-hidden">unread notifications</span>
+                        	</span>
+                    	</a>
+                	</li>
+                	<li class="nav-item dropdown">
+                    	<a class="nav-link dropdown-toggle text-center" href="#" id="navbarDropdown" role="button"
+                        	data-bs-toggle="dropdown" aria-expanded="false">
+                        	<img src="https://via.placeholder.com/30" alt="Profile" class="rounded-circle">
+                        	<div class="small">Me</div>
+                    	</a>
+                    	<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        	<li><a class="dropdown-item" href="#">View Profile</a></li>
+                        	<li><a class="dropdown-item" href="#">Account Settings</a></li>
+                        	<li><hr class="dropdown-divider"></li>
+                        	<li><a class="dropdown-item" href="#">Sign Out</a></li>
+                    	</ul>
+                	</li>
+            	</ul>
+        	</div>
+    	</div>
+	</nav>
+
+
+    <div class="container">
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-md-3 d-none d-md-block">
+                <div class="sidebar-section">
+                    <div class="bg-white p-3 rounded mb-3">
+                        <div class="text-center">
+                            <img src="https://via.placeholder.com/100" alt="Profile" class="rounded-circle mb-2">
+                            <h5>Jane Doe</h5>
+                            <p class="text-muted">Software Developer at XYZ Corp</p>
+                            <a href="profile.html" class="btn btn-primary btn-sm">View Profile</a>
+                        </div>
+                        <hr>
+                        <div>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="#profile" class="text-decoration-none text-primary"><i class="bi bi-person-fill me-2"></i>Profile Information</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#residence" class="text-decoration-none text-muted"><i class="bi bi-geo-alt-fill fs-6"></i>Address</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#education" class="text-decoration-none text-muted"><i class="bi bi-mortarboard-fill me-2"></i>Education</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#certifications" class="text-decoration-none text-muted"><i class="bi bi-award-fill me-2"></i>Licenses & Certifications</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#next-of-kin" class="text-decoration-none text-muted"><i class="bi bi-people-fill me-2"></i>Next of Kin</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#Work Experience" class="text-decoration-none text-muted">
+                                        <i class="bi bi-briefcase-fill me-2"></i>Work Experience
+                                      </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <!-- Profile Information -->
+                <div class="content-section" id="profile">
+                    <h4>Profile Information</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="profileImage" class="form-label">Profile Image</label>
+                            <input type="file" class="form-control" id="profileImage">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" placeholder="First-Name  Middle-Name  Last-Name" id="fullName" value="John Doe">
+                        </div>
+                        <div class="mb-3">
+                            <label for="headline" class="form-label">Profesional Title</label>
+                            <input type="text" class="form-control" id="headline" placeholder="Nurse" value="Software Engineer at ABC Corp">
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" placeholder="City, State, Country " id="location" value="San Francisco, CA">
+                        </div>
+                        <div class="mb-3">
+                            <label for="about" class="form-label">Professional Bio</label>
+                            <textarea class="form-control" placeholder="Tell us about yourself..." id="about" rows="3">Experienced Software Engineer with a demonstrated history of working in the tech industry.</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+
+
+                 <!-- Work Experience-->
+                  
+
+                <!-- Education -->
+                <div class="content-section" id="education">
+                    <h4>Education</h4>
+                    <form>
+                        <div id="educationContainer">
+                            <!-- Education Entry Template -->
+                            <div class="form-section" id="education1">
+                                <h5>Education 1</h5>
+                                <div class="mb-3">
+                                    <label for="university1" class="form-label">University</label>
+                                    <input type="text" class="form-control" id="university1" name="university[]" placeholder="University Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="course1" class="form-label">Course</label>
+                                    <input type="text" class="form-control" id="course1" name="course[]" placeholder="Course Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="entryYear1" class="form-label">Year of Entry</label>
+                                    <input type="month" class="form-control" id="entryYear1" name="entryYear[]" min="1980-01" max="2024-12" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endYear1" class="form-label">Year of Completion</label>
+                                    <input type="month" class="form-control" id="endYear1" name="endYear[]" min="1980-01" max="2024-12" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="degree1" class="form-label">Degree</label>
+                                    <select class="form-control" id="degree1" name="degree[]" required>
+                                        <option value="" disabled selected>Select Degree</option>
+                                        <option value="Bachelor of Medicine, Bachelor of Surgery (MBBS)">Bachelor of Medicine, Bachelor of Surgery (MBBS)</option>
+                                        <option value="Doctor of Medicine (MD)">Doctor of Medicine (MD)</option>
+                                        <option value="Bachelor of Science in Nursing (BSN)">Bachelor of Science in Nursing (BSN)</option>
+                                        <option value="Master of Science in Nursing (MSN)">Master of Science in Nursing (MSN)</option>
+                                        <option value="Diploma in Nursing">Diploma in Nursing</option>
+                                        <option value="PhD in Medicine">PhD in Medicine</option>
+                                        <option value="Master of Surgery (MS)">Master of Surgery (MS)</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-danger remove-education" data-id="1">Remove</button>
+                            </div>
+                        </div>
+                        
+            
+                        <button type="button" id="addEducation" class="btn btn-secondary">Add More Education</button>
+                        <button type="submit" class="btn btn-primary">Save Education</button>
+                    </form>
+                </div>                
+                
+                <script>
+                    $(document).ready(function() {
+                    let educationCount = 1;
+
+                    // Add more education details dynamically
+                    $('#addEducation').click(function() {
+                        educationCount++;
+                        $('#educationContainer').append(`
+                            <div class="form-section" id="education${educationCount}">
+                                <h5>Education ${educationCount}</h5>
+                                <div class="mb-3">
+                                    <label for="university${educationCount}" class="form-label">University</label>
+                                    <input type="text" class="form-control" id="university${educationCount}" name="university[]" placeholder="University Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="course${educationCount}" class="form-label">Course</label>
+                                    <input type="text" class="form-control" id="course${educationCount}" name="course[]" placeholder="Course Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="entryYear${educationCount}" class="form-label">Year of Entry</label>
+                                    <input type="month" class="form-control" id="entryYear${educationCount}" name="entryYear[]" min="1980-01" max="2024-12" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endYear${educationCount}" class="form-label">Year of Completion</label>
+                                    <input type="month" class="form-control" id="endYear${educationCount}" name="endYear[]" min="1980-01" max="2024-12" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="degree${educationCount}" class="form-label">Degree</label>
+                                    <select class="form-control" id="degree${educationCount}" name="degree[]" required>
+                                        <option value="" disabled selected>Select Degree</option>
+                                        <option value="Bachelor of Medicine, Bachelor of Surgery (MBBS)">Bachelor of Medicine, Bachelor of Surgery (MBBS)</option>
+                                        <option value="Doctor of Medicine (MD)">Doctor of Medicine (MD)</option>
+                                        <option value="Bachelor of Science in Nursing (BSN)">Bachelor of Science in Nursing (BSN)</option>
+                                        <option value="Master of Science in Nursing (MSN)">Master of Science in Nursing (MSN)</option>
+                                        <option value="Diploma in Nursing">Diploma in Nursing</option>
+                                        <option value="PhD in Medicine">PhD in Medicine</option>
+                                        <option value="Master of Surgery (MS)">Master of Surgery (MS)</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-danger remove-education" data-id="${educationCount}">Remove</button>
+                            </div>
+                        `);
+                    });
+
+                    // Remove education entry
+                    $(document).on('click', '.remove-education', function() {
+                        let id = $(this).data('id');
+                        $('#education' + id).remove();
+                    });
+                });
+                </script>
+
+                <!-- Licenses & Certifications -->
+                <div class="content-section" id="certifications">
+                    <h4>Licenses & Certifications</h4>
+                    <form>
+                        <div id="certificationContainer">
+                            <!-- Certification Entry Template -->
+                            <div class="form-section" id="certification1">
+                                <h5>Certification 1</h5>
+                                <div class="mb-3">
+                                    <label for="certificationName1" class="form-label">Certification Name</label>
+                                    <input type="text" class="form-control" id="certificationName1" name="certificationName[]" placeholder="Certification Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="certificationFile1" class="form-label">Upload Certificate</label>
+                                    <input type="file" class="form-control" id="certificationFile1" name="certificationFile[]" accept=".pdf,.jpg,.png" required>
+                                </div>
+                                <button type="button" class="btn btn-danger remove-certification" data-id="1">Remove</button>
+                            </div>
+                        </div>
+
+                        <button type="button" id="addCertification" class="btn btn-secondary">Add More Certifications</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+
+                <script>
+                    $(document).ready(function() {
+                        let certificationCount = 1;
+                
+                        // Add more certifications dynamically
+                        $('#addCertification').click(function() {
+                            certificationCount++;
+                            $('#certificationContainer').append(`
+                                <div class="form-section" id="certification${certificationCount}">
+                                    <h5>Certification ${certificationCount}</h5>
+                                    <div class="mb-3">
+                                        <label for="certificationName${certificationCount}" class="form-label">Certification Name</label>
+                                        <input type="text" class="form-control" id="certificationName${certificationCount}" name="certificationName[]" placeholder="Certification Name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="certificationFile${certificationCount}" class="form-label">Upload Certificate</label>
+                                        <input type="file" class="form-control" id="certificationFile${certificationCount}" name="certificationFile[]" accept=".pdf,.jpg,.png" required>
+                                    </div>
+                                    <button type="button" class="btn btn-danger remove-certification" data-id="${certificationCount}">Remove</button>
+                                </div>
+                            `);
+                        });
+                
+                        // Remove a specific certification section
+                        $(document).on('click', '.remove-certification', function() {
+                            let id = $(this).data('id');
+                            $('#certification' + id).remove();
+                        });
+                    });
+                </script>
+                
+                
+
+                 <!-- Work Experience-->
+                 <div class="content-section", id="experience">
+                    <h4>Work Experience--</h4>
+                    <form>
+                        <div>
+                            <!-- Work Experience entry temoplate-->
+                             <div class="form-section" id="experience1">
+                                <h5>Experience 1</h5>
+                                <div class="mb-3">
+                                    <label for="company1" class="form-label">Company</label>
+                                    <input type="text" class="form-control" id="company1" name="company[]"
+                                    placeholder="Company Name(e.g- HedgeWay Hospital)" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">Role</label>
+                                    <input type="text" class="form-control" id="role1" name="role[]"
+                                    placeholder="Anaesthetic Nurse" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="startDate" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" name="startDate[]">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endDate" class="form-label">End Date (or Current)</label>
+                                    <input type="date" class="form-control" name="endDate[]">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="responsibilities" class="form-label">Key Responsibilities</label>
+                                    <textarea class="form-control" name="responsibilities[]" rows="4" placeholder="Describe your key responsibilities..."></textarea>
+                                </div>
+                
+                             </div>
+                        </div>
+                    </form>
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+
+     <!-- Include Footer -->
+     <?php include 'footer.html'; ?>
+     <footer class="bg-white border-top mt-5">
+         <div class="container py-4">
+             <div class="row">
+                 <div class="col-md-6">
+                     <p class="text-muted">&copy; 2023 MySite. All rights reserved.</p>
+                 </div>
+                 <div class="col-md-6 text-md-end">
+                     <a href="#" class="text-muted me-3">About</a>
+                     <a href="#" class="text-muted me-3">Accessibility</a>
+                     <a href="#" class="text-muted me-3">Help Center</a>
+                     <a href="#" class="text-muted">Privacy & Terms</a>
+                 </div>
+             </div>
+         </div>
+     </footer>
+ 
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+

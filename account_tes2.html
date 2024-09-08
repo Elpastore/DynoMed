@@ -175,23 +175,27 @@
                         </div>
                         <div class="mb-3">
                             <label for="fullName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="fullName" value="John Doe">
+                            <input type="text" class="form-control" placeholder="First-Name  Middle-Name  Last-Name" id="fullName" value="John Doe">
                         </div>
                         <div class="mb-3">
-                            <label for="headline" class="form-label">Headline</label>
-                            <input type="text" class="form-control" id="headline" value="Software Engineer at ABC Corp">
+                            <label for="headline" class="form-label">Profesional Title</label>
+                            <input type="text" class="form-control" id="headline" placeholder="Nurse" value="Software Engineer at ABC Corp">
                         </div>
                         <div class="mb-3">
                             <label for="location" class="form-label">Location</label>
-                            <input type="text" class="form-control" id="location" value="San Francisco, CA">
+                            <input type="text" class="form-control" placeholder="City, State, Country " id="location" value="San Francisco, CA">
                         </div>
                         <div class="mb-3">
-                            <label for="about" class="form-label">About</label>
-                            <textarea class="form-control" id="about" rows="3">Experienced Software Engineer with a demonstrated history of working in the tech industry.</textarea>
+                            <label for="about" class="form-label">Professional Bio</label>
+                            <textarea class="form-control" placeholder="Tell us about yourself..." id="about" rows="3">Experienced Software Engineer with a demonstrated history of working in the tech industry.</textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
                 </div>
+
+
+                 <!-- Work Experience-->
+                  
 
                 <!-- Education -->
                 <div class="content-section" id="education">
@@ -238,7 +242,7 @@
                         <button type="button" id="addEducation" class="btn btn-secondary">Add More Education</button>
                         <button type="submit" class="btn btn-primary">Save Education</button>
                     </form>
-                </div>
+                </div>                
                 
                 <script>
                     $(document).ready(function() {
@@ -348,8 +352,47 @@
                     });
                 </script>
                 
+                
 
-                <!-- Next of Kin -->
+                 <!-- Work Experience-->
+                 <div class="content-section", id="experience">
+                    <h4>Work Experience--</h4>
+                    <form>
+                        <div>
+                            <!-- Work Experience entry temoplate-->
+                             <div class="form-section" id="experience1">
+                                <h5>Experience 1</h5>
+                                <div class="mb-3">
+                                    <label for="company1" class="form-label">Company</label>
+                                    <input type="text" class="form-control" id="company1" name="company[]"
+                                    placeholder="Company Name(e.g- HedgeWay Hospital)" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">Role</label>
+                                    <input type="text" class="form-control" id="role1" name="role[]"
+                                    placeholder="Anaesthetic Nurse" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="startDate" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" name="startDate[]">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endDate" class="form-label">End Date (or Current)</label>
+                                    <input type="date" class="form-control" name="endDate[]">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="responsibilities" class="form-label">Key Responsibilities</label>
+                                    <textarea class="form-control" name="responsibilities[]" rows="4" placeholder="Describe your key responsibilities..."></textarea>
+                                </div>
+                
+                             </div>
+                        </div>
+                    </form>
+                </div>
+
+
+				<!-- Next of Kin -->
                 <div class="content-section" id="next-of-kin">
                     <h4>Next of Kin</h4>
                     <form>
@@ -366,7 +409,7 @@
                             <input type="text" class="form-control" id="kinPhone" value="(555) 123-4567">
                         </div>
                         <div class="mb-3">
-							                            <label for="kinEmail" class="form-label">Email</label>
+                                                        <label for="kinEmail" class="form-label">Email</label>
                             <input type="email" class="form-control" id="kinEmail" value="jane.doe@example.com">
                         </div>
                         <div class="mb-3">
@@ -376,6 +419,9 @@
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
                 </div>
+
+                
+
             </div>
         </div>
     </div>
@@ -405,4 +451,5 @@
 </body>
 
 </html>
+
 
