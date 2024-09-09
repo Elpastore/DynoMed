@@ -29,8 +29,15 @@
             border: 1px solid #e0e0e0;
             border-radius: 8px;
             padding: 20px;
-            margin-bottom: 20px;
             margin-top: 50px;
+        }
+
+        .content-section2 {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 18px;
         }
 
         .profile-img {
@@ -148,12 +155,12 @@
                                     <a href="#certifications" class="text-decoration-none text-muted"><i class="bi bi-award-fill me-2"></i>Licenses & Certifications</a>
                                 </li>
                                 <li class="mb-2">
-                                    <a href="#next-of-kin" class="text-decoration-none text-muted"><i class="bi bi-people-fill me-2"></i>Next of Kin</a>
-                                </li>
-                                <li class="mb-2">
                                     <a href="#Work Experience" class="text-decoration-none text-muted">
                                         <i class="bi bi-briefcase-fill me-2"></i>Work Experience
                                       </a>
+                                </li>
+                                <li class="mb-2"></li>
+                                    <a href="#next-of-kin" class="text-decoration-none text-muted"><i class="bi bi-people-fill me-2"></i>Next of Kin</a>
                                 </li>
                             </ul>
                         </div>
@@ -197,7 +204,7 @@
                   
 
                 <!-- Education -->
-                <div class="content-section" id="education">
+                <div class="content-section2" id="education">
                     <h4>Education</h4>
                     <form>
                         <div id="educationContainer">
@@ -290,13 +297,15 @@
                     // Remove education entry
                     $(document).on('click', '.remove-education', function() {
                         let id = $(this).data('id');
-                        $('#education' + id).remove();
+                        if (confirm('Are you sure you want to delete this educstion data? This action caanot be undone')) {
+                            $('#education' + id).remove();
+                        }
                     });
                 });
                 </script>
 
                 <!-- Licenses & Certifications -->
-                <div class="content-section" id="certifications">
+                <div class="content-section2" id="certifications">
                     <h4>Licenses & Certifications</h4>
                     <form>
                         <div id="certificationContainer">
@@ -346,7 +355,10 @@
                         // Remove a specific certification section
                         $(document).on('click', '.remove-certification', function() {
                             let id = $(this).data('id');
-                            $('#certification' + id).remove();
+                            if (confirm('Are you sure you want to delete this data? this action cannot be undone')) {
+                                $('#certification' + id).remove();
+                            }
+                
                         });
                     });
                 </script>
@@ -354,10 +366,10 @@
                 
 
                  <!-- Work Experience-->
-                 <div class="content-section", id="experience">
+                 <div class="content-section2", id="experience">
                     <h4>Work Experience--</h4>
                     <form>
-                        <div>
+                        <div id="experienceContainer">
                             <!-- Work Experience entry temoplate-->
                              <div class="form-section" id="experience1">
                                 <h5>Experience 1</h5>
@@ -367,29 +379,107 @@
                                     placeholder="Company Name(e.g- HedgeWay Hospital)" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="role" class="form-label">Role</label>
+                                    <label for="role1" class="form-label">Role</label>
                                     <input type="text" class="form-control" id="role1" name="role[]"
                                     placeholder="Anaesthetic Nurse" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="startDate" class="form-label">Start Date</label>
-                                    <input type="date" class="form-control" name="startDate[]">
+                                    <label for="startDate1" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="startDate1" name="startDate[]">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="endDate" class="form-label">End Date (or Current)</label>
-                                    <input type="date" class="form-control" name="endDate[]">
+                                    <label for="endDate1" class="form-label">End Date (or Current)</label>
+                                    <input type="date" class="form-control" id="endDate1" name="endDate[]">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="responsibilities" class="form-label">Key Responsibilities</label>
-                                    <textarea class="form-control" name="responsibilities[]" rows="4" placeholder="Describe your key responsibilities..."></textarea>
+                                    <label for="responsibilities1" class="form-label">Key Responsibilities</label>
+                                    <textarea class="form-control" name="responsibilities[]" id="responsibility1" rows="4" placeholder="Describe your key responsibilities..."></textarea>
                                 </div>
-                
+                                <button type="button" class="btn btn-danger remove-experience" data-id="1">Remove</button>
+
                              </div>
                         </div>
+                        <button type="button" id="addExperience" class="btn btn-secondary">Add More Work Experience</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+
                     </form>
                 </div>
-                
+                <script>
+                    $(document).ready(function() {
+                        let experienceCount = 1
+
+                        // Add more experience deatails dynamically
+                        $('#addExperience').click(function() {
+                            experienceCount++;
+                            $('#experienceContainer').append(`<div class="form-section" id="experience${experienceCount}">
+                                <h5>Experience ${experienceCount}</h5>
+                                <div class="mb-3">
+                                    <label for="company${experienceCount}" class="form-label">Company</label>
+                                    <input type="text" class="form-control" id="company${experienceCount}" name="company[]"
+                                    placeholder="Company Name(e.g- HedgeWay Hospital)" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="role${experienceCount}" class="form-label">Role</label>
+                                    <input type="text" class="form-control" id="role${experienceCount}" name="role[]"
+                                    placeholder="Anaesthetic Nurse" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="startDate${experienceCount}" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="startDate${experienceCount}" name="startDate[]">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endDate${experienceCount}" class="form-label">End Date (or Current)</label>
+                                    <input type="date" class="form-control" id="endDate${experienceCount}" name="endDate[]">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="responsibilities${experienceCount}" class="form-label">Key Responsibilities</label>
+                                    <textarea class="form-control" id="responsibility${experienceCount}" name="responsibilities[]" rows="4" placeholder="Describe your key responsibilities..."></textarea>
+                                </div>
+                                <button type="button" class="btn btn-danger remove-experience" data-id="${experienceCount}">Remove</button>
+
+                             </div>`
+                            );
+                        });
+                        // Remove Experience entry from the dataBAse
+                        $(document).on('click', '.remove-experience', function() {
+                            let id = $(this).data('id');
+                            if (confirm("Are you sure you want to delete this work experience entry? This action cannot be undone.")) {
+                                $('#experience' + id).remove();
+                            }
+                        });
+                    });
+                </script>
+
+                <!-- Next of Kin -->
+                <div class="content-section2" id="next-of-kin">
+                    <h4>Next of Kin</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="kinName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="kinName" value="Jane Doe">
+                        </div>
+                        <div class="mb-3">
+                            <label for="kinRelationship" class="form-label">Relationship</label>
+                            <input type="text" class="form-control" id="kinRelationship" value="Sister">
+                        </div>
+                        <div class="mb-3">
+                            <label for="kinPhone" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="kinPhone" value="(555) 123-4567">
+                        </div>
+                        <div class="mb-3">
+                                                        <label for="kinEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="kinEmail" value="jane.doe@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="kinAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="kinAddress" rows="2">123 Main St, Springfield, IL</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+
 
             </div>
         </div>
