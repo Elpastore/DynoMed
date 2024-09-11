@@ -9,7 +9,7 @@ class ResidentialAddress(EmbeddedDocument):
     country = StringField(required=False)
     state = StringField(required=False)
     city = StringField(required=False)
-    town = StringField(required=False)
+    street = StringField(required=False)
 
 class NextOfKin(EmbeddedDocument):
     first_name = StringField(required=False, min_length=2, max_length=50)
@@ -19,25 +19,29 @@ class NextOfKin(EmbeddedDocument):
     gender = StringField(required=False)
     residential_address_email = EmailField(required=False)
     residential_address_telephone_num = StringField(required=False)
+    residential_address_country = StringField(required=False)
+    residential_address_state = StringField(required=False)
+    residential_address_city = StringField(required=False)
+    residential_address_street = StringField(required=False)
 
 class Education(EmbeddedDocument):
-    country = StringField(required=False, choices=['US', 'UK', 'CA'])
     university = StringField(required=False)
+    course = StringField(required=False)
+    entry_yr = StringField(required=False)
+    completion_yr = StringField(required=False)
     degree = StringField(required=False)
 
 class Certificate(EmbeddedDocument):
-    certificate_type = StringField(required=False, choices=['degree', 'professional', 'training', 'other'])
-    certificate_file_name = StringField(required=False)
+    certificate_name = StringField(required=False)
     certificate_file_path = StringField(required=False)
 
 class Expert(Document):
     # Personal Data
-    profile_picture_name = StringField(required=False)
-    profile_picture_path = StringField(require=False)
     username = StringField(min_length=2, max_length=50)
     first_name = StringField(min_length=2, max_length=50)
     middle_name = StringField(max_length=50)
     last_name = StringField(min_length=2, max_length=50)
+    professional_title = StringField(required=False)
     gender = StringField(choices=['male', 'female', 'other', 'prefer_not_to_say'])
     date_of_birth = DateField(required=False)
     country_of_origin = StringField(required=False)

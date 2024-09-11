@@ -174,14 +174,18 @@
                 <!-- Profile Information -->
                 <div class="content-section" id="profile">
                     <h4>Profile Information</h4>
-                    <form>
+                    <form id="profile", method="post", enctype="multipart/form-data">
+
+                        <!-- this hidden input field helps to check which form the post request
+                            is comming from in the backend-->
+                        <input type="hidden" name="form_name" value="profile_form">
                         <div class="mb-3">
                             <label for="profileImage" class="form-label">Profile Image</label>
                             <input type="file" class="form-control" id="profileImage">
                         </div>
                         <div class="mb-3">
                             <label for="fullName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" placeholder="First-Name  Middle-Name  Last-Name" id="fullName" value="John Doe">
+                            <input type="text" class="form-control" placeholder="First-Name  Middle-Name  Last-Name" id="fullName" value="{{ med_user.name }}">
                         </div>
                         <div class="mb-3">
                             <label for="headline" class="form-label">Profesional Title</label>
@@ -200,13 +204,47 @@
                 </div>
 
 
+                <!-- Address-->
+                 <!-- Residential Adress-->
+                 <div class="content-section2" id="residence">
+                    <h4>Address</h4>
+                    <form id="address" method="post" enctype="multipart/form-data">
+                        
+                         <!-- this hidden input field helps to check which form the post request
+                            is comming from in the backend-->
+                        <input type="hidden" name="form_name" value="address_form">
+                        <div class="mb-3">
+                            <label for="country_of_origin" class="form-label">Country of Origin</label>
+				            <input type="text" class="form-control" id="country_of_origin" name="country_of_origin" value="{{ med_user.country_of_origin }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="state_of_origin" class="form-label">State of Origin</label>
+				            <input type="text" class="form-control" id="state_of_origin" name="state_of_origin" value="{{ med_user.state_of_origin }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="local_government_area" class="form-label">Local Government Area</label>
+				            <input type="text" class="form-control" id="local_government_area" name="local_government_area" value="{{ med_user.local_government_area }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="town_of_origin" class="form-label">Town of Origin</label>
+                            <input type="text" class="form-control" id="town_of_origin" name="town_of_origin" value="{{ med_user.town_of_origin }}">
+                        </div>
+                    </form>
+                 </div>
+
+
+
                  <!-- Work Experience-->
                   
 
                 <!-- Education -->
                 <div class="content-section2" id="education">
                     <h4>Education</h4>
-                    <form>
+                    <form id="education" method="post" enctype="multipart/form-data">
+
+                        <!-- this hidden input field helps to check which form the post request
+                            is comming from in the backend-->
+                        <input type="hidden" name="form_name" value="education_form">
                         <div id="educationContainer">
                             <!-- Education Entry Template -->
                             <div class="form-section" id="education1">
@@ -259,6 +297,7 @@
                         educationCount++;
                         $('#educationContainer').append(`
                             <div class="form-section" id="education${educationCount}">
+                                <input type="hidden" name="form_name" value="education_form">
                                 <h5>Education ${educationCount}</h5>
                                 <div class="mb-3">
                                     <label for="university${educationCount}" class="form-label">University</label>
@@ -307,7 +346,11 @@
                 <!-- Licenses & Certifications -->
                 <div class="content-section2" id="certifications">
                     <h4>Licenses & Certifications</h4>
-                    <form>
+                    <form id="certification" method="post" enctype="multipart/form-data">
+                        <!-- this hidden input field helps to check which form the post request
+                        is comming from in the backend-->
+                        <input type="hidden" name="form_name" value="certification_form">
+
                         <div id="certificationContainer">
                             <!-- Certification Entry Template -->
                             <div class="form-section" id="certification1">
@@ -337,6 +380,7 @@
                         $('#addCertification').click(function() {
                             certificationCount++;
                             $('#certificationContainer').append(`
+                                <input type="hidden" name="form_name" value="certification_form">
                                 <div class="form-section" id="certification${certificationCount}">
                                     <h5>Certification ${certificationCount}</h5>
                                     <div class="mb-3">
@@ -368,7 +412,10 @@
                  <!-- Work Experience-->
                  <div class="content-section2", id="experience">
                     <h4>Work Experience--</h4>
-                    <form>
+                    <form id="experience" method="post" enctype="multipart/form-data">
+                        <!-- this hidden input field helps to check which form the post request
+                        is comming from in the backend-->
+                        <input type="hidden" name="form_name" value="experience_form">
                         <div id="experienceContainer">
                             <!-- Work Experience entry temoplate-->
                              <div class="form-section" id="experience1">
@@ -412,7 +459,9 @@
                         // Add more experience deatails dynamically
                         $('#addExperience').click(function() {
                             experienceCount++;
-                            $('#experienceContainer').append(`<div class="form-section" id="experience${experienceCount}">
+                            $('#experienceContainer').append(`
+                                <div class="form-section" id="experience${experienceCount}">
+                                <input type="hidden" name="form_name" value="experience_form">
                                 <h5>Experience ${experienceCount}</h5>
                                 <div class="mb-3">
                                     <label for="company${experienceCount}" class="form-label">Company</label>
@@ -455,7 +504,8 @@
                 <!-- Next of Kin -->
                 <div class="content-section2" id="next-of-kin">
                     <h4>Next of Kin</h4>
-                    <form>
+                    <form id="next_of_kin" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="form_name" value="next-of-kin_form">
                         <div class="mb-3">
                             <label for="kinName" class="form-label">Full Name</label>
                             <input type="text" class="form-control" id="kinName" value="Jane Doe">

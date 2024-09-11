@@ -12,6 +12,7 @@ from bson import ObjectId
 from flask_wtf.csrf import CSRFProtect
 from dyno_med import (Medical, Expert, app, database, patient_record)
 from datetime import datetime
+from mongoengine import *
 
 # csrf = CSRFProtect(app)
 from dyno_med import csrf
@@ -247,35 +248,88 @@ def med_user_update():
         return jsonify({'message': 'Unauthorized access'}), 401
     
     # Retrieve the medical user object from the database using the user_id
-    med_user = Expert.objects.get(id=user_id)
-    med_user_dict = med_user.to_mongo().to_dict()
-    print(med_user_dict)
-    if not med_user_dict or not med_user:
+    try:
+        # Retrieve the medical user object from the database using the user_id
+        med_user = Expert.objects.get(id=user_id)
+    except DoesNotExist:
         return jsonify({'message': 'Medical expert not found'}), 404
     
-    # Extract all data of the medical user from the med_user object
-    try:
-        medical = Medical()
-        med_user = medical.retrive_med_user(med_user_dict)
-        print(med_user)
-        print()
-        print('after retrive')
-    except Exception as e:
-        return jsonify({'message': str(e)}), 400
+    #med_user_dict = med_user.to_mongo().to_dict()
+   # print(med_user_dict)
+
+    #if not med_user_dict:
+        #return jsonify({'message': 'Medical expert not found'}), 404
     
-    if request.method == "POST":
-        data = request.form
-        files = request.files
-        if not files:
-            files = None
-        try:
-            # Store the latest update from the medical user in the database
-            medical = Medical()
-            medical.update_med_user(med_user_dict, data, files, user_id)
-            return jsonify({'message': 'Update successful'}), 200
-        except Exception as e:
-            return jsonify({'message': str(e)}), 400
-    
+    # Handle post request
+    if request.method == 'POST':
+        form_name = request.form.get('form_name')
+
+        # ceck which form is submitted
+        if form_name == 'education_form':
+            education_data = request.form.to_dict(flat=False)
+            print("Education Form Submitted:", education_data)
+
+            # update the education form
+            try:
+                medical = Medical()
+                medical.update_med_user_education(med_user, education_data, None, user_id)
+                return jsonify({'message': 'Education updated sucessfully'})
+            except Exception as e:
+                return jsonify({'message': str(e)}), 400
+            
+        elif form_name == 'address_form':
+            address_data = request.form.to_dict()
+            print('Adress Form Submitted:', address_data)
+            # update the address form:
+            try:
+                medical = Medical()
+                medical.update_med_user_address(med_user, address_data, None, user_id)
+                return jsonify({'message': 'Address update sucessfully'}), 200
+            except Exception as e:
+                return jsonify({'message': str(e)}), 400
+        
+        elif form_name == 'experirence_form':
+            experience_data = request.form.to_dict()
+            print('work experirnce form submitted:', experience_data)
+            try:
+                medical = Medical()
+                medical.update_med_user(med_user_dict, experience_data, None, user_id)
+                return jsonify({'meassage': 'work experience update sucessfully'}), 200
+            except Exception as e:
+                return jsonify({'message': str(e)}), 400
+        
+        elif form_name =='next_of_kin_form':
+            next_of_kin_data = request.form.to_dict()
+            print('work experirnce form submitted:', next_of_kin_data)
+            try:
+                medical = Medical()
+                medical.update_med_user(med_user, next_of_kin_data, None, user_id)
+                return jsonify({'meassage': 'next_of_kin update sucessfully'}), 200
+            except Exception as e:
+                return jsonify({'meassage': str(e)}), 400
+        
+        elif form_name == 'profile_form':
+            profile_data = request.form.to_dict()
+            print('work experirnce form submitted:', profile_data)
+            try:
+                medical = Medical()
+                medical.update_med_user(med_user_dict, profile_data, None, user_id)
+                return jsonify({'meassage': 'profile update sucessfully'}), 200
+            except Exception as e:
+                return jsonify({'meassage': str(e)}), 400
+        elif form_name == 'certification_form':
+            certification_data = request.form.to_dict()
+            cert_files= request.files.getlist('certificationFile[]')
+            print('work experirnce form submitted:', certification_data)
+            try:
+                medical = Medical()
+                medical.update_med_user_cert(med_user_dict, certification_data, cert_files, user_id)
+                return jsonify({'meassage': 'certification update sucessfully'}), 200
+            except Exception as e:
+                return jsonify({'meassage': str(e)}), 400
+        else:
+            return jsonify({'message': 'Unknown form submitted'}), 400
+
     # If it's a GET request, render the template with the current user data
     return render_template('med-expert-update.html', med_user=med_user)
 
