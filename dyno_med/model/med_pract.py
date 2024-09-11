@@ -3,7 +3,7 @@
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from typing import List, Dict, Any, Optional
-from dyno_med import Expert
+from dyno_med import (Expert, Education, Certificate, NextOfKin)
 from bson import ObjectId
 import os
 import re
@@ -114,29 +114,30 @@ class Medical:
                         raise ValueError(f"Invalid file type for certificate: {file.filename}")
         return self.certificates
 
-    def handle_profile_picture(self, files: Optional[Dict[str, Any]]) -> None:
-        """
-        Handle profile picture upload.
-
-        Args:
-            profile_picture (Any): The profile picture file object.
-            files (Dict[str, Any]): Dictionary containing file objects.
-
-        Raises:
-            ValueError: If an invalid file type is uploaded for the profile picture.
-        """
-        if 'profile_picture' in files:
-            profile_picture = files['profile_picture']
-            if profile_picture.filename != '':
-                if self.allowed_file(profile_picture.filename):
-                    filename = secure_filename(profile_picture.filename)
-                    picture_path = os.path.join(self.UPLOAD_PIC, filename)
-                    profile_picture.save(picture_path)
-                    # Save picture_path to med_user object or database
-                else:
-                    raise ValueError("Invalid file type for profile picture")
+    ile type for profile picture")
 
     def update_residential_address(self, data: Dict[str, Any]) -> Dict[str, str]:
+        """
+        Update residential address from data.
+
+        Args:
+            data (Dict[str, Any]): Dictionary containing form data.
+
+        Returns:
+            Dict[str, str]: Updated residential address dictionary.
+        """
+        if not data:
+            raise TypeError('form Object not found!')
+        self.residential_address = {
+            'country': data.get('residential_address.country'),
+            'state': data.get('residential_address.state'),
+            'city': data.get('residential_address.city'),
+            'town': data.get('residential_address.town'),
+            'house_num': data.get('residential_address.house_num')
+        }
+        return self.residential_address
+    
+    def update_education(self, data: Dict[str, Any]) -> Dict[str, str]:
         """
         Update residential address from data.
 
@@ -206,136 +207,81 @@ class Medical:
             })
             index += 1
         return self.education
-
-    def update_med_user(self, med_user: Dict[str, Any], data: Dict[str, Any], files: Optional[Dict[str, Any]], user_id) -> None:
+    
+    def check_input_params(self, med_user: object, data: Dict[str, Any],
+                               files: Optional[Dict[str, Any]], user_id):
+            if not med_user:
+                raise ValueError('No user found, ''please provide medical user''')
+            if not data:
+                raise ValueError('No form data found, pleade provide the object from the databse')
+            if files == None:
+                pass
+            elif not files:
+                raise ValueError('No files data found')
+            if not user_id:
+                raise ValueError('No user id found: please provide user id')
+    
+    def _ensure_string(self, value):
         """
-        Update the medical user data in the database from the form data.
-
-        Args:
-            med_user (Dict[str, Any]): The medical user dictionary.
-            data (Dict[str, Any]): Dictionary containing form data.
-            files (Optional[Dict[str, Any]]): Dictionary containing file objects.
-
-        Raises:
-            TypeError: If the data types are incorrect.
-            ValueError: If the email format is invalid.
-            Exception: If there's an error updating the medical user.
+        Ensure the given value is a string.
+        
+        :param value: The value to check and potentially convert
+        :return: The value as a string
         """
-        if not med_user:
-            raise ValueError('No user found')
-        if not data:
-            raise ValueError('No form data found')
+        if isinstance(value, str):
+            return value
+        elif value is None:
+            return ""  # or return None, depending on your preference
+        elif isinstance(value, (int, float, bool)):
+            return str(value)
+        else:
+            raise ValueError(f"Unexpected type for education data: {type(value)}")
 
+    @staticmethod
+    def update_med_user_education(self, med_user: object, education_data:
+                                  Dict[str, any], _, user_id):
+        """
+        update the education information for the medical user
+
+        :param med_user: The Expert document to update
+        :param education_data: Dictionary containing the education from the data
+        :param_: placeholder for files( not used)
+        :param user_id: The ID of the user being updated 
+        """
+        self.check_input_params(med_user, education_data, _, user_id)
         try:
-            # Update attributes from provided data
-            #med_user['_id'] = data.get('_id', med_user.get('_id', ''))
-            #if isinstance(med_user['_id'], ObjectId):
-            #    med_user['_id'] = str(med_user['_id'])
-            #elif "'" in med_user['_id']:
-            #    med_user['_id'] = med_user['_id'].split("'")[1]
-            # med_user['_id'] = user_id
-            user_id = ObjectId(user_id) 
-            med_user['username'] = data.get('username', med_user.get('username', ''))
-            print(str(med_user['username']))
-            med_user['first_name'] = data.get('first_name', med_user.get('first_name', ''))
-            med_user['middle_name'] = data.get('middle_name', med_user.get('middle_name', ''))
-            med_user['last_name'] = data.get('last_name', med_user.get('last_name', ''))
-            print(str(med_user['last_name']))
-            
-            # Update age with type checking
-            age = data.get('age')
-            if age:
-                try:
-                    med_user['age'] = int(age)
-                except ValueError:
-                    raise TypeError('Age must be an Integer')
-            
-            med_user['gender'] = data.get('gender', med_user.get('gender', ''))
-            
-            # Update date of birth with format checking
-            date_of_birth = data.get('date_of_birth')
-            # Update date of birth with format checking
-            date_of_birth = data.get('date_of_birth')
-            if date_of_birth:
-                if isinstance(date_of_birth, str):
-                    try:
-                        med_user['date_of_birth'] = datetime.strptime(date_of_birth, '%Y-%m-%d')
-                    except ValueError:
-                        raise TypeError('Date of birth must be in YYYY-MM-DD format')
-                elif isinstance(date_of_birth, datetime):
-                    med_user['date_of_birth'] = date_of_birth
-                else:
-                    raise TypeError('Date of birth must be a string or datetime object')
-            print(date_of_birth)
-            
-            med_user['country_of_origin'] = data.get('country_of_origin', med_user.get('country_of_origin', ''))
-            med_user['state_of_origin'] = data.get('state_of_origin', med_user.get('state_of_origin', ''))
-            med_user['local_government_area'] = data.get('local_government_area', med_user.get('local_government_area', ''))
-            med_user['town_of_origin'] = data.get('town_of_origin', med_user.get('town_of_origin', ''))
-            
-            # Update email with format validation
-            email = data.get('email')
-            if email:
-                if not self.is_valid_email(email):
-                    raise ValueError("Invalid email format")
-                med_user['email'] = email
-            print(email)
-            
-            # Update mobile number with type checking
-            mobile_num = data.get('mobile_num')
-            if mobile_num:
-                if isinstance(mobile_num, str):
-                    try:
-                        med_user['mobile_num'] = int(mobile_num)
-                    except ValueError:
-                        raise TypeError('Mobile Number must be an Integer')
-                else:
-                     med_user['mobile_num'] = mobile_num
-            
-            med_user['linkedin'] = data.get('linkedin', med_user.get('linkedin', ''))
-            med_user['password'] = data.get('password', med_user.get('password', ''))
+            # process education data
+            new_education = []
+            for index in range(len(education_data['university'])):
+                education = Education(
+                    university=self._ensure_string(education_data['university'][index]),
+                    course=self._ensure_string(education_data['course'][index]),
+                    entry_yr=self._ensure_string(education_data['entryYear'][index]),
+                    completion_yr=self._(education_data['endYear'][index]),
+                    degree=self._ensure_string(education_data['degree'][index])
+                )
+                new_education.append(education)
 
-            # Update complex fields
-            print('before residential adress')
-            med_user['residential_address'] = self.update_residential_address(data)
-            print(str(med_user['residential_address']))
-            med_user['next_of_kin'] = self.update_next_of_kin(data)
-            med_user['education'] = self.update_education(data)
-
-            # Handle file uploads
-            if files:
-                med_user['certificates'] = self.handle_certificates(files, data)
-                self.handle_profile_picture(files)
-            print('before saved data')
-            print(med_user)
-            print()
-            print()
-
-            # Create an update dictionary with only the fields that need to be updated
-            update_dict = {}
-            for key, value in med_user.items():
-                if key != '_id' and value is not None:
-                    if key == 'date_of_birth':
-                        if isinstance(value, datetime):
-                            update_dict[key] = value
-                        elif isinstance(value, str):
-                            update_dict[key] = datetime.strptime(value, '%Y-%m-%d')
-                        else:
-                            raise TypeError('Date of birth must be a string or datetime object')
-                    elif key in ['age', 'mobile_num']:  # Fields that should be integers
-                        update_dict[key] = int(value) if value != '' else None
-                    else:  # String fields and other types
-                        update_dict[key] = value
-            
-            print("Update dictionary:", update_dict)
-            saved_data = Expert.objects(id=user_id).update_one(**update_dict)
-            if saved_data:
-                print("Document updated successfully")
-            else:
-                print("No document was updated")
-
+            #update the users education
+            med_user.education = new_education
+            med_user.save()
         except Exception as e:
-            raise Exception(f'Error updating medical user: {str(e)}')
+            print(f"Error updating education for user {user_id}: {str(e)}")
+            raise Exception(f"Failed to update education: {str(e)}")
+    
+    @staticmethod
+    def update_med_user_address(self, med_user: object, education_data:
+                                Dict[str, any], _, user_id):
+        """
+        update the address information for the medical user
+
+        :param med_user: The Expert document to update
+        :param education_data: Dictionary containing the address from the data
+        :param_: placeholder for files( not used)
+        :param user_id: The ID of the user being updated 
+        """
+        self.check_input_params(med_user, education_data, _, user_id)
+        
 
     @staticmethod
     def retrive_med_user(med_user_data: Dict[str, Any]) -> Dict[str, Any]:
