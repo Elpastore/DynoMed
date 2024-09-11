@@ -293,7 +293,7 @@ def med_user_update():
             print('work experirnce form submitted:', experience_data)
             try:
                 medical = Medical()
-                medical.update_med_user(med_user_dict, experience_data, None, user_id)
+                medical.update_med_user_experience(med_user, experience_data, None, user_id)
                 return jsonify({'meassage': 'work experience update sucessfully'}), 200
             except Exception as e:
                 return jsonify({'message': str(e)}), 400
@@ -303,7 +303,7 @@ def med_user_update():
             print('work experirnce form submitted:', next_of_kin_data)
             try:
                 medical = Medical()
-                medical.update_med_user(med_user, next_of_kin_data, None, user_id)
+                medical.update_med_user_kin(med_user, next_of_kin_data, None, user_id)
                 return jsonify({'meassage': 'next_of_kin update sucessfully'}), 200
             except Exception as e:
                 return jsonify({'meassage': str(e)}), 400

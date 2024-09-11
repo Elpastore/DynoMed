@@ -3,7 +3,7 @@
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from typing import List, Dict, Any, Optional
-from dyno_med import (Expert, Education, Certificate, NextOfKin)
+from dyno_med import (Expert, Education, Experience, Certificate, NextOfKin)
 from bson import ObjectId
 import os
 import re
@@ -230,12 +230,56 @@ class Medical:
         """
         if isinstance(value, str):
             return value
-        elif value is None:
+        elif value == '':
             return ""  # or return None, depending on your preference
         elif isinstance(value, (int, float, bool)):
             return str(value)
         else:
             raise ValueError(f"Unexpected type for education data: {type(value)}")
+    
+    def _ensure_date(self, value):
+        """
+        Ensure the given value is a string.
+        :param value: The value to check and convert to date format
+        :param return: return the value in dat format
+        """
+        if not isinstance(value, datetime):
+            try:
+                value = datetime.strptime(value, '%m-%d-%Y')
+            except Exception as e:
+                print(f"Error in date conversion: {e}")
+        if value == '':
+            return ''
+
+    @staticmethod
+    def update_med_user_experience(self, med_user: object,
+                                   experience_data: Dict[str, any], _, user_id):
+        """
+        update the experience information for the medical user
+
+        :param med_user: The Expert document to update
+        :param experience_data: Dictionary containing the education from the data
+        :param_: placeholder for files( not used)
+        :param user_id: The ID of the user being updated
+        """
+        self.check_input_params(med_user, experience_data, _, user_id)
+        try:
+            # process experience data
+            new_experience = []
+            for index in range(len(experience_data['company'])):
+                experience = Experience(
+                    company=self._ensure_string(experience_data['company'][index]),
+                    role=self._ensure_string(experience_data['role'][index]),
+                    start_date=self._ensure_date(experience_data['startDate'][index]),
+                    end_date=self._ensure_date(experience_data['endDate'][index])
+                )
+            new_experience.append(experience)
+            med_user.experience = new_experience
+            med_user.save()
+        except Exception as e:
+            print(f"Error updating experience for user {user_id}: {str(e)}")
+            raise Exception(f"Failed to update experience: {str(e)}")
+
 
     @staticmethod
     def update_med_user_education(self, med_user: object, education_data:
@@ -270,7 +314,7 @@ class Medical:
             raise Exception(f"Failed to update education: {str(e)}")
     
     @staticmethod
-    def update_med_user_address(self, med_user: object, education_data:
+    def update_med_user_address(self, med_user: object, address_data:
                                 Dict[str, any], _, user_id):
         """
         update the address information for the medical user
@@ -280,8 +324,42 @@ class Medical:
         :param_: placeholder for files( not used)
         :param user_id: The ID of the user being updated 
         """
-        self.check_input_params(med_user, education_data, _, user_id)
-        
+        self.check_input_params(med_user, address_data, _, user_id)
+        try:
+            # update the specified field only
+            med_user.country_of_origin = self._ensure_string(address_data.get('country_of_origin'))
+            med_user.state_of_origin = self._ensure_string(address_data.get('sate_of_origin'))
+            med_user.local_government_area = self._ensure_string(address_data.get('local_government_area'))
+            med_user.town_of_origin = self._ensure_string(address_data.get('town_of_origin'))
+
+            # save the updated document
+            med_user.save()
+        except Exception as e:
+            print(f"Error updating address for user {med_user.id}: {str(e)}")
+            raise Exception(f"Failed to update: {str(e)}")
+    
+    @staticmethod
+    def med_user_kin(self, med_user: object, kin_data: 
+                     Dict[str, any], _, user_id):
+        """
+        Update the next of kin data in db from the next_of_kin_ form
+
+        Args:
+            med_user: the Expert document to update
+            kin_data: The dictionary containg the next of kin data from the form
+            user_: the id of the med_uer
+
+        Return:
+            retun None
+        """
+        self.check_input_params(med_user, kin_data, _, user_id)
+        try:
+           
+            full_name = self._ensure_string.kin_data['KinName']
+            loop throughthe full_name
+                if you encouter a space split to get the first name and last name
+                    i
+        except Exception as e:
 
     @staticmethod
     def retrive_med_user(med_user_data: Dict[str, Any]) -> Dict[str, Any]:

@@ -42,7 +42,7 @@ from .model.med_expert import (
 
 from .model.med_pract import Medical
 # Import from med_expert.py in the model directory
-from .model.med_expert import Expert
+from .model.med_expert import (Expert, Experience, NextOfKin, Certificate)
 
 # Import routes
 from . import routes

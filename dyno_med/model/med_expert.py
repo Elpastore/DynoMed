@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-from mongoengine import Document, EmbeddedDocument, StringField, ListField, EmbeddedDocumentField, DateTimeField, IntField, DateField, FileField, EmailField
+from mongoengine import (Document, EmbeddedDocument, StringField, ListField, EmbeddedDocumentField,
+                         DateTimeField, IntField, DateField, FileField, EmailField)
 from datetime import datetime
 from mongoengine import connect
 
@@ -10,6 +11,12 @@ class ResidentialAddress(EmbeddedDocument):
     state = StringField(required=False)
     city = StringField(required=False)
     street = StringField(required=False)
+
+class Experience(EmbeddedDocument):
+    company = StringField(required=False)
+    role = StringField(required=False)
+    start_date = DateField(required=False)
+    end_date = DateField(required=False)
 
 class NextOfKin(EmbeddedDocument):
     first_name = StringField(required=False, min_length=2, max_length=50)
@@ -60,6 +67,7 @@ class Expert(Document):
 
     # Professional Data
     education = ListField(EmbeddedDocumentField(Education), required=False)
+    experience = ListField(EmbeddedDocumentField(Education), required=False)
     certificates = ListField(EmbeddedDocumentField(Certificate), required=False)
 
     # Metadata
