@@ -48,9 +48,7 @@ class Medical:
         self.education: List[Dict[str, str]] = []
         self.certificates: List[Dict[str, str]] = []
 
-
-    @staticmethod
-    def is_valid_email(email: str) -> bool:
+    def is_valid_email(self, email: str) -> bool:
         """
         Check if the email is valid.
 
@@ -80,83 +78,12 @@ class Medical:
         return '.' in filename and \
             filename.rsplit('.', 1)[1].lower() in self.ALLOWED_EXTENSIONS
 
-    def handle_certificates(self, files: Optional[Dict[str, Any]], data: Dict[
-        str, Any]) -> List[Dict[str, str]]:
-        """
-        Handle certificate uploads.
-
-        Args:
-            files (Dict[str, Any]): Dictionary containing file objects.
-            data (Dict[str, Any]): Dictionary containing form data.
-
-        Returns:
-            List[Dict[str, str]]: List of dictionaries containing certificate information.
-
-        Raises:
-            ValueError: If an invalid file type is uploaded for a certificate.
-        """
-        for key in files:
-            if key.startswith('certificate-') and key.endswith('-file'):
-                file = files.get(key)
-                if file.filename != '':
-                    if self.allowed_file(file.filename):
-                        index = key.split('-')[1]
-                        cert_type = data.get(f'certificate-{index}-type')
-                        filename = secure_filename(file.filename)
-                        cert_path = os.path.join(self.UPLOAD_FOLDER, filename)
-                        file.save(cert_path)
-                        self.certificates.append({
-                            'certificate_type': cert_type,
-                            'certificate_file_name': filename,
-                            'certificate_file_path': cert_path
-                        })
-                    else:
-                        raise ValueError(f"Invalid file type for certificate: {file.filename}")
-        return self.certificates
+    
 
     ile type for profile picture")
 
-    def update_residential_address(self, data: Dict[str, Any]) -> Dict[str, str]:
-        """
-        Update residential address from data.
-
-        Args:
-            data (Dict[str, Any]): Dictionary containing form data.
-
-        Returns:
-            Dict[str, str]: Updated residential address dictionary.
-        """
-        if not data:
-            raise TypeError('form Object not found!')
-        self.residential_address = {
-            'country': data.get('residential_address.country'),
-            'state': data.get('residential_address.state'),
-            'city': data.get('residential_address.city'),
-            'town': data.get('residential_address.town'),
-            'house_num': data.get('residential_address.house_num')
-        }
-        return self.residential_address
     
-    def update_education(self, data: Dict[str, Any]) -> Dict[str, str]:
-        """
-        Update residential address from data.
-
-        Args:
-            data (Dict[str, Any]): Dictionary containing form data.
-
-        Returns:
-            Dict[str, str]: Updated residential address dictionary.
-        """
-        if not data:
-            raise TypeError('form Object not found!')
-        self.residential_address = {
-            'country': data.get('residential_address.country'),
-            'state': data.get('residential_address.state'),
-            'city': data.get('residential_address.city'),
-            'town': data.get('residential_address.town'),
-            'house_num': data.get('residential_address.house_num')
-        }
-        return self.residential_address
+    
 
     def update_next_of_kin(self, data: Dict[str, Any]) -> Dict[str, str]:
         """
@@ -180,35 +107,9 @@ class Medical:
         }
         return self.next_of_kin
 
-    def update_education(self, data: Dict[str, Any]) -> List[Dict[str, str]]:
-        """
-        Update education information from data.
-
-        Args:
-            data (Dict[str, Any]): Dictionary containing form data.
-
-        Returns:
-            List[Dict[str, str]]: Updated list of education dictionaries.
-        """
-        if not data:
-            raise TypeError('form object not found!')
-        self.education = []
-        index = 0
-        while True:
-            country = data.get(f'education-{index}-country')
-            university = data.get(f'education-{index}-university')
-            degree = data.get(f'education-{index}-degree')
-            if not country and not university and not degree:
-                break
-            self.education.append({
-                'country': country,
-                'university': university,
-                'degree': degree
-            })
-            index += 1
-        return self.education
     
-    def check_input_params(self, med_user: object, data: Dict[str, Any],
+    
+    def _check_input_params(self, med_user: object, data: Dict[str, Any],
                                files: Optional[Dict[str, Any]], user_id):
             if not med_user:
                 raise ValueError('No user found, ''please provide medical user''')
@@ -244,14 +145,88 @@ class Medical:
         :param return: return the value in dat format
         """
         if not isinstance(value, datetime):
+            if value == '':
+                return ''
             try:
                 value = datetime.strptime(value, '%m-%d-%Y')
             except Exception as e:
                 print(f"Error in date conversion: {e}")
-        if value == '':
-            return ''
 
-    @staticmethod
+    def _handle_fullName(self, fullname: str) -> List:
+        """
+        Extract the first name, middle name and last name from the full name
+
+        Args:
+            fullname: A string containing the fullname of the user
+        
+        Return: Returns a list containing the first name, middlename(if exist)
+                and last name of the user
+        """
+        try:
+            value = self._ensure_string(fullname)
+            if value == '':
+                first_name = ''
+                middle_name = ''
+                last_name = ''
+            name_segments = fullname.split()
+            if len(name_segments) == 1:
+                first_name, middle_name, last_name = name_segments, '', ''
+            elif len(name_segments) == 2:
+                first_name, last_name = name_segments
+                middle_name = ''
+            elif len(name_segments) >= 3:
+                first_name, middle_name, last_name = name_segments[0], ''.join(name_segments[1:-1]),
+                name_segments[-1]
+            return [first_name, middle_name, last_name]
+        except Exception as e:
+            raise Exception(f"failed to extract names from full name: {e}")
+
+    def _handle_address(self, address: str) -> List:
+        """
+        Extract the street, city and state from the address
+
+        Args:
+            address: A string containing the adress of the user
+        
+        Return: Returns a list containing the street, city(if exist)
+                and state of the user
+        """
+        address = self._ensure_string(address)
+        if address == '':
+            street, city, state, country = '', '', '', ''
+        adress_index = address.split(',')
+        if len(adress_index) == 3:
+            street, city, state, country = adress_index[0], adress_index[1], adress_index[-1], ''
+        elif len(adress_index) == 4:
+            street, city, state, country = adress_index[0], adress_index[1],
+            adress_index[2],adress_index[-1]
+        return [street, city, state, country]
+    
+    def _handle_num(self, number) -> List:
+        """
+        Extract the number and arrange the number including the country code in the database
+
+        Args:
+            number: the number plus the country code from the form object
+        
+        Return: Return a list contain ing the number and the country code
+        """
+        number_box = []
+        new_box = []
+        if number == '':
+            return ''
+        if not number:
+            return
+        number_box = number.split()
+        for i in number_box:
+            for j in range(len(number_box)):
+                if type(i) is not int:
+                    index = int(i)
+                new_box[j] = index
+        return new_box
+        
+
+
     def update_med_user_experience(self, med_user: object,
                                    experience_data: Dict[str, any], _, user_id):
         """
@@ -262,7 +237,7 @@ class Medical:
         :param_: placeholder for files( not used)
         :param user_id: The ID of the user being updated
         """
-        self.check_input_params(med_user, experience_data, _, user_id)
+        self._check_input_params(med_user, experience_data, _, user_id)
         try:
             # process experience data
             new_experience = []
@@ -281,7 +256,6 @@ class Medical:
             raise Exception(f"Failed to update experience: {str(e)}")
 
 
-    @staticmethod
     def update_med_user_education(self, med_user: object, education_data:
                                   Dict[str, any], _, user_id):
         """
@@ -292,7 +266,7 @@ class Medical:
         :param_: placeholder for files( not used)
         :param user_id: The ID of the user being updated 
         """
-        self.check_input_params(med_user, education_data, _, user_id)
+        self._check_input_params(med_user, education_data, _, user_id)
         try:
             # process education data
             new_education = []
@@ -313,7 +287,6 @@ class Medical:
             print(f"Error updating education for user {user_id}: {str(e)}")
             raise Exception(f"Failed to update education: {str(e)}")
     
-    @staticmethod
     def update_med_user_address(self, med_user: object, address_data:
                                 Dict[str, any], _, user_id):
         """
@@ -324,7 +297,7 @@ class Medical:
         :param_: placeholder for files( not used)
         :param user_id: The ID of the user being updated 
         """
-        self.check_input_params(med_user, address_data, _, user_id)
+        self._check_input_params(med_user, address_data, _, user_id)
         try:
             # update the specified field only
             med_user.country_of_origin = self._ensure_string(address_data.get('country_of_origin'))
@@ -338,7 +311,6 @@ class Medical:
             print(f"Error updating address for user {med_user.id}: {str(e)}")
             raise Exception(f"Failed to update: {str(e)}")
     
-    @staticmethod
     def med_user_kin(self, med_user: object, kin_data: 
                      Dict[str, any], _, user_id):
         """
@@ -352,16 +324,34 @@ class Medical:
         Return:
             retun None
         """
-        self.check_input_params(med_user, kin_data, _, user_id)
-        try:
-           
-            full_name = self._ensure_string.kin_data['KinName']
-            loop throughthe full_name
-                if you encouter a space split to get the first name and last name
-                    i
-        except Exception as e:
+        self._check_input_params(med_user, kin_data, _, user_id)
+        name_list = []
+        fullname = kin_data['KinName']
+        address = kin_data['address']
+        name_list = self._handle_fullName(fullname)
+        first_name, middle_name, last_name = name_list
 
-    @staticmethod
+        address_list = self._handle_address(address)
+        street, city, state, country = address_list
+
+        try:
+            next_of_kin = NextOfKin(
+                first_name=self.ensure_string(first_name),
+                middle_name=self.ensure_string(middle_name),
+                last_name=self.ensure_string(last_name),
+                relationship=self._ensure_string(kin_data['relationship']),
+                residential_address_email=kin_data['email'],
+                residential_address_telephone_num=self._handle_num(kin_data['number']),
+                residential_address_country=self._ensure_string(country),
+                residential_address_state=self._ensure_string(state), 
+                residential_address_city=self._ensure_string(city),
+                residential_address_street=self._ensure_string(street)
+            )
+            med_user.next_of_kin = next_of_kin
+            med_user.save()
+        except Exception as e:
+            raise Exception(f"could not update the next_of_kin in database: {e}")
+
     def retrive_med_user(med_user_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Retrieve the medical user data from the database.
