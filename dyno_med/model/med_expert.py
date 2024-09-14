@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-from mongoengine import Document, EmbeddedDocument, StringField, ListField, EmbeddedDocumentField, DateTimeField, IntField, DateField, FileField, EmailField
+from mongoengine import (Document, EmbeddedDocument, StringField, ListField, EmbeddedDocumentField,
+                         DateTimeField, IntField, DateField, FileField, EmailField)
 from datetime import datetime
 from mongoengine import connect
 
@@ -11,12 +12,18 @@ class ResidentialAddress(EmbeddedDocument):
     city = StringField(required=False)
     street = StringField(required=False)
 
+class Experience(EmbeddedDocument):
+    company = StringField(required=False)
+    role = StringField(required=False)
+    start_date = DateField(required=False)
+    end_date = DateField(required=False)
+    responsibilities = StringField(required=False)
+
 class NextOfKin(EmbeddedDocument):
     first_name = StringField(required=False, min_length=2, max_length=50)
     middle_name = StringField(max_length=50)
     last_name = StringField(required=False, min_length=2, max_length=50)
     relationship = StringField(required=False)
-    gender = StringField(required=False)
     residential_address_email = EmailField(required=False)
     residential_address_telephone_num = StringField(required=False)
     residential_address_country = StringField(required=False)
@@ -37,11 +44,14 @@ class Certificate(EmbeddedDocument):
 
 class Expert(Document):
     # Personal Data
+    profile_picture = StringField(required=False)
     username = StringField(min_length=2, max_length=50)
     first_name = StringField(min_length=2, max_length=50)
     middle_name = StringField(max_length=50)
     last_name = StringField(min_length=2, max_length=50)
     professional_title = StringField(required=False)
+    responsilities = StringField(require=False)
+    bio_data = StringField(required=False)
     gender = StringField(choices=['male', 'female', 'other', 'prefer_not_to_say'])
     date_of_birth = DateField(required=False)
     country_of_origin = StringField(required=False)
@@ -60,6 +70,7 @@ class Expert(Document):
 
     # Professional Data
     education = ListField(EmbeddedDocumentField(Education), required=False)
+    experience = ListField(EmbeddedDocumentField(Experience), required=False)
     certificates = ListField(EmbeddedDocumentField(Certificate), required=False)
 
     # Metadata

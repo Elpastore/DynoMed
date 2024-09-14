@@ -35,14 +35,11 @@ csrf.exempt('dyno_med.routes.patient_profile')
 csrf.exempt('dyno_med.routes.add_new_medical_record')
 
 # csrf.exempt('dyno_med.routes.medical_practitioner_registration')
-from .model.med_expert import (
-    Expert, ResidentialAddress,
-    NextOfKin, Education, Certificate
-)
 
 from .model.med_pract import Medical
 # Import from med_expert.py in the model directory
-from .model.med_expert import Expert
+from .model.med_expert import (Expert, Experience, NextOfKin, Certificate, Education,
+                               ResidentialAddress)
 
 # Import routes
 from . import routes
