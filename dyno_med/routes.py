@@ -242,6 +242,8 @@ def medical_expert_page():
 @csrf.exempt
 def med_user_update():
     """Update medical experts"""
+    from dyno_med import DoesNotExist
+
     user_id = session.get('user_id')
     
     if not user_id:

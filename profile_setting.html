@@ -185,19 +185,31 @@
                         </div>
                         <div class="mb-3">
                             <label for="fullName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" placeholder="First-Name  Middle-Name  Last-Name" id="fullName" value="{{ med_user.name }}">
+                            <input type="text" class="form-control" name="fullName" placeholder="First-Name  Middle-Name  Last-Name" id="fullName" value="{{ med_user.name }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="degree1" class="form-label">Gender</label>
+                            <select class="form-control" id="gender" name="gender[]" required>
+                                <option value="Male">Male</option>
+                                <option value="female">female</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="date_of_birth" class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth[]">
                         </div>
                         <div class="mb-3">
                             <label for="headline" class="form-label">Profesional Title</label>
-                            <input type="text" class="form-control" id="headline" placeholder="Nurse" value="Software Engineer at ABC Corp">
+                            <input type="text" class="form-control" id="headline" name="profesional_title" placeholder="Nurse" value="Software Engineer at ABC Corp">
                         </div>
                         <div class="mb-3">
-                            <label for="location" class="form-label">Location</label>
+                            <label for="location" name="location" class="form-label">Location</label>
                             <input type="text" class="form-control" placeholder="City, State, Country " id="location" value="San Francisco, CA">
                         </div>
                         <div class="mb-3">
                             <label for="about" class="form-label">Professional Bio</label>
-                            <textarea class="form-control" placeholder="Tell us about yourself..." id="about" rows="3">Experienced Software Engineer with a demonstrated history of working in the tech industry.</textarea>
+                            <textarea class="form-control" name="bio_data" placeholder="Tell us about yourself..." id="about" rows="3">Experienced Software Engineer with a demonstrated history of working in the tech industry.</textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
@@ -342,7 +354,14 @@
                     });
                 });
                 </script>
-
+div id="certificationContainer">
+                            <!-- Certification Entry Template -->
+                            <div class="form-section" id="certification1">
+                                <h5>Certification 1</h5>
+                                <div class="mb-3">
+                                    <label for="certificationName1" class="form-label">Certification Name</label>
+                                    <input type="text" class="form-control" id="certificationName1" name="certificationName[]" placeholder="Certification Name" required>
+                                </
                 <!-- Licenses & Certifications -->
                 <div class="content-section2" id="certifications">
                     <h4>Licenses & Certifications</h4>
@@ -351,14 +370,7 @@
                         is comming from in the backend-->
                         <input type="hidden" name="form_name" value="certification_form">
 
-                        <div id="certificationContainer">
-                            <!-- Certification Entry Template -->
-                            <div class="form-section" id="certification1">
-                                <h5>Certification 1</h5>
-                                <div class="mb-3">
-                                    <label for="certificationName1" class="form-label">Certification Name</label>
-                                    <input type="text" class="form-control" id="certificationName1" name="certificationName[]" placeholder="Certification Name" required>
-                                </div>
+                        <div>
                                 <div class="mb-3">
                                     <label for="certificationFile1" class="form-label">Upload Certificate</label>
                                     <input type="file" class="form-control" id="certificationFile1" name="certificationFile[]" accept=".pdf,.jpg,.png" required>
@@ -516,7 +528,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="kinPhone" class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" id="kinPhone" name="number"value="(555) 123-4567">
+                            <input type="text" class="form-control" id="kinPhone" name="number" value="(555) 123-4567">
                         </div>
                         <div class="mb-3">
                             <label for="kinEmail" class="form-label">Email</label>
