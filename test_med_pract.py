@@ -39,6 +39,7 @@ medical.update_med_user_profile(med_user=med_user, profile_data=profile_data, fi
 cert_data = {
     'certificationName[]': ['Certification in Advanced Cardiology', 'Certification in Emergency Care']
 }
+print(cert_data.get('certificationName[]')[0])
 
 # Create a list of files to simulate multiple certification file uploads
 files = [certificate_file_1, certificate_file_2]
