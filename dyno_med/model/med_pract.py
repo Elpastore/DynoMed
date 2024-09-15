@@ -233,8 +233,9 @@ class Medical:
         certifications = []
 
         for idx, file in enumerate(files):
-            cert_name_key = f"certificationName[{idx}]"
-            if cert_data.get(cert_name_key) and file and self.allowed_file(file.filename):
+            cert_name_key = cert_data.get('certificationName[]')[0]
+            if cert_name_key and file and self.allowed_file(file.filename):
+                print(f"the if statenment: {cert_name_key}")
                 try:
                     # Secure file name
                     secure_filename_value = secure_filename(file.filename)
@@ -243,8 +244,7 @@ class Medical:
 
                     # Create a certificate object
                     certificate = Certificate(
-                        certificate_name=self._ensure_string(
-                            cert_data.get(f'certificationName[{idx}]', '')),
+                        certificate_name=self._ensure_string(cert_name_key),
                         certificate_file_path=file_path
                     )
                     certifications.append(certificate)
