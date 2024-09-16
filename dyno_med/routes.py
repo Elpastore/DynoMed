@@ -112,23 +112,30 @@ def login_signUp():
             user_type = request.form.get('user_type')
             
             if login_form.validate_on_submit():
+                expert = Expert.object(email=email).first()
                 user = database.users.find_one({'email': email, 'user_type': user_type})
                 
-
-                if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-                    user_id = str(user['_id'])
-                    session['user_id'] = user_id
-                    # return jsonify({'message': 'Login successful', 'redirect': url_for('home')}), 200
-                    flash('Login success.', 'success')
-                    if user.get('user_type') == 'patient':
+                if user.get('user_type') == 'patient':
+                    if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+                        user_id = str(user['_id'])
+                        session['user_id'] = user_id
+                        flash('Login success.', 'success')
                         return redirect(url_for('patient_profile'))
-                    
-                    elif user.get('user_type') == 'medical':
-                        return redirect(url_for('medical_expert_page', password=password))
+                    else:
+                        #return jsonify({'message': 'Login Unsuccessful. Please check your email and password'}), 401
+                        print('Please check your email and password')
+                        flash('Login Unsuccessful. Please check your email and your password', 'danger')
+                
                 else:
-                    #return jsonify({'message': 'Login Unsuccessful. Please check your email and password'}), 401
-                    print('Please check your email and password')
-                    flash('Login Unsuccessful. Please check your email and your password', 'danger')
+                    if expert and bcrypt(password.encode('utf-8'), expert.password.encode('utf-8')):
+                        user_id = expert.id
+                        session['user_id'] = user_id
+                        flash('Login success.', 'success')
+                        return redirect(url_for('medical_expert_page'))
+                    else:
+                        print('Please check your email and password')
+                        flash('Login Unsuccessful. Please check your email and your password', 'danger')
+
                 return render_template('login.html', login_form=login_form, signup_form=signup_form)
                 
                 #return redirect(url_for('login_signUp'))
@@ -142,17 +149,20 @@ def login_signUp():
                 user_type = request.form.get('user_type')
 
                 hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-                print('after encrytion')
-                # new_user = {'username': username, 'email': email, 'password': hashed_password}
+
                 try:
-                    new_user = {'username': username, 'email': email, 'password': hashed_password, 'user_type': user_type}
-                    database.users.insert_one(new_user)
-                    print('after insrting in user db' )
                     if user_type == 'patient':
+                        new_user = {'username': username, 'email': email, 'password': hashed_password, 'user_type': user_type}
+                        database.users.insert_one(new_user)
                         Patient(id=ObjectId(new_user['_id']), full_name=username, email=email).save()
+        
                     if user_type == 'medical':
-                        print('after hashed psswd')
-                        user = Expert(id=ObjectId(new_user['_id']), username=username, email=email, password=hashed_password).save()
+                        expert = Expert(
+                            username=username,
+                            email=email,
+                            password=hashed_password
+                        )
+                        expert.save()
 
                     flash('Registration successful. Please login.', 'success')
                     return redirect(url_for('login_signUp'))
@@ -178,14 +188,6 @@ def medical_expert_calender():
         return redirect(url_for('medical-expert_page'))
     return render_template('med-expert_calender.html')
 
-@app.route('/medical_practitioner/profile/update', methods=['POST', 'GET'], strict_slashes=False)
-@csrf.exempt
-def med_expert_update():
-    """medical expert page"""
-    if request.method == 'POST':
-
-        Medical.insert(request.form, request.file)
-    return render_template('med-expert-update.html')
 
 @app.route('/patient/profile', methods=['GET', 'POST', 'PUT'])
 def patient_profile():
@@ -212,36 +214,11 @@ def patient_profile():
         
         return render_template('patient_profil.html', patient_data=patient_user)
 
-@app.route('/medical_practitioner/profile', methods=['POST', 'GET'], strict_slashes=False)
-@csrf.exempt
-def medical_expert_page():
-    """medical expert page"""
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({'message': 'Unauthorized access'}), 401
-
-    if request.method == 'GET':
-        try:
-             password = request.args.get('password')
-             med_user = Expert.objects.get(id=ObjectId(user_id))
-             if password:
-                if med_user.password == '':
-                    hashed_password = bcrypt.hashpw(password.encode('UTF-8'), bcrypt.gensalt())
-                    # store encryted password in db
-                    med_user.password = hashed_password.decode('UTF-8')
-                    med_user.save()
-        
-                    print(f"stored str form of hased psswd: {med_user.password}")
-                   
-        except Exception as e:
-             return jsonify({'message': f'Invalid user ID: {e}'}), 400
-
-        return render_template('med-expert_profile.html', med_user=med_user)
 
 @app.route('/medical_practitioner/update', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
-def med_user_update():
-    """Update medical experts"""
+def med_user_profile_settings():
+    """Update medical expert profile seetings form"""
     from dyno_med import DoesNotExist
 
     user_id = session.get('user_id')
@@ -256,13 +233,7 @@ def med_user_update():
     except DoesNotExist:
         return jsonify({'message': 'Medical expert not found'}), 404
     
-    #med_user_dict = med_user.to_mongo().to_dict()
-   # print(med_user_dict)
 
-    #if not med_user_dict:
-        #return jsonify({'message': 'Medical expert not found'}), 404
-    
-    # Handle post request
     if request.method == 'POST':
         form_name = request.form.get('form_name')
 
@@ -315,7 +286,7 @@ def med_user_update():
             print('work experirnce form submitted:', profile_data)
             try:
                 medical = Medical()
-                medical.update_med_user(med_user_dict, profile_data, None, user_id)
+                medical.update_med_user_profile(med_user, profile_data, None, user_id)
                 return jsonify({'meassage': 'profile update sucessfully'}), 200
             except Exception as e:
                 return jsonify({'meassage': str(e)}), 400
@@ -325,7 +296,7 @@ def med_user_update():
             print('work experirnce form submitted:', certification_data)
             try:
                 medical = Medical()
-                medical.update_med_user_cert(med_user_dict, certification_data, cert_files, user_id)
+                medical.update_med_user_certifications(med_user, certification_data, cert_files, user_id)
                 return jsonify({'meassage': 'certification update sucessfully'}), 200
             except Exception as e:
                 return jsonify({'meassage': str(e)}), 400
