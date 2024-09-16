@@ -169,6 +169,7 @@ class Medical:
                 file_path = os.path.join(self.UPLOAD_PIC, secure_name)
                 file.save(file_path)
                 med_user.profile_picture = file_path
+                print(f"picture path: {file_path}")
             
             # update the present location of the user
             location = ResidentialAddress(
@@ -230,7 +231,7 @@ class Medical:
 
         self._check_input_params(med_user, cert_data)
         
-        certifications = []
+        new_certifications = []
 
         for idx, file in enumerate(files):
             cert_name_key = cert_data.get('certificationName[]')[0]
@@ -247,12 +248,12 @@ class Medical:
                         certificate_name=self._ensure_string(cert_name_key),
                         certificate_file_path=file_path
                     )
-                    certifications.append(certificate)
+                    new_certifications.append(certificate)
                 except Exception as e:
                     raise Exception(f"Unable to update certification data in the database: {e}")
 
-        if certifications:
-            med_user.certificates.extend(certifications)
+        if new_certifications:
+            med_user.certificates = new_certifications
             med_user.save()
 
     def update_med_user_address(self, med_user: object, address_data: Dict[str, Any]):
@@ -303,51 +304,94 @@ class Medical:
         except Exception as e:
             raise Exception(f"Failed to update next of kin: {str(e)}")
 
-    @staticmethod
-    def retrieve_med_user(med_user_data: Dict[str, Any]) -> Dict[str, Any]:
-        med_user = {
-            'profile_picture_name': med_user_data.get('profile_picture_name', ''),
-            'profile_picture_path': med_user_data.get('profile_picture_path', ''),
-            'username': med_user_data.get('username', ''),
-            'first_name': med_user_data.get('first_name', ''),
-            'middle_name': med_user_data.get('middle_name', ''),
-            'last_name': med_user_data.get('last_name', ''),
-            'age': med_user_data.get('age', ''),
-            'gender': med_user_data.get('gender', ''),
-            'date_of_birth': med_user_data.get('date_of_birth', ''),
-            'country_of_origin': med_user_data.get('country_of_origin', ''),
-            'state_of_origin': med_user_data.get('state_of_origin', ''),
-            'local_government_area': med_user_data.get('local_government_area', ''),
-            'town_of_origin': med_user_data.get('town_of_origin', ''),
-            'email': med_user_data.get('email', ''),
-            'mobile_num': med_user_data.get('mobile_num', ''),
-            'linkedin': med_user_data.get('linkedin', ''),
-            'residential_address': {
-                'country': med_user_data.get('residential_address', {}).get('country', ''),
-                'state': med_user_data.get('residential_address', {}).get('state', ''),
-                'city': med_user_data.get('residential_address', {}).get('city', ''),
-                'town': med_user_data.get('residential_address', {}).get('town', ''),
-                'street': med_user_data.get('residential_address', {}).get('street', ''),
-                'house_num': med_user_data.get('residential_address', {}).get('house_num', '')
-            },
-            'next_of_kin': {
-                'first_name': med_user_data.get('next_of_kin', {}).get('first_name', ''),
-                'middle_name': med_user_data.get('next_of_kin', {}).get('middle_name', ''),
-                'last_name': med_user_data.get('next_of_kin', {}).get('last_name', ''),
-                'relationship': med_user_data.get('next_of_kin', {}).get('relationship', ''),
-                'residential_address_email': med_user_data.get('next_of_kin', {}).get('residential_address_email', ''),
-                'residential_address_telephone_num': med_user_data.get('next_of_kin', {}).get('residential_address_telephone_num', ''),
-            },
-            'education': [{
-                'country': edu.get('country', ''),
-                'university': edu.get('university', ''),
-                'degree': edu.get('degree', '')
-            } for edu in med_user_data.get('education', [])],
-            'certificates': [{
-                'certificate_file_name': cert.get('certificate_file_name', ''),
-                'certificate_type': cert.get('certificate_type', ''),
-                'certificate_file_path': cert.get('certificate_file_path', ''),
-            } for cert in med_user_data.get('certificates', [])],
-            'description': med_user_data.get('description', ''),
+    
+    def retrieve_med_user(self, med_user: object) -> dict:
+        """Retrieve the user data from the database"""
+        # Retrieve the full name:
+        fullName = ' '.join(filter(None, [
+            getattr(med_user, 'first_name', ''),
+            getattr(med_user, 'middle_name', ''),
+            getattr(med_user, 'last_name', '')
+        ]))
+
+        # Retrieve the location of the user
+        location = ' '.join(filter(None, [
+            getattr(med_user.residential_address, 'street', ''),
+            getattr(med_user.residential_address, 'city', ''),
+            getattr(med_user.residential_address, 'state', ''),
+            getattr(med_user.residential_address, 'country', '')
+        ]))
+
+        # Retrieve the education
+        education = []
+        if hasattr(med_user, 'education'):
+            for edu in med_user.education:
+                education.append({
+                    'university': getattr(edu, 'university', ''),
+                    'course': getattr(edu, 'course', ''),
+                    'entry_yr': getattr(edu, 'entry_yr', ''),
+                    'completion_yr': getattr(edu, 'completion_yr', ''),
+                    'degree': getattr(edu, 'degree', '')
+                })
+        
+        # Retrieve experience from the database
+        experience = []
+        if hasattr(med_user, 'experience'):
+            for exp in med_user.experience:
+                experience.append({
+                    'company': getattr(exp, 'company', ''),
+                    'role': getattr(exp, 'role', ''),
+                    'start_date': getattr(exp, 'start_date', ''),
+                    'end_date': getattr(exp, 'end_date', ''),
+                    'responsibilities': getattr(exp, 'responsibilities', '')
+                })
+
+        # Retrieve the med_user certificate
+        certificates = []
+        if hasattr(med_user, 'certificates'):
+            for cert in med_user.certificates:
+                certificates.append({
+                    'certificate_name': getattr(cert, 'certificate_name', ''),
+                    'certificate_file_path': getattr(cert, 'certificate_file_path', '')
+                })
+
+        # Retrieve the next of kin data from the database
+        kin_full_name = ' '.join(filter(None, [
+            getattr(med_user.next_of_kin, 'first_name', ''),
+            getattr(med_user.next_of_kin, 'middle_name', ''),
+            getattr(med_user.next_of_kin, 'last_name', '')
+        ]))
+        
+        address = ' '.join(filter(None, [
+            getattr(med_user.next_of_kin, 'residential_address_street', ''),
+            getattr(med_user.next_of_kin, 'residential_address_city', ''),
+            getattr(med_user.next_of_kin, 'residential_address_state', ''),
+            getattr(med_user.next_of_kin, 'residential_address_country', '')
+        ]))
+        
+        kin = {
+            'fullName': kin_full_name,
+            'address': address,
+            'relationship': getattr(med_user.next_of_kin, 'relationship', ''),
+            'email': getattr(med_user.next_of_kin, 'residential_address_email', ''),
         }
-        return med_user
+        
+        med_user_data = {
+            'profile_picture': getattr(med_user, 'profile_picture', ''),
+            'fullName': fullName,
+            'professional_title': getattr(med_user, 'professional_title', ''),
+            'gender': getattr(med_user, 'gender', ''),
+            'bio_data': getattr(med_user, 'bio_data', ''),
+            'location': location,
+            'experience': experience,
+            'education': education,
+            'certificates': certificates,
+            'date_of_birth': getattr(med_user, 'date_of_birth', ''),
+            'country_of_origin': getattr(med_user, 'country_of_origin', ''),
+            'state_of_origin': getattr(med_user, 'state_of_origin', ''),
+            'local_government_area': getattr(med_user, 'local_government_area', ''),
+            'town_of_origin': getattr(med_user, 'town_of_origin', ''),
+            'kin': kin
+        }
+        
+        return med_user_data
