@@ -22,13 +22,14 @@ profile_data = {
     'fullName': 'John Doe',
     'professional_title': 'Cardiologist',
     'bio_data': 'An experienced cardiologist with over 15 years of practice.',
-    'gender': 'male',
+    'gender': 'male',    z-
     'dateOfBirth': '10-12-1975',
     'location': '123 Main St, Springfield, IL, USA',
 }
 
 # Retrieve the expert document (create one if does not exist)
 med_user = Expert.objects(username="Wizy").first()
+print(f"id: {med_user.id}")
 
 # initialize medical instances and update profile:
 medical = Medical()

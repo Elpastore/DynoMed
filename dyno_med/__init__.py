@@ -36,7 +36,7 @@ csrf.exempt('dyno_med.routes.add_new_medical_record')
 
 # csrf.exempt('dyno_med.routes.medical_practitioner_registration')
 
-from .model.med_pract import Medical
+from .model.medExpertProfile_settings import Medical
 # Import from med_expert.py in the model directory
 from .model.med_expert import (Expert, Experience, NextOfKin, Certificate, Education,
                                ResidentialAddress)
@@ -45,6 +45,6 @@ from .model.med_expert import (Expert, Experience, NextOfKin, Certificate, Educa
 from . import routes
 
 # Import from med_pract.py in the model directory
-from .model.med_pract import Medical
+from .model.medExpertProfile_settings import Medical
 from mongoengine import DoesNotExist
 
