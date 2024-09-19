@@ -9,7 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style>
         body {
             background-color: #f3f2ef;
@@ -19,7 +21,7 @@
         .sidebar-section {
             position: sticky;
             top: 80px;
-			margin-top: 50px;
+            margin-top: 50px;
         }
 
         .content-section {
@@ -27,8 +29,15 @@
             border: 1px solid #e0e0e0;
             border-radius: 8px;
             padding: 20px;
-            margin-bottom: 20px;
-			margin-top: 50px;
+            margin-top: 50px;
+        }
+
+        .content-section2 {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 18px;
         }
 
         .profile-img {
@@ -36,23 +45,13 @@
             height: 150px;
             object-fit: cover;
         }
-
-        .form-section {
-            margin-bottom: 30px;
-        }
-
-        .remove-btn {
-            cursor: pointer;
-            color: red;
-            margin-left: 10px;
-        }
     </style>
 </head>
 
 <body>
     <!-- Include Navbar -->
     <?php include 'navbar.html'; ?>
-	<!-- navbar.html -->
+    <!-- navbar.html -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
     	<div class="container-fluid">
         	<a class="navbar-brand text-primary fw-bold" href="#">MySite</a>
@@ -156,13 +155,12 @@
                                     <a href="#certifications" class="text-decoration-none text-muted"><i class="bi bi-award-fill me-2"></i>Licenses & Certifications</a>
                                 </li>
                                 <li class="mb-2">
+                                    <a href="#Work Experience" class="text-decoration-none text-muted">
+                                        <i class="bi bi-briefcase-fill me-2"></i>Work Experience
+                                      </a>
+                                </li>
+                                <li class="mb-2"></li>
                                     <a href="#next-of-kin" class="text-decoration-none text-muted"><i class="bi bi-people-fill me-2"></i>Next of Kin</a>
-                                </li>
-                                <li class="mb-2">
-                                    <a href="#security" class="text-decoration-none text-muted"><i class="bi bi-shield-lock-fill me-2"></i>Security</a>
-                                </li>
-                                <li class="mb-2">
-                                    <a href="#notifications" class="text-decoration-none text-muted"><i class="bi bi-bell-fill me-2"></i>Notifications</a>
                                 </li>
                             </ul>
                         </div>
@@ -170,65 +168,63 @@
                 </div>
             </div>
 
+
             <!-- Main Content -->
             <div class="col-md-9">
                 <!-- Profile Information -->
                 <div class="content-section" id="profile">
                     <h4>Profile Information</h4>
-                    <form method="POST" action="{{ url_for('med_user_update') }}" enctype="multipart/form-data">
+                    <form id="profile", method="post", enctype="multipart/form-data">
+
+                        <!-- this hidden input field helps to check which form the post request
+                            is comming from in the backend-->
+                        <input type="hidden" name="form_name" value="profile_form">
                         <div class="mb-3">
                             <label for="profileImage" class="form-label">Profile Image</label>
                             <input type="file" class="form-control" id="profileImage">
                         </div>
                         <div class="mb-3">
-                            <label for="username" class="form-label">User Name</label>
-				            <input type="text" class="form-control" id="username" name="username" minlength="2" maxlength="50" value="{{ med_user.username }}">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" name="fullName" placeholder="First-Name  Middle-Name  Last-Name" id="fullName" value="{{ med_user.name }}">
                         </div>
                         <div class="mb-3">
-                            <label for="first_name" class="form-label">First Name</label>
-				            <input type="text" class="form-control" id="first_name" name="first_name" minlength="2" maxlength="50" value="{{ med_user.first_name }}">
-                        </div>
-						<div class="mb-3">
-                            <label for="middle_name" class="form-label">Middle Name</label>
-				            <input type="text" class="form-control" id="middle_name" name="middle_name" maxlength="50" value="{{ med_user.middle_name }}">
-                        </div>
-						<div class="mb-3">
-                            <label for="last_name" class="form-label">Last Name</label>
-				            <input type="text" class="form-control" id="last_name" name="last_name" minlength="2" maxlength="50" value="{{ med_user.last_name }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="gender" class="form-label">Gender</label>
-                            <select class="form-select" id="gender" name="gender">
-                                <option value="">Choose...</option>
-                                <option value="male" {% if med_user.gender == 'male' %}selected{% endif %}>Male</option>
-                                <option value="female" {% if med_user.gender == 'female' %}selected{% endif %}>Female</option>
-                                <option value="other" {% if med_user.gender == 'other' %}selected{% endif %}>Other</option>
-                                <option value="prefer_not_to_say" {% if med_user.gender == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
+                            <label for="degree1" class="form-label">Gender</label>
+                            <select class="form-control" id="gender" name="gender[]" required>
+                                <option value="Male">Male</option>
+                                <option value="female">female</option>
                             </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="date_of_birth" class="form-label">Date of Birth</label>
-				            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ med_user.date_of_birth.strftime('%Y-%m-%d') if med_user.date_of_birth is not string
-                            else med_user.date_of_birth }}">
                         </div>
 
                         <div class="mb-3">
-                            <label for="Profession" class="form-label">Profession</label>
-                            <input type="text" class="form-control" id="Profession" name="Profession" minlength="2" maxlength="100" value="{{ med_user.Profession }}">
-                        </div>
+                            <label for="date_of_birth" class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth[]">
                         </div>
                         <div class="mb-3">
-                            <label for="about" class="form-label">About</label>
-                            <textarea class="form-control" id="description" name="description" rows="5" placeholder="Describe yourself, your specialties, and previous work experience (if any)">{{ med_user.description if med_user.description else '' }}</textarea>
+                            <label for="headline" class="form-label">Profesional Title</label>
+                            <input type="text" class="form-control" id="headline" name="profesional_title" placeholder="Nurse" value="Software Engineer at ABC Corp">
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" name="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" placeholder="City, State, Country " id="location" value="San Francisco, CA">
+                        </div>
+                        <div class="mb-3">
+                            <label for="about" class="form-label">Professional Bio</label>
+                            <textarea class="form-control" name="bio_data" placeholder="Tell us about yourself..." id="about" rows="3">Experienced Software Engineer with a demonstrated history of working in the tech industry.</textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
                 </div>
 
-                <!-- Residential Adress-->
-                <div class="content-section" id="residence">
+
+                <!-- Address-->
+                 <!-- Residential Adress-->
+                 <div class="content-section2" id="residence">
                     <h4>Address</h4>
-                    <form>
+                    <form id="address" method="post" enctype="multipart/form-data">
+                        
+                         <!-- this hidden input field helps to check which form the post request
+                            is comming from in the backend-->
+                        <input type="hidden" name="form_name" value="address_form">
                         <div class="mb-3">
                             <label for="country_of_origin" class="form-label">Country of Origin</label>
 				            <input type="text" class="form-control" id="country_of_origin" name="country_of_origin" value="{{ med_user.country_of_origin }}">
@@ -245,33 +241,22 @@
                             <label for="town_of_origin" class="form-label">Town of Origin</label>
                             <input type="text" class="form-control" id="town_of_origin" name="town_of_origin" value="{{ med_user.town_of_origin }}">
                         </div>
-
-                        <h4> Residential Address</h4>
-                        <div class="mb-3">
-                            <label for="residential_address-country" class="form-label">Country</label>
-				            <input type="text" class="form-control" id="residential_address-country" name="residential_address.country" value="{{ med_user.residential_address.country }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="residential_address-state" class="form-label">State</label>
-				            <input type="text" class="form-control" id="residential_address-state" name="residential_address.state" value="{{ med_user.residential_address.state }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="residential_address-city" class="form-label">City</label>
-                            <input type="text" class="form-control" id="residential_address-city" name="residential_address.city" value="{{ med_user.residential_address.city }}"> 
-                        </div>"
-                        <div class="mb-3">
-                            <label for="residential_address-town" class="form-label">Town</label>
-				            <input type="text" class="form-control" id="residential_address-town" name="residential_address.town" value="{{ med_user.residential_address.town }}">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save Address</button>
                     </form>
+                 </div>
 
-                </div>
+
+
+                 <!-- Work Experience-->
+                  
 
                 <!-- Education -->
-                <div class="content-section" id="education">
+                <div class="content-section2" id="education">
                     <h4>Education</h4>
-                    <form>
+                    <form id="education" method="post" enctype="multipart/form-data">
+
+                        <!-- this hidden input field helps to check which form the post request
+                            is comming from in the backend-->
+                        <input type="hidden" name="form_name" value="education_form">
                         <div id="educationContainer">
                             <!-- Education Entry Template -->
                             <div class="form-section" id="education1">
@@ -313,62 +298,65 @@
                         <button type="button" id="addEducation" class="btn btn-secondary">Add More Education</button>
                         <button type="submit" class="btn btn-primary">Save Education</button>
                     </form>
-                </div>
+                </div>                
                 
                 <script>
                     $(document).ready(function() {
-                        let educationCount = 1;
+                    let educationCount = 1;
 
-                        // Add more education details dynamically
-                        $('#addEducation').click(function() {
-                            educationCount++;
-                            $('#educationContainer').append(`
-                                <div class="form-section" id="education${educationCount}">
-                                    <h5>Education ${educationCount}</h5>
-                                    <div class="mb-3">
-                                        <label for="university${educationCount}" class="form-label">University</label>
-                                        <input type="text" class="form-control" id="university${educationCount}" name="university[]" placeholder="University Name" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="course${educationCount}" class="form-label">Course</label>
-                                        <input type="text" class="form-control" id="course${educationCount}" name="course[]" placeholder="Course Name" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="entryYear${educationCount}" class="form-label">Year of Entry</label>
-                                        <input type="month" class="form-control" id="entryYear${educationCount}" name="entryYear[]" min="1980-01" max="2024-12" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="endYear${educationCount}" class="form-label">Year of Completion</label>
-                                        <input type="month" class="form-control" id="endYear${educationCount}" name="endYear[]" min="1980-01" max="2024-12" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="degree${educationCount}" class="form-label">Degree</label>
-                                        <select class="form-control" id="degree${educationCount}" name="degree[]" required>
-                                            <option value="" disabled selected>Select Degree</option>
-                                            <option value="Bachelor of Medicine, Bachelor of Surgery (MBBS)">Bachelor of Medicine, Bachelor of Surgery (MBBS)</option>
-                                            <option value="Doctor of Medicine (MD)">Doctor of Medicine (MD)</option>
-                                            <option value="Bachelor of Science in Nursing (BSN)">Bachelor of Science in Nursing (BSN)</option>
-                                            <option value="Master of Science in Nursing (MSN)">Master of Science in Nursing (MSN)</option>
-                                            <option value="Diploma in Nursing">Diploma in Nursing</option>
-                                            <option value="PhD in Medicine">PhD in Medicine</option>
-                                            <option value="Master of Surgery (MS)">Master of Surgery (MS)</option>
-                                        </select>
-                                    </div>
-                                    <button type="button" class="btn btn-danger remove-education" data-id="${educationCount}">Remove</button>
+                    // Add more education details dynamically
+                    $('#addEducation').click(function() {
+                        educationCount++;
+                        $('#educationContainer').append(`
+                            <div class="form-section" id="education${educationCount}">
+                                <input type="hidden" name="form_name" value="education_form">
+                                <h5>Education ${educationCount}</h5>
+                                <div class="mb-3">
+                                    <label for="university${educationCount}" class="form-label">University</label>
+                                    <input type="text" class="form-control" id="university${educationCount}" name="university[]" placeholder="University Name" required>
                                 </div>
-                            `);
-                        });
-
-                        // Remove education entry
-                        $(document).on('click', '.remove-education', function() {
-                            let id = $(this).data('id');
-                            $('#education' + id).remove();
-                        });
+                                <div class="mb-3">
+                                    <label for="course${educationCount}" class="form-label">Course</label>
+                                    <input type="text" class="form-control" id="course${educationCount}" name="course[]" placeholder="Course Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="entryYear${educationCount}" class="form-label">Year of Entry</label>
+                                    <input type="month" class="form-control" id="entryYear${educationCount}" name="entryYear[]" min="1980-01" max="2024-12" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endYear${educationCount}" class="form-label">Year of Completion</label>
+                                    <input type="month" class="form-control" id="endYear${educationCount}" name="endYear[]" min="1980-01" max="2024-12" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="degree${educationCount}" class="form-label">Degree</label>
+                                    <select class="form-control" id="degree${educationCount}" name="degree[]" required>
+                                        <option value="" disabled selected>Select Degree</option>
+                                        <option value="Bachelor of Medicine, Bachelor of Surgery (MBBS)">Bachelor of Medicine, Bachelor of Surgery (MBBS)</option>
+                                        <option value="Doctor of Medicine (MD)">Doctor of Medicine (MD)</option>
+                                        <option value="Bachelor of Science in Nursing (BSN)">Bachelor of Science in Nursing (BSN)</option>
+                                        <option value="Master of Science in Nursing (MSN)">Master of Science in Nursing (MSN)</option>
+                                        <option value="Diploma in Nursing">Diploma in Nursing</option>
+                                        <option value="PhD in Medicine">PhD in Medicine</option>
+                                        <option value="Master of Surgery (MS)">Master of Surgery (MS)</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-danger remove-education" data-id="${educationCount}">Remove</button>
+                            </div>
+                        `);
                     });
+
+                    // Remove education entry
+                    $(document).on('click', '.remove-education', function() {
+                        let id = $(this).data('id');
+                        if (confirm('Are you sure you want to delete this educstion data? This action caanot be undone')) {
+                            $('#education' + id).remove();
+                        }
+                    });
+                });
                 </script>
 
                 <!-- Licenses & Certifications -->
-                <div class="content-section" id="certifications">
+                <div class="content-section2" id="certifications">
                     <h4>Licenses & Certifications</h4>
                     <form>
                         <div id="certificationContainer">
@@ -392,6 +380,8 @@
                     </form>
                 </div>
 
+
+
                 <script>
                     $(document).ready(function() {
                         let certificationCount = 1;
@@ -400,6 +390,7 @@
                         $('#addCertification').click(function() {
                             certificationCount++;
                             $('#certificationContainer').append(`
+                                <input type="hidden" name="form_name" value="certification_form">
                                 <div class="form-section" id="certification${certificationCount}">
                                     <h5>Certification ${certificationCount}</h5>
                                     <div class="mb-3">
@@ -418,125 +409,163 @@
                         // Remove a specific certification section
                         $(document).on('click', '.remove-certification', function() {
                             let id = $(this).data('id');
-                            $('#certification' + id).remove();
+                            if (confirm('Are you sure you want to delete this data? this action cannot be undone')) {
+                                $('#certification' + id).remove();
+                            }
+                
                         });
                     });
                 </script>
-                                        
+                
+                
+
+                 <!-- Work Experience-->
+                 <div class="content-section2", id="experience">
+                    <h4>Work Experience--</h4>
+                    <form id="experience" method="post" enctype="multipart/form-data">
+                        <!-- this hidden input field helps to check which form the post request
+                        is comming from in the backend-->
+                        <input type="hidden" name="form_name" value="experience_form">
+                        <div id="experienceContainer">
+                            <!-- Work Experience entry temoplate-->
+                             <div class="form-section" id="experience1">
+                                <h5>Experience 1</h5>
+                                <div class="mb-3">
+                                    <label for="company1" class="form-label">Company</label>
+                                    <input type="text" class="form-control" id="company1" name="company[]"
+                                    placeholder="Company Name(e.g- HedgeWay Hospital)" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="role1" class="form-label">Role</label>
+                                    <input type="text" class="form-control" id="role1" name="role[]"
+                                    placeholder="Anaesthetic Nurse" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="startDate1" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="startDate1" name="startDate[]">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endDate1" class="form-label">End Date (or Current)</label>
+                                    <input type="date" class="form-control" id="endDate1" name="endDate[]">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="responsibilities1" class="form-label">Key Responsibilities</label>
+                                    <textarea class="form-control" name="responsibilities[]" id="responsibility1" rows="4" placeholder="Describe your key responsibilities..."></textarea>
+                                </div>
+                                <button type="button" class="btn btn-danger remove-experience" data-id="1">Remove</button>
+
+                             </div>
+                        </div>
+                        <button type="button" id="addExperience" class="btn btn-secondary">Add More Work Experience</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+
+                    </form>
+                </div>
+                <script>
+                    $(document).ready(function() {
+                        let experienceCount = 1
+
+                        // Add more experience deatails dynamically
+                        $('#addExperience').click(function() {
+                            experienceCount++;
+                            $('#experienceContainer').append(`
+                                <div class="form-section" id="experience${experienceCount}">
+                                <input type="hidden" name="form_name" value="experience_form">
+                                <h5>Experience ${experienceCount}</h5>
+                                <div class="mb-3">
+                                    <label for="company${experienceCount}" class="form-label">Company</label>
+                                    <input type="text" class="form-control" id="company${experienceCount}" name="company[]"
+                                    placeholder="Company Name(e.g- HedgeWay Hospital)" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="role${experienceCount}" class="form-label">Role</label>
+                                    <input type="text" class="form-control" id="role${experienceCount}" name="role[]"
+                                    placeholder="Anaesthetic Nurse" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="startDate${experienceCount}" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="startDate${experienceCount}" name="startDate[]">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endDate${experienceCount}" class="form-label">End Date (or Current)</label>
+                                    <input type="date" class="form-control" id="endDate${experienceCount}" name="endDate[]">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="responsibilities${experienceCount}" class="form-label">Key Responsibilities</label>
+                                    <textarea class="form-control" id="responsibility${experienceCount}" name="responsibilities[]" rows="4" placeholder="Describe your key responsibilities..."></textarea>
+                                </div>
+                                <button type="button" class="btn btn-danger remove-experience" data-id="${experienceCount}">Remove</button>
+
+                             </div>`
+                            );
+                        });
+                        // Remove Experience entry from the dataBAse
+                        $(document).on('click', '.remove-experience', function() {
+                            let id = $(this).data('id');
+                            if (confirm("Are you sure you want to delete this work experience entry? This action cannot be undone.")) {
+                                $('#experience' + id).remove();
+                            }
+                        });
+                    });
+                </script>
+
                 <!-- Next of Kin -->
-                <div class="content-section" id="next-of-kin">
+                <div class="content-section2" id="next-of-kin">
                     <h4>Next of Kin</h4>
-                    <form>
+                    <form id="next_of_kin" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="form_name" value="next-of-kin_form">
                         <div class="mb-3">
-                            <label for="next_of_kin-first_name" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="next_of_kin-first_name" name="next_of_kin.first_name" minlength="2" maxlength="50" value="{{ med_user.next_of_kin.first_name }}">
-                        </div>
-						<div class="mb-3">
-                            <label for="next_of_kin-middle_name" class="form-label">Middle Name</label>
-				            <input type="text" class="form-control" id="next_of_kin-middle_name" name="next_of_kin.middle_name" maxlength="50" value="{{ med_user.next_of_kin.middle_name }}">
-                        </div>
-						<div class="mb-3">
-                            <label for="next_of_kin-last_name" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="next_of_kin-last_name" name="next_of_kin.last_name" minlength="2" maxlength="50" value="{{ med_user.next_of_kin.last_name }}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="next_of_kin-relationship" class="form-label">Relationship</label>
-				            <input type="text" class="form-control" id="next_of_kin-relationship" name="next_of_kin.relationship" value="{{ med_user.next_of_kin.relationship }}">
+                            <label for="kinName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="kinName" name='KinName' value="Jane Doe">
                         </div>
                         <div class="mb-3">
-                            <label for="next-of-kin-gender" class="form-label">Gender</label>
-                            <select class="form-select" id="next-of-kin-gender" name="next-of-kin-gender">
-                                <option value="">Choose...</option>
-                                <option value="male" {% if med_user.gender == 'male' %}selected{% endif %}>Male</option>
-                                <option value="female" {% if med_user.gender == 'female' %}selected{% endif %}>Female</option>
-                                <option value="other" {% if med_user.gender == 'other' %}selected{% endif %}>Other</option>
-                                <option value="prefer_not_to_say" {% if med_user.gender == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
-                            </select>
+                            <label for="kinRelationship" class="form-label">Relationship</label>
+                            <input type="text" class="form-control" id="kinRelationship" name='relationship' value="Sister">
                         </div>
                         <div class="mb-3">
-                            <label for="next_of_kin-residential_address_telephone_num" class="form-label">Telephone Number</label>
-				            <input type="tel" class="form-control" id="next_of_kin-residential_address_telephone_num" name="next_of_kin.residential_address_telephone_num" value="{{ med_user.next_of_kin.residential_address_telephone_num }}">
+                            <label for="kinPhone" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="kinPhone" name="number" value="(555) 123-4567">
                         </div>
                         <div class="mb-3">
-                            <label for="next_of_kin-residential_address_email" class="form-label">Email</label>
-				            <input type="email" class="form-control" id="next_of_kin-residential_address_email" name="next_of_kin.residential_address_email" value="{{ med_user.next_of_kin.residential_address_email if med_user.next_of_kin and med_user.next_of_kin.residential_address_email else '' }}">
+                            <label for="kinEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="kinEmail" name="email" value="jane.doe@example.com">
                         </div>
-                        <button type="submit" class="btn btn-primary">Save Next of Kin</button>
+                        <div class="mb-3">
+                            <label for="kinAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="kinAddress" name="address" rows="2">123 Main St, Springfield, IL</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
                 </div>
 
-                <!-- Security Settings -->
-                <div class="content-section" id="security">
-                    <h4>Security</h4>
-                    <form>
-                        <!-- Password -->
-                        <div class="mb-3">
-                            <label for="currentPassword" class="form-label">Current Password</label>
-                            <input type="password" class="form-control" id="currentPassword" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="newPassword" class="form-label">New Password</label>
-                            <input type="password" class="form-control" id="newPassword" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Change Password</button>
-                    </form>
-                </div>
-
-                <!-- Notifications -->
-                <div class="content-section" id="notifications">
-                    <h4>Notifications</h4>
-                    <form>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" value="" id="emailNotifications" checked>
-                            <label class="form-check-label" for="emailNotifications">
-                                Email Notifications
-                            </label>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" value="" id="smsNotifications">
-                            <label class="form-check-label" for="smsNotifications">
-                                SMS Notifications
-                            </label>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" value="" id="pushNotifications" checked>
-                            <label class="form-check-label" for="pushNotifications">
-                                Push Notifications
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save Notification Settings</button>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Include Footer -->
-    <?php include 'footer.html'; ?>
-	<footer class="bg-white border-top mt-5">
-    	<div class="container py-4">
-        	<div class="row">
-            	<div class="col-md-6">
-                	<p class="text-muted">&copy; 2023 MySite. All rights reserved.</p>
-            	</div>
-            	<div class="col-md-6 text-md-end">
-                	<a href="#" class="text-muted me-3">About</a>
-                	<a href="#" class="text-muted me-3">Accessibility</a>
-                	<a href="#" class="text-muted me-3">Help Center</a>
-                	<a href="#" class="text-muted">Privacy & Terms</a>
-            	</div>
-        	</div>
-    	</div>
-	</footer>
+     <!-- Include Footer -->
+     <?php include 'footer.html'; ?>
+     <footer class="bg-white border-top mt-5">
+         <div class="container py-4">
+             <div class="row">
+                 <div class="col-md-6">
+                     <p class="text-muted">&copy; 2023 MySite. All rights reserved.</p>
+                 </div>
+                 <div class="col-md-6 text-md-end">
+                     <a href="#" class="text-muted me-3">About</a>
+                     <a href="#" class="text-muted me-3">Accessibility</a>
+                     <a href="#" class="text-muted me-3">Help Center</a>
+                     <a href="#" class="text-muted">Privacy & Terms</a>
+                 </div>
+             </div>
+         </div>
+     </footer>
+ 
 
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>

@@ -22,7 +22,7 @@ profile_data = {
     'fullName': 'John Doe',
     'professional_title': 'Cardiologist',
     'bio_data': 'An experienced cardiologist with over 15 years of practice.',
-    'gender': 'male',    z-
+    'gender': 'male',
     'dateOfBirth': '10-12-1975',
     'location': '123 Main St, Springfield, IL, USA',
 }

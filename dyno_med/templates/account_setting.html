@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings | MySite</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f3f2ef;
+            margin-top: 70px;
+        }
+
+        .settings-section {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+			margin-top: 50px;
+        }
+
+        .settings-header {
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+
+        .settings-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .form-check-label {
+            margin-left: 10px;
+        }
+
+        .sidebar-section {
+            position: sticky;
+            top: 80px;
+			margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Include Navbar -->
+    <?php include 'navbar.html'; ?>
+	<!-- navbar.html -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
+    	<div class="container-fluid">
+        	<a class="navbar-brand text-primary fw-bold" href="#">MySite</a>
+        	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            	aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            	<span class="navbar-toggler-icon"></span>
+        	</button>
+        	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+            	<form class="d-flex me-auto ms-3">
+                	<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            	</form>
+            	<ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="{{ url_for('user_page') }}">
+                        	<i class="bi bi-house-door-fill fs-4"></i>
+                        	<div class="small">Home</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="network.html">
+                        	<i class="bi bi-people-fill fs-4"></i>
+                        	<div class="small">My Network</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center" href="jobs.html">
+                        	<i class="bi bi-briefcase-fill fs-4"></i>
+                        	<div class="small">Jobs</div>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center position-relative" href="messaging.html">
+                        	<i class="bi bi-chat-dots-fill fs-4"></i>
+                        	<div class="small">Messaging</div>
+                        	<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            5
+                            	<span class="visually-hidden">unread messages</span>
+                        	</span>
+                    	</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link text-center position-relative" href="notifications.html">
+                        	<i class="bi bi-bell-fill fs-4"></i>
+                        	<div class="small">Notifications</div>
+                        	<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            	3
+                            	<span class="visually-hidden">unread notifications</span>
+                        	</span>
+                    	</a>
+                	</li>
+                	<li class="nav-item dropdown">
+                    	<a class="nav-link dropdown-toggle text-center" href="#" id="navbarDropdown" role="button"
+                        	data-bs-toggle="dropdown" aria-expanded="false">
+                        	<img src="https://via.placeholder.com/30" alt="Profile" class="rounded-circle">
+                        	<div class="small">Me</div>
+                    	</a>
+                    	<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        	<li><a class="dropdown-item" href="#">View Profile</a></li>
+                        	<li><a class="dropdown-item" href="#">Account Settings</a></li>
+                        	<li><hr class="dropdown-divider"></li>
+                        	<li><a class="dropdown-item" href="#">Sign Out</a></li>
+                    	</ul>
+                	</li>
+            	</ul>
+        	</div>
+    	</div>
+	</nav>
+
+
+    <div class="container">
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-md-3 d-none d-md-block">
+                <div class="sidebar-section mb-3">
+                    <div class="bg-white p-3 rounded">
+                        <div class="text-center">
+                            <img src="{{ med_user.get('profile_picture') }}" alt="Profile" class="rounded-circle mb-2">
+                            <h5>{{ med_user.get('fullName') }}</h5>
+                            <p class="text-muted">{{ med_user.get('professional_title') }}</p>
+                            <a href="profile.html" class="btn btn-primary btn-sm">View Profile</a>
+                        </div>
+                        <hr>
+                        <div>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="account-settings.html" class="text-decoration-none text-primary"><i class="bi bi-gear-fill me-2"></i>Account Settings</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="Profile.html" class="text-decoration-none text-muted">
+                                        <i class="bi bi-person-fill me-2"></i>Profile Settings
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="Calender-settings.html" class="text-decoration-none text-muted">
+                                        <i class="bi bi-calendar3 me-2"></i>Calendar Settings
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="privacy-settings.html" class="text-decoration-none text-muted"><i class="bi bi-shield-lock-fill me-2"></i>Privacy Settings</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="notifications.html" class="text-decoration-none text-muted"><i class="bi bi-bell-fill me-2"></i>Notifications</a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <!-- Account Settings -->
+                <div class="settings-section">
+                    <h4 class="settings-header">Account Settings</h4>
+
+                    <!-- Username -->
+                    <div class="settings-item">
+                        <h6>Username</h6>
+                        <p class="text-muted">Your username is how other members will identify you.</p>
+                        <div class="d-flex">
+                            <input type="text" class="form-control me-2" id='usernameInput' value="{{ med_user.get('username') }}">
+                            <button class="btn btn-primary changeSettingBtn" data-type="username">Change</button>
+                        </div>
+                    </div>
+
+                    <!-- Email Address -->
+                    <div class="settings-item">
+                        <h6>Email Address</h6>
+                        <p class="text-muted">The email address associated with your account.</p>
+                        <div class="d-flex">
+                            <input type="email" class="form-control me-2" id='emailInput' value="{{ med_user.get('email') }}">
+                            <button class="btn btn-primary changeSettingBtn ">Change</button>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="settings-item">
+                        <h6>Password</h6>
+                        <p class="text-muted">Change your account password.</p>
+                        <form>
+                            <div class="mb-3">
+                                <label for="oldPassword" class="form-label">Current Password</label>
+                                <input type="password" class="form-control" id="oldPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newPassword" class="form-label">New Password</label>
+                                <input type="password" class="form-control" id="newPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary changeSettingBtn">Change Password</button>
+                        </form>
+                    </div>
+
+                    <!-- Two-Factor Authentication -->
+                    <div class="settings-item">
+                        <h6>Two-Factor Authentication</h6>
+                        <p class="text-muted">Add an extra layer of security to your account.</p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="twoFactorAuth">
+                            <label class="form-check-label" for="twoFactorAuth">
+                                Enable Two-Factor Authentication
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Account Deactivation -->
+                    <div class="settings-item">
+                        <h6>Account Deactivation</h6>
+                        <p class="text-muted">Deactivate your account if you no longer wish to use it.</p>
+                        <button class="btn btn-danger">Deactivate Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        // function to confirm the user action and return if confirmed
+        function confirmAction() {
+            return confirm(` Are you sure you want to change ${actonType}?`);
+        }
+    
+        // function to prepare POSt data based on the action type
+        function preparePOstData(actionType) {
+            let preparePOstData = {}
+
+            if (actionType === 'email') {
+                pastData = { email: document.getElementById('emailInput').value };
+            } else if (actionType === 'username') {
+                postData = {username: document.getElementById('usernameInput').value};
+            } else if (actionType === 'password') {
+                postData = {
+                    old_password: document.getElementById('oldPassword'.value),
+                    new_password: document.getElementById('newPassowrd').value,
+                    confirm_password: document.getElementById('confirmPassword').value
+                };
+            } else if (actionType === 'deactivate') {
+                pastData = { deactivate: true};
+            }
+
+            return postData;
+        }
+
+        // function to send Post request and handle reponse
+        function sendPostRequest(postData, actionType) {
+            fetch('/user_page/account_setting', {
+                method: 'POST',
+                headers: {
+                    'content-Type': 'application/json',
+                    //'X-CSRFToken': '{{ csrf_token() }}' 
+                },
+                body: JSON.stringify(postData)
+            })
+
+            .then(reponse => reponse.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    if (actionType === 'deactivate') {
+                        window.location.href = '/home';
+                    }
+                } else {
+                    alert('Error:' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('An error occured: ' + error);
+            });
+        }
+
+        // function to handle button click event
+        function handleButtonClick(button) {
+            const actionType = button.getAttribute('data-type');
+            const confirmed = confirmAction(actionType);
+            
+            if (confirmed) {
+                const postData = preparePOstData(actionType);
+                sendPostRequest(postData, actionType);
+            }
+        }
+
+        // Add event listener to all chnageSettingBtn buttons
+        document.querySelectorAll('.changeSettingBtn').forEach(buttun => {
+            button.addEventListener('click', function () {
+                handleButtonClick(this);
+            })
+        })
+    </script>
+    <!-- Include Footer -->
+    <?php include 'footer.html'; ?>
+
+	<footer class="bg-white border-top mt-5">
+    	<div class="container py-4">
+        	<div class="row">
+            	<div class="col-md-6">
+                	<p class="text-muted">&copy; 2023 MySite. All rights reserved.</p>
+            	</div>
+            	<div class="col-md-6 text-md-end">
+                	<a href="#" class="text-muted me-3">About</a>
+                	<a href="#" class="text-muted me-3">Accessibility</a>
+                	<a href="#" class="text-muted me-3">Help Center</a>
+                	<a href="#" class="text-muted">Privacy & Terms</a>
+            	</div>
+        	</div>
+    	</div>
+	</footer>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+

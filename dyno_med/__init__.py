@@ -45,6 +45,6 @@ from .model.med_expert import (Expert, Experience, NextOfKin, Certificate, Educa
 from . import routes
 
 # Import from med_pract.py in the model directory
-from .model.medExpertProfile_settings import Medical
+from .model.medExpertAccount_settings import AccountSetting
 from mongoengine import DoesNotExist
 
