@@ -256,7 +256,7 @@ def account_setting():
 
         # change the email
         if 'email' in data:
-            if setting.change_email(user, data['email']):
+            if setting.change_email(user, data):
                 flash('Email changed sucessfully.', 'success')
                 return jsonify({'sucess': True, 'message': 'Email change sucessfully'})
             else:
@@ -265,7 +265,7 @@ def account_setting():
         
         # change the account password
         elif 'new_password' in data:
-            if setting.change_password(user, data['old_password'], data['new_password'], data['confirm_password']):
+            if setting.change_password(user, data):
                 flash('Password changed successfully.', 'success')
                 return jsonify({'success': True, 'message': 'Password changed successfully'})
             else:
@@ -274,7 +274,7 @@ def account_setting():
 
         # change the account username of the user
         elif 'username' in data:
-            if setting.change_username(user, data['username']):
+            if setting.change_username(user, data):
                 flash('username changed successfully.', 'success')
                 return jsonify({'success': True, 'message': 'username changed successfully'})
             else:
