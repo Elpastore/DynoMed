@@ -112,7 +112,7 @@ def login_signUp():
             user_type = request.form.get('user_type')
             
             if login_form.validate_on_submit():
-                expert = Expert.object(email=email).first()
+                expert = Expert.objects(email=email).first()
                 user = database.users.find_one({'email': email, 'user_type': user_type})
                 
                 if user.get('user_type') == 'patient':
@@ -127,11 +127,12 @@ def login_signUp():
                         flash('Login Unsuccessful. Please check your email and your password', 'danger')
                 
                 else:
-                    if expert and bcrypt(password.encode('utf-8'), expert.password.encode('utf-8')):
-                        user_id = expert.id
+                    from bcrypt import checkpw
+                    if expert and checkpw(password.encode('utf-8'), expert['password'].encode('utf-8')):
+                        user_id = str(expert.id)
                         session['user_id'] = user_id
                         flash('Login success.', 'success')
-                        return redirect(url_for('medical_expert_page'))
+                        return redirect(url_for('user_page'))
                     else:
                         print('Please check your email and password')
                         flash('Login Unsuccessful. Please check your email and your password', 'danger')
@@ -180,13 +181,26 @@ def login_signUp():
     return render_template('login.html', login_form=login_form, signup_form=signup_form)
 
 
-@app.route('/medical_practitioner/profile/calender', methods=['POST', 'GET'], strict_slashes=False)
+@app.route('/user_page', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
-def medical_expert_calender():
-    """medical expert page"""
-    if request.method == 'POST':
-        return redirect(url_for('medical-expert_page'))
-    return render_template('med-expert_calender.html')
+def user_page():
+    """user page"""
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'message': 'Unauthorized access'}), 401
+    
+    try:
+        # retrive the expert object
+        user = Expert.objects.get(id=user_id)
+    except Exception as e:
+        raise Exception("unable to retrive the user document: {e}")
+    
+    collection_name = user._get_collection_name()
+    if collection_name == 'medical_practitioners':
+        medical = Medical()
+        med_dict = medical.retrieve_med_user(user)
+    
+    return render_template('user_page.html', med_user=med_dict, user=collection_name)
 
 
 @app.route('/patient/profile', methods=['GET', 'POST', 'PUT'])
@@ -214,10 +228,71 @@ def patient_profile():
         
         return render_template('patient_profil.html', patient_data=patient_user)
 
-
-@app.route('/medical_practitioner/update', methods=['POST', 'GET'], strict_slashes=False)
+@app.route('/user_page/account_setting', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
-def med_user_profile_settings():
+def account_setting():
+    """Update account seetings form"""
+    from dyno_med import DoesNotExist, AccountSetting
+
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'sucess': False, 'message': 'unauthorized access'}), 401
+    
+    # retrive the user object from the database
+    try:
+        # Retrieve the medical user object from the database using the user_id
+        user = Expert.objects.get(id=user_id)
+    except DoesNotExist:
+        return jsonify({'sucess': False, 'message': 'user not found'}), 404
+    
+    collection_name = user._get_collection_name()
+    if collection_name == 'medical_practitioners':
+        medical = Medical()
+        med_user = medical.retrieve_med_user(user)
+
+    if request.method == 'POST':
+        data = request.json
+        setting = AccountSetting()
+
+        # change the email
+        if 'email' in data:
+            if setting.change_email(user, data['email']):
+                flash('Email changed sucessfully.', 'success')
+                return jsonify({'sucess': True, 'message': 'Email change sucessfully'})
+            else:
+                flash('Failed to change email.', 'danger')
+                return jsonify({'success': False, 'message': 'Failed to change email'})
+        
+        # change the account password
+        elif 'new_password' in data:
+            if setting.change_password(user, data['old_password'], data['new_password'], data['confirm_password']):
+                flash('Password changed successfully.', 'success')
+                return jsonify({'success': True, 'message': 'Password changed successfully'})
+            else:
+                flash('Failed to change password.', 'danger')
+                return jsonify({'success': False, 'message': 'Failed to change password'})
+
+        # change the account username of the user
+        elif 'username' in data:
+            if setting.change_username(user, data['username']):
+                flash('username changed successfully.', 'success')
+                return jsonify({'success': True, 'message': 'username changed successfully'})
+            else:
+                flash('Failed to change username', 'danger')
+                return jsonify({'success': False, 'message': 'Failed to change password'})
+            
+        # Deactivate account
+        elif 'deactivate' in data:
+            setting.delete_account(user)
+            flash('Account deactivated successfully.', 'success')
+            session.clear()
+            return jsonify({'success': True, 'message': 'Account deactivated. You have been logged out.'})
+    
+    return render_template('account_setting.html', med_user=med_user, user=collection_name)
+
+@app.route('/account_setting/med_user_profile_setting', methods=['POST', 'GET'], strict_slashes=False)
+@csrf.exempt
+def med_user_profile_setting():
     """Update medical expert profile seetings form"""
     from dyno_med import DoesNotExist
 
@@ -304,7 +379,7 @@ def med_user_profile_settings():
             return jsonify({'message': 'Unknown form submitted'}), 400
 
     # If it's a GET request, render the template with the current user data
-    return render_template('med-expert-update.html', med_user=med_user)
+    return render_template('profile_setting.html', med_user=med_user)
 
 
 @app.route('/patient_new_record', methods=['POST', 'GET'])

@@ -378,6 +378,8 @@ class Medical:
         
         med_user_data = {
             'profile_picture': getattr(med_user, 'profile_picture', ''),
+            'email': getattr(med_user, 'email', ''),
+            'username': getattr(med_user, 'username', ''),
             'fullName': fullName,
             'professional_title': getattr(med_user, 'professional_title', ''),
             'gender': getattr(med_user, 'gender', ''),
