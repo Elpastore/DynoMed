@@ -100,9 +100,10 @@ def logout():
 @app.route('/user_signup-login', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
 def login_signUp():
-    """login and signup for all users"""
+    """Login and signup for all users"""
     login_form = LoginForm()
     signup_form = RegistrationForm()
+
     if request.method == 'POST':
         action = request.form.get('action')
 
@@ -115,38 +116,28 @@ def login_signUp():
                 expert = Expert.objects(email=email).first()
                 user = database.users.find_one({'email': email, 'user_type': user_type})
                 
-                if user.get('user_type') == 'patient':
-                    if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-                        user_id = str(user['_id'])
-                        session['user_id'] = user_id
+                if user and user['user_type'] == 'patient':
+                    if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+                        session['user_id'] = str(user['_id'])
                         flash('Login success.', 'success')
                         return redirect(url_for('patient_profile'))
                     else:
-                        #return jsonify({'message': 'Login Unsuccessful. Please check your email and password'}), 401
-                        print('Please check your email and password')
-                        flash('Login Unsuccessful. Please check your email and your password', 'danger')
+                        flash('Login Unsuccessful. Please check your email and password.', 'danger')
                 
+                elif expert and bcrypt.checkpw(password.encode('utf-8'), expert.password.encode('utf-8')):
+                    session['user_id'] = str(expert.id)
+                    flash('Login success.', 'success')
+                    return redirect(url_for('user_page'))
                 else:
-                    from bcrypt import checkpw
-                    if expert and checkpw(password.encode('utf-8'), expert['password'].encode('utf-8')):
-                        user_id = str(expert.id)
-                        session['user_id'] = user_id
-                        flash('Login success.', 'success')
-                        return redirect(url_for('user_page'))
-                    else:
-                        print('Please check your email and password')
-                        flash('Login Unsuccessful. Please check your email and your password', 'danger')
+                    flash('Login Unsuccessful. Please check your email and password.', 'danger')
 
-                return render_template('login.html', login_form=login_form, signup_form=signup_form)
-                
-                #return redirect(url_for('login_signUp'))
+            return render_template('login.html', login_form=login_form, signup_form=signup_form)
 
         elif action == 'form-signup':
             if signup_form.validate_on_submit():
                 username = signup_form.username.data
                 email = signup_form.email.data
                 password = signup_form.password.data
-                # user_type = signup_form.user_type.data
                 user_type = request.form.get('user_type')
 
                 hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
@@ -156,13 +147,8 @@ def login_signUp():
                         new_user = {'username': username, 'email': email, 'password': hashed_password, 'user_type': user_type}
                         database.users.insert_one(new_user)
                         Patient(id=ObjectId(new_user['_id']), full_name=username, email=email).save()
-        
-                    if user_type == 'medical':
-                        expert = Expert(
-                            username=username,
-                            email=email,
-                            password=hashed_password
-                        )
+                    elif user_type == 'medical':
+                        expert = Expert(username=username, email=email, password=hashed_password)
                         expert.save()
 
                     flash('Registration successful. Please login.', 'success')
@@ -170,16 +156,15 @@ def login_signUp():
                 except Exception:
                     flash('Error in registration. Please try again!', 'danger')
 
-                return render_template('login.html', login_form=login_form, signup_form=signup_form)
             else:
                 for field, errors in signup_form.errors.items():
                     for error in errors:
                         flash(f"Error in {getattr(signup_form, field).label.text}: {error}", 'danger')
-                    flash('Please try again!    ')
-                return render_template('login.html', login_form=login_form, signup_form=signup_form)
-            
+                flash('Please try again!')
+                
+            return render_template('login.html', login_form=login_form, signup_form=signup_form)
+    
     return render_template('login.html', login_form=login_form, signup_form=signup_form)
-
 
 @app.route('/user_page', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
@@ -231,20 +216,19 @@ def patient_profile():
 @app.route('/user_page/account_setting', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
 def account_setting():
-    """Update account seetings form"""
+    """Update account settings form"""
     from dyno_med import DoesNotExist, AccountSetting
 
     user_id = session.get('user_id')
     if not user_id:
-        return jsonify({'sucess': False, 'message': 'unauthorized access'}), 401
-    
-    # retrive the user object from the database
+        return AccountSetting.unauthorized_access()
+
+    # Retrieve the user object from the database
     try:
-        # Retrieve the medical user object from the database using the user_id
         user = Expert.objects.get(id=user_id)
     except DoesNotExist:
-        return jsonify({'sucess': False, 'message': 'user not found'}), 404
-    
+        return AccountSetting.user_not_found()
+
     collection_name = user._get_collection_name()
     if collection_name == 'medical_practitioners':
         medical = Medical()
@@ -256,39 +240,22 @@ def account_setting():
 
         # change the email
         if 'email' in data:
-            if setting.change_email(user, data):
-                flash('Email changed sucessfully.', 'success')
-                return jsonify({'sucess': True, 'message': 'Email change sucessfully'})
-            else:
-                flash('Failed to change email.', 'danger')
-                return jsonify({'success': False, 'message': 'Failed to change email'})
-        
+            return setting.change_email(user, data)
+
         # change the account password
         elif 'new_password' in data:
-            if setting.change_password(user, data):
-                flash('Password changed successfully.', 'success')
-                return jsonify({'success': True, 'message': 'Password changed successfully'})
-            else:
-                flash('Failed to change password.', 'danger')
-                return jsonify({'success': False, 'message': 'Failed to change password'})
+            return setting.change_password(user, data)
 
         # change the account username of the user
         elif 'username' in data:
-            if setting.change_username(user, data):
-                flash('username changed successfully.', 'success')
-                return jsonify({'success': True, 'message': 'username changed successfully'})
-            else:
-                flash('Failed to change username', 'danger')
-                return jsonify({'success': False, 'message': 'Failed to change password'})
-            
+            return setting.change_username(user, data)
+
         # Deactivate account
         elif 'deactivate' in data:
-            setting.delete_account(user)
-            flash('Account deactivated successfully.', 'success')
-            session.clear()
-            return jsonify({'success': True, 'message': 'Account deactivated. You have been logged out.'})
-    
+            return setting.delete_account(user)
+
     return render_template('account_setting.html', med_user=med_user, user=collection_name)
+
 
 @app.route('/account_setting/med_user_profile_setting', methods=['POST', 'GET'], strict_slashes=False)
 @csrf.exempt
@@ -311,15 +278,14 @@ def med_user_profile_setting():
 
     if request.method == 'POST':
         form_name = request.form.get('form_name')
+        medical = Medical()
 
         # ceck which form is submitted
         if form_name == 'education_form':
             education_data = request.form.to_dict(flat=False)
-            print("Education Form Submitted:", education_data)
 
             # update the education form
             try:
-                medical = Medical()
                 medical.update_med_user_education(med_user, education_data, None, user_id)
                 return jsonify({'message': 'Education updated sucessfully'})
             except Exception as e:
@@ -330,7 +296,6 @@ def med_user_profile_setting():
             print('Adress Form Submitted:', address_data)
             # update the address form:
             try:
-                medical = Medical()
                 medical.update_med_user_address(med_user, address_data, None, user_id)
                 return jsonify({'message': 'Address update sucessfully'}), 200
             except Exception as e:
