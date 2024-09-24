@@ -28,7 +28,7 @@ profile_data = {
 }
 
 # Retrieve the expert document (create one if does not exist)
-med_user = Expert.objects(username="Wizy").first()
+med_user = Expert.objects(email="test1@gmail.com").first()
 print(f"id: {med_user.id}")
 
 # initialize medical instances and update profile:

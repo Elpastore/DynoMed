@@ -30,26 +30,35 @@ class AccountSetting:
         self.medical._check_input_params(med_user, data)
 
         # Ensure integer passwords are converted to strings for processing
+        print(data)
+        print(med_user.to_mongo())
         new_password = str(data.get('new_password', '')).strip()
+        print(new_password)
         old_password = str(data.get('old_password', '')).strip()
         confirm_password = str(data.get('confirm_password', '')).strip()
 
         # Ensure all password fields are provided
-        if not new_password:
+        if new_password == '':
             flash("New password field is empty", 'danger')
             return jsonify({'success': False, 'message': 'New password is required'})
 
-        if not old_password:
+
+        if old_password == '':
             flash("Old password field is empty", 'danger')
             return jsonify({'success': False, 'message': 'Old password is required'})
 
-        if not confirm_password:
+        if confirm_password == '':
             flash("Confirm password field is empty", 'danger')
             return jsonify({'success': False, 'message': 'Confirm password is required'})
-
+        print(confirm_password)
+        print('after confirm')
+        print(med_user.password)
+        
+        
         # Check if old password matches the user's current password
         if not bcrypt.checkpw(old_password.encode('utf-8'), med_user.password.encode('utf-8')):
             flash('Current password does not match.', 'danger')
+            print(f'med user password: {med_user.password}')
             return jsonify({'success': False, 'message': 'Old password is incorrect'})
 
         # Check if the new password matches the confirmation
@@ -61,6 +70,7 @@ class AccountSetting:
         new_hash = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         med_user.password = new_hash
         med_user.save()
+        print('new_password')
 
         flash('Password changed successfully.', 'success')
         return jsonify({'success': True, 'message': 'Password changed successfully'})
